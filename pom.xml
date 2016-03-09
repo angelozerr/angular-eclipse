@@ -21,6 +21,8 @@
 		</license>
 	</licenses>
 	<modules>
+	    <module>ts.eclipse.ide.angular2.core</module>
+	    <module>ts.eclipse.ide.angular2.ui</module>
 		<module>update-site</module>
 	</modules>
 	<build>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <bundle id="minimal-json">
+      <category name="TypeScript IDE"/>
+   </bundle>
+   <feature id="ts-feature">
+      <category name="TypeScript IDE"/>
+   </feature>   
+   <feature id="ts-jsdt-feature">
+      <category name="TypeScript IDE"/>
+   </feature>
+   <feature id="ts-validation-feature">
+      <category name="TypeScript IDE"/>
+   </feature>
+   
+   <feature id="ts-validation-feature">
+      <category name="TypeScript IDE"/>
+   </feature>
+
+   <feature id="ts-nodejs.embed-feature">
+      <category name="Embed Node.js"/>
+   </feature>
+      
+   <category-def name="TypeScript IDE" label="TypeScript IDE" >
+      <description>
+         TypeScript IDE to use TypeScript with Eclipse IDE.
+      </description>   
+   </category-def>
+   
+   <category-def name="Embed Node.js" label="Embed Node.js">
+      <description>
+         Embed Node.js switch OS
+      </description>
+   </category-def>   
+   
+</site>

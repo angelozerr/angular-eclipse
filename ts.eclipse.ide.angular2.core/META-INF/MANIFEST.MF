@@ -14,8 +14,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jface.text,
  org.eclipse.core.commands,
  org.eclipse.core.expressions
-Export-Package: ts.eclipse.ide.core
+Export-Package: ts.eclipse.ide.angular2.core
 Bundle-ActivationPolicy: lazy
-Bundle-Activator: ts.eclipse.ide.core.Angular2CorePlugin
+Bundle-Activator: ts.eclipse.ide.angular2.core.Angular2CorePlugin
 Import-Package: com.eclipsesource.json;version="[0.9.4,0.9.5)"
 

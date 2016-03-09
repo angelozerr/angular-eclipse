@@ -8,7 +8,7 @@
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package ts.eclipse.ide.internal.core;
+package ts.eclipse.ide.angular2.internal.core;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,7 +18,7 @@ import java.util.Set;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
-import ts.eclipse.ide.core.Angular2CorePlugin;
+import ts.eclipse.ide.angular2.core.Angular2CorePlugin;
 
 /**
  * Helper class to route trace output.

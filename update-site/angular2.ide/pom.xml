@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>fr.opensagres.angular2</groupId>
-		<artifactId>angular2-eclipse</artifactId>
+		<artifactId>update-site</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>angular2.ide</artifactId>

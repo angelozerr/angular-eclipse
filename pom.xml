@@ -38,6 +38,7 @@
 				<version>${tycho-version}</version>
 				<configuration>
 					<resolver>p2</resolver>
+					<pomDependencies>consider</pomDependencies>
 					<environments>
 						<environment>
 							<os>win32</os>
@@ -151,6 +152,11 @@
 			<groupId>com.eclipsesource.minimal-json</groupId>
 			<artifactId>minimal-json</artifactId>
 			<version>0.9.4</version>
+		</dependency>
+		<dependency>
+			<groupId>fr.opensagres.js</groupId>
+			<artifactId>minimatch.java</artifactId>
+			<version>1.1.0</version>
 		</dependency>		
 	</dependencies>
 	<repositories>

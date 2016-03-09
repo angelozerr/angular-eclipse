@@ -8,6 +8,7 @@
   <artifactId>update-site</artifactId>
   <packaging>pom</packaging>
   <modules>
+    <module>angular2-feature</module>
 	<module>angular2.ide</module> <!-- Update site -->
  </modules>
 </project>

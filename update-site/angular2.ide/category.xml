@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
+   <feature id="angular2-feature">
+      <category name="Angular2 IDE"/>
+   </feature>
+   
    <bundle id="minimal-json">
       <category name="TypeScript IDE"/>
    </bundle>
@@ -20,7 +24,13 @@
    <feature id="ts-nodejs.embed-feature">
       <category name="Embed Node.js"/>
    </feature>
-      
+
+   <category-def name="Angular2 IDE" label="Angular2 IDE" >
+      <description>
+         Angular2 IDE to use Angular2 with Eclipse IDE.
+      </description>   
+   </category-def>
+         
    <category-def name="TypeScript IDE" label="TypeScript IDE" >
       <description>
          TypeScript IDE to use TypeScript with Eclipse IDE.

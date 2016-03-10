@@ -33,7 +33,7 @@
 	    <!-- Angular2 Editor preferences page -->
 		<page
 	          category="ts.eclipse.ide.angular2.html.preferences"
-	          class="ts.eclipse.ide.angular2.internal.ui.preferences.html.HTML2AngularEditorPreferencesPage"
+	          class="ts.eclipse.ide.angular2.internal.ui.preferences.html.HTMLAngular2EditorPreferencesPage"
 	          id="ts.eclipse.ide.angular2.html.preferences.editor"
 	          name="%HTMLAngular2EditorPreferencePage.name"/>
 	    <!-- Angular2 Syntax Coloring preferences page -->
@@ -45,7 +45,7 @@
 	    <!-- Angular2 Typing preferences page -->
 		<page
 	          category="ts.eclipse.ide.angular2.html.preferences.editor"
-	          class="ts.eclipse.ide.angular2.internal.ui.preferences.html.HTMLAngularTypingPreferencePage"
+	          class="ts.eclipse.ide.angular2.internal.ui.preferences.html.HTMLAngular2TypingPreferencePage"
 	          id="ts.eclipse.ide.angular2.html.preferences.editor.typing"
 	          name="%HTMLAngular2TypingPreferencePage.name"/>            
    </extension>	

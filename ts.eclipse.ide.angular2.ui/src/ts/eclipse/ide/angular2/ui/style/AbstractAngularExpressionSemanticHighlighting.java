@@ -53,7 +53,7 @@ public abstract class AbstractAngularExpressionSemanticHighlighting extends
 						.getAngular2Project(file.getProject());
 				startSymbol = angularProject.getStartSymbol();
 				endSymbol = angularProject.getEndSymbol();
-			} catch (CoreException e) {
+			} catch (Throwable e) {
 			}
 		}
 		if (DOMRegionContext.XML_CONTENT.equals(documentRegion.getType())) {

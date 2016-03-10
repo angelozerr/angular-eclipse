@@ -23,7 +23,8 @@
        <page
 	          class="ts.eclipse.ide.angular2.internal.ui.preferences.Angular2GlobalPreferencesPage"
 	          id="ts.eclipse.ide.angular2.preferences"
-	          name="%Angular2PreferencePage.name"/>
+	          name="%Angular2PreferencePage.name"
+	          category="ts.eclipse.ide.ui.preference.TypeScriptMainPreferencePage"/>
        <!-- Angular2 HTML Files preferences page -->  
        <page
               category="ts.eclipse.ide.angular2.preferences"
@@ -64,7 +65,7 @@
 	    <highlighting
 	          class="ts.eclipse.ide.angular2.ui.style.DirectiveSemanticHighlighting"
 	          target="org.eclipse.wst.html.core.htmlsource"
-	          styleStringKey="directiveName">
+	          styleStringKey="angular2DirectiveName">
 	    </highlighting>
 	 </extension>
 
@@ -73,7 +74,7 @@
 	    <highlighting
 	          class="ts.eclipse.ide.angular2.ui.style.AngularExpressionSemanticHighlighting"
 	          target="org.eclipse.wst.html.core.htmlsource"
-	          styleStringKey="angularExpression">
+	          styleStringKey="angular2Expression">
 	    </highlighting>
 	 </extension>
 	 
@@ -82,7 +83,7 @@
 	    <highlighting
 	          class="ts.eclipse.ide.angular2.ui.style.AngularExpressionBorderSemanticHighlighting"
 	          target="org.eclipse.wst.html.core.htmlsource"
-	          styleStringKey="angularExpressionBorder">
+	          styleStringKey="angular2ExpressionBorder">
 	    </highlighting>
 	 </extension>
    
@@ -93,5 +94,21 @@
 	       <themeid refid="org.eclipse.e4.ui.css.theme.e4_dark"></themeid>
 	   </stylesheet>
    </extension>
+    
+
+	<!--======================================================================================-->
+	<!-- HTML editor configuration for Angular2                 						      -->
+	<!--======================================================================================-->	    
               
+	<extension point="org.eclipse.wst.sse.ui.editorConfiguration">
+  		<!--<documentationTextHover
+        	class="org.eclipse.angularjs.internal.ui.taginfo.HTMLAngularTagInfoHoverProcessor"
+        	target="org.eclipse.wst.html.HTML_DEFAULT">
+  		</documentationTextHover>-->			
+		<provisionalConfiguration
+			type="autoeditstrategy"
+			class="ts.eclipse.ide.angular2.internal.ui.autoedit.StructuredAutoEditStrategyAngular2"
+			target="org.eclipse.wst.html.HTML_DEFAULT, org.eclipse.wst.html.HTML_DECLARATION" />            
+	</extension>
+	              
 </plugin>        

@@ -22,8 +22,14 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.navigator,
  org.eclipse.ui.forms,
  org.eclipse.core.filesystem,
- ts.eclipse.ide.angular2.core
+ ts.eclipse.ide.angular2.core,
+ org.eclipse.wst.sse.core,
+ org.eclipse.wst.sse.ui,
+ org.eclipse.wst.xml.core,
+ org.eclipse.wst.html.ui,
+ org.eclipse.wst.xml.ui
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: ts.eclipse.ide.angular2.ui.Angular2UIPlugin
 Import-Package: com.eclipsesource.json;version="[0.9.4,0.9.5)"
-Export-Package: ts.eclipse.ide.angular2.ui
+Export-Package: ts.eclipse.ide.angular2.ui,
+ ts.eclipse.ide.angular2.ui.style

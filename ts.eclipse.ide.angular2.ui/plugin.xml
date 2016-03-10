@@ -13,5 +13,85 @@
 ###############################################################################
  -->
 <plugin>
-           
+        
+	<!--======================================================================================-->
+	<!-- Angular2 Preferences                                    						      -->
+	<!--======================================================================================-->
+    <extension
+       point="org.eclipse.ui.preferencePages">  
+       <!-- Angular2 Global preferences page -->  
+       <page
+	          class="ts.eclipse.ide.angular2.internal.ui.preferences.Angular2GlobalPreferencesPage"
+	          id="ts.eclipse.ide.angular2.preferences"
+	          name="%Angular2PreferencePage.name"/>
+       <!-- Angular2 HTML Files preferences page -->  
+       <page
+              category="ts.eclipse.ide.angular2.preferences"
+	          class="ts.eclipse.ide.angular2.internal.ui.preferences.html.HTMLAngular2GlobalPreferencesPage"
+	          id="ts.eclipse.ide.angular2.html.preferences"
+	          name="%HTMLAngular2GlobalPreferencesPage.name"/>	          
+	    <!-- Angular2 Editor preferences page -->
+		<page
+	          category="ts.eclipse.ide.angular2.html.preferences"
+	          class="ts.eclipse.ide.angular2.internal.ui.preferences.html.HTML2AngularEditorPreferencesPage"
+	          id="ts.eclipse.ide.angular2.html.preferences.editor"
+	          name="%HTMLAngular2EditorPreferencePage.name"/>
+	    <!-- Angular2 Syntax Coloring preferences page -->
+		<page
+	          category="ts.eclipse.ide.angular2.html.preferences.editor"
+	          class="ts.eclipse.ide.angular2.internal.ui.preferences.html.HTMLAngular2EditorSyntaxColoringPreferencePage"
+	          id="ts.eclipse.ide.angular2.html.preferences.editor.syntaxcoloring"
+	          name="%HTMLAngular2EditorSyntaxColoringPreferencePage.name"/>
+	    <!-- Angular2 Typing preferences page -->
+		<page
+	          category="ts.eclipse.ide.angular2.html.preferences.editor"
+	          class="ts.eclipse.ide.angular2.internal.ui.preferences.html.HTMLAngularTypingPreferencePage"
+	          id="ts.eclipse.ide.angular2.html.preferences.editor.typing"
+	          name="%HTMLAngular2TypingPreferencePage.name"/>            
+   </extension>	
+		     
+	<extension point="org.eclipse.core.runtime.preferences">
+		<initializer
+			class="ts.eclipse.ide.angular2.internal.ui.preferences.Angular2UIPreferenceInitializer" />
+	</extension>		     
+        
+	<!--======================================================================================-->
+	<!-- Angular2 Highlighting                                      						      -->
+	<!--======================================================================================-->
+	
+	<extension
+	       point="org.eclipse.wst.sse.ui.semanticHighlighting">
+	    <highlighting
+	          class="ts.eclipse.ide.angular2.ui.style.DirectiveSemanticHighlighting"
+	          target="org.eclipse.wst.html.core.htmlsource"
+	          styleStringKey="directiveName">
+	    </highlighting>
+	 </extension>
+
+	 <extension
+	       point="org.eclipse.wst.sse.ui.semanticHighlighting">
+	    <highlighting
+	          class="ts.eclipse.ide.angular2.ui.style.AngularExpressionSemanticHighlighting"
+	          target="org.eclipse.wst.html.core.htmlsource"
+	          styleStringKey="angularExpression">
+	    </highlighting>
+	 </extension>
+	 
+	 <extension
+	       point="org.eclipse.wst.sse.ui.semanticHighlighting">
+	    <highlighting
+	          class="ts.eclipse.ide.angular2.ui.style.AngularExpressionBorderSemanticHighlighting"
+	          target="org.eclipse.wst.html.core.htmlsource"
+	          styleStringKey="angularExpressionBorder">
+	    </highlighting>
+	 </extension>
+   
+   <!-- dark theme defaults -->
+   <extension
+	    point="org.eclipse.e4.ui.css.swt.theme">
+	   <stylesheet uri="css/dark/preferencestyle.css"> 
+	       <themeid refid="org.eclipse.e4.ui.css.theme.e4_dark"></themeid>
+	   </stylesheet>
+   </extension>
+              
 </plugin>        

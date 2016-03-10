@@ -16,7 +16,7 @@ import java.util.ResourceBundle;
 import org.eclipse.osgi.util.NLS;
 
 /**
- * TypeScript UI messages.
+ * Angular2 UI messages.
  *
  */
 public class Angular2UIMessages extends NLS {
@@ -24,6 +24,16 @@ public class Angular2UIMessages extends NLS {
 	private static final String BUNDLE_NAME = "ts.eclipse.ide.angular2.internal.ui.Angular2UIMessages"; //$NON-NLS-1$
 
 	private static ResourceBundle fResourceBundle;
+
+	// Preferences
+	public static String Angular2GlobalPreferencesPage_desc;
+	public static String HTMLAngular2GlobalPreferencesPage_desc;
+	public static String HTMLAngular2EditorPreferencesPage_desc;
+	
+	public static String Angular2Typing_Auto_Complete;
+	public static String Angular2Typing_Close_EL;
+
+	public static String Sample_HTMLAngular2_doc;
 
 	public static ResourceBundle getResourceBundle() {
 		try {

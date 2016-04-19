@@ -8,4 +8,8 @@ Today this project is just a POC, you benefit with TypeScript features (completi
 
 This project highlights Angular expression inside HTML editor, but that's all. Once [typescript.java](https://github.com/angelozerr/typescript.java) will be released, I will work on this project.
 
-For the moment, please create issues at https://github.com/angelozerr/angular2-eclipse/issues 
+For the moment:
+
+ * see https://github.com/angelozerr/angular2-eclipse/wiki/Getting-Started to install it
+ * see https://github.com/angelozerr/angular2-eclipse/wiki/RoadMap
+ * please create issues at https://github.com/angelozerr/angular2-eclipse/issues 

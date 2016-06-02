@@ -110,5 +110,13 @@
 			class="ts.eclipse.ide.angular2.internal.ui.autoedit.StructuredAutoEditStrategyAngular2"
 			target="org.eclipse.wst.html.HTML_DEFAULT, org.eclipse.wst.html.HTML_DECLARATION" />            
 	</extension>
-	              
+	
+	<!-- Templates -->
+	<extension point="org.eclipse.ui.editors.templates">
+		<!-- HTML Angular2 template which looks like https://github.com/johnpapa/vscode-angular2-snippets/blob/master/snippets/html.json -->
+		<include
+			file="templates/htmlangular2-templates.xml"
+			translations="$nl$/templates/htmlangular2-templates.properties">
+		</include>			
+	</extension>              
 </plugin>        

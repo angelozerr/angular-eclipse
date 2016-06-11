@@ -117,6 +117,21 @@
 		<include
 			file="templates/htmlangular2-templates.xml"
 			translations="$nl$/templates/htmlangular2-templates.properties">
+		</include>
+		<!-- TypeScript Angular2 template which looks like https://github.com/johnpapa/vscode-angular2-snippets/blob/master/snippets/typescript.json -->
+		<include
+			file="templates/typescriptangular2-templates.xml"
+			translations="$nl$/templates/typescriptangular2-templates.properties">
 		</include>			
-	</extension>              
+	</extension>
+
+	<!-- Wizards -->
+	<extension
+	      point="org.eclipse.ui.newWizards">
+		<category
+		   id="ts.eclipse.ide.angular2.ui.new"
+		   name="%NewAngular2Wizard.category">
+		</category>
+	</extension>
+	
 </plugin>        

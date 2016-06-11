@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %pluginName
+Bundle-Vendor: %providerName
+Bundle-Localization: plugin
+Bundle-SymbolicName: ts.eclipse.ide.angular2.cli;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.ui.ide,
+ org.eclipse.ui,
+ org.eclipse.debug.core,
+ org.eclipse.debug.ui,
+ ts.eclipse.ide.core
+Bundle-ActivationPolicy: lazy
+Bundle-Activator: ts.eclipse.ide.angular2.cli.Angular2CliPlugin
+Export-Package: ts.eclipse.ide.angular2.cli,
+ ts.eclipse.ide.angular2.cli.launch
+
+

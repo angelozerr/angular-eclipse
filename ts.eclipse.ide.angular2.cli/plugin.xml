@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<!--
+###############################################################################
+# Copyright (c) 2015-2016 Angelo Zerr and others.
+# All rights reserved. This program and the accompanying materials
+# are made available under the terms of the Eclipse Public License v1.0
+# which accompanies this distribution, and is available at
+# http://www.eclipse.org/legal/epl-v10.html
+#
+# Contributors:
+#     Angelo Zerr <angelo.zerr@gmail.com> - Initial API and implementation 
+###############################################################################
+ -->
+<plugin>
+
+	<extension
+	      point="org.eclipse.ui.newWizards">
+	 	<wizard
+		   id="ts.eclipse.ide.angular2.cli.wizards.new.project"
+	       name="%NewAngular2ProjectWizard.name"
+		   class="ts.eclipse.ide.angular2.internal.cli.wizards.NewAngular2ProjectWizard"
+		   project="true"
+		   category="ts.eclipse.ide.angular2.ui.new"
+		   icon="icons/full/obj16/angular2.png">
+	       <description>%NewAngular2ProjectWizard.desc</description>
+		</wizard>
+	</extension>
+	
+	<!-- Launch -->
+	<extension
+       point="org.eclipse.debug.core.launchConfigurationTypes">
+	    <launchConfigurationType
+	          id="ts.eclipse.ide.angular2.cli.angularCliLaunchConfigurationType"
+	          delegate="ts.eclipse.ide.angular2.internal.cli.launch.AngularCliLaunchConfigurationDelegate"
+	          modes="run"
+	          name="%AngularCliLaunchConfigurationDelegate.label">
+	    </launchConfigurationType>
+	</extension>
+		
+</plugin>        

@@ -23,6 +23,7 @@
 	<modules>
 	    <module>ts.eclipse.ide.angular2.core</module>
 	    <module>ts.eclipse.ide.angular2.ui</module>
+        <module>ts.eclipse.ide.angular2.cli</module>
 		<module>update-site</module>
 	</modules>
 	<build>
@@ -158,7 +159,7 @@
 	</dependencies>
 	<repositories>
 		<repository>
-			<id>mars</id>
+			<id>neon</id>
 			<layout>p2</layout>
 			<url>http://download.eclipse.org/releases/neon</url>
 		</repository>

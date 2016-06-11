@@ -14,39 +14,11 @@
  -->
 <plugin>
 
-   <extension-point id="typeScriptConsoleConnectors" 
-   					name="%typeScriptConsoleConnectors.name"
-					schema="schema/typeScriptConsoleConnectors.exsd" />
-	<extension-point id="nodeJSInstalls" 
-					 name="%nodeJSInstallsContribution.name"
-					 schema="schema/nodeJSInstalls.exsd" />
-	
-   <extension point="org.eclipse.core.expressions.propertyTesters">
-		<propertyTester
-			id="ts.eclipse.ide.core.TypeScriptNatureTester"
-			type="org.eclipse.core.resources.IResource"
-			namespace="ts.eclipse.ide.core"
-			properties="isTypeScriptProject,hasTypeScriptBuilder"
-			class="ts.eclipse.ide.internal.core.TypeScriptNatureTester">
-		</propertyTester>
+	<extension point="org.eclipse.wst.html.core.customTagValidator">
+		<validator class="ts.eclipse.ide.angular2.internal.core.validation.HTMLAngular2TagValidator"></validator>
 	</extension>
-			
-	<!-- Preferences initialization -->
-	<extension
-		point="org.eclipse.core.runtime.preferences">
-		<initializer
-			class="ts.eclipse.ide.internal.core.preferences.TypeScriptCorePreferenceInitializer" />
+	<extension point="org.eclipse.wst.html.core.customAttributeValidator">
+		<validator class="ts.eclipse.ide.angular2.internal.core.validation.HTMLAngular2AttributeValidator"></validator>
 	</extension>
-			
-	<!-- Builder to compile TypeScript -> JavaScript with tsc -->			
-   <extension
-         id="typeScriptBuilder"
-         name="%TypeScriptBuilder.name"
-         point="org.eclipse.core.resources.builders">
-      <builder>
-         <run class="ts.eclipse.ide.core.builder.TypeScriptBuilder">
-         </run>
-      </builder>
-   </extension>
 
 </plugin>        

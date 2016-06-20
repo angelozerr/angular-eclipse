@@ -15,7 +15,7 @@
 <plugin>
 
 	<!-- Wizards -->
-	<extension
+	<!--<extension
 	      point="org.eclipse.ui.newWizards">
 	 	<wizard
 		   id="ts.eclipse.ide.angular2.cli.wizards.new.project"
@@ -27,9 +27,10 @@
 	       <description>%NewAngular2ProjectWizard.desc</description>
 		</wizard>
 	</extension>
+	-->
 	
 	<!-- Launch -->
-	<extension
+	<!--<extension
        point="org.eclipse.debug.core.launchConfigurationTypes">
 	    <launchConfigurationType
 	          id="ts.eclipse.ide.angular2.cli.angularCliLaunchConfigurationType"
@@ -38,6 +39,7 @@
 	          name="%AngularCliLaunchConfigurationDelegate.label">
 	    </launchConfigurationType>
 	</extension>
+	-->
 		
  	<!-- Preference Pages -->          		
   <extension

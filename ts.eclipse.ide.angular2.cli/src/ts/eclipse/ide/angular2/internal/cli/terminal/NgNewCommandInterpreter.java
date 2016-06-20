@@ -23,9 +23,13 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.ISetSelectionTarget;
 import org.eclipse.ui.progress.UIJob;
 
-import ts.eclipse.ide.terminal.interpreter.ICommandInterpreter;
+import ts.eclipse.ide.terminal.interpreter.AbstractCommandInterpreter;
 
-public class NgNewCommandInterpreter implements ICommandInterpreter {
+public class NgNewCommandInterpreter extends AbstractCommandInterpreter {
+
+	public NgNewCommandInterpreter(List<String> parameters, String workingDir) {
+		super(parameters, workingDir);
+	}
 
 	@Override
 	public void execute(List<String> parameters, String workingDir) {
@@ -79,9 +83,5 @@ public class NgNewCommandInterpreter implements ICommandInterpreter {
 			}
 		}
 	}
-	
-	@Override
-	public void addLine(String line) {
-		
-	}
+
 }

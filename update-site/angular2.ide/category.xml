@@ -15,6 +15,9 @@
    <feature id="ts-validation-feature">
       <category name="TypeScript IDE"/>
    </feature>
+      <feature url="features/ts-json-feature_1.0.0.qualifier.jar" id="ts-json-feature" version="1.0.0.qualifier">
+      <category name="JSON Editors"/>
+   </feature>
    <feature id="ts-nodejs.embed-feature">
       <category name="Embed Node.js"/>
    </feature>
@@ -36,4 +39,9 @@
          Embed Node.js switch OS
       </description>
    </category-def>
+   <category-def name="JSON Editors" label="JSON Editors (Ony for &gt; Neon)">
+      <description>
+         Provide JSON Editor for tsconfig.json based on WTP JSON Editor.
+      </description>
+   </category-def>   
 </site>

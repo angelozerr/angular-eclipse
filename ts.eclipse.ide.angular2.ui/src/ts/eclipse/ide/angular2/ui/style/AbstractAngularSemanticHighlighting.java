@@ -78,7 +78,7 @@ public abstract class AbstractAngularSemanticHighlighting implements
 			return true;
 		}
 		// semantic highlight can be consumed if project has angular nature.
-		return Angular2Project.hasAngular2Nature(file.getProject());
+		return Angular2Project.isAngular2Project(file.getProject());
 	}
 
 	@Override

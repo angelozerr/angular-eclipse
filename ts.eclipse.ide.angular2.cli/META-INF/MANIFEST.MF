@@ -12,10 +12,17 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
  org.eclipse.debug.core,
  org.eclipse.debug.ui,
- ts.eclipse.ide.core
+ ts.eclipse.ide.core,
+ ts.eclipse.ide.ui,
+ org.eclipse.ui.forms,
+ ts.core,
+ ts.eclipse.ide.angular2.core,
+ org.eclipse.core.externaltools,
+ ts.eclipse.ide.terminal.interpreter.npm
 Bundle-ActivationPolicy: lazy
-Bundle-Activator: ts.eclipse.ide.angular2.cli.Angular2CliPlugin
+Bundle-Activator: ts.eclipse.ide.angular2.cli.AngularCliPlugin
 Export-Package: ts.eclipse.ide.angular2.cli,
- ts.eclipse.ide.angular2.cli.launch
+ ts.eclipse.ide.angular2.cli.launch,
+ ts.eclipse.ide.angular2.cli.preferences
 
 

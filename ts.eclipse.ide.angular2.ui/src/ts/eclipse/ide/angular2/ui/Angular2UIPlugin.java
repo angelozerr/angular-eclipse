@@ -10,6 +10,8 @@
  */
 package ts.eclipse.ide.angular2.ui;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -27,6 +29,8 @@ public class Angular2UIPlugin extends AbstractUIPlugin {
 
 	// The shared instance
 	private static Angular2UIPlugin plugin;
+
+	private static final int INTERNAL_ERROR = 10001;
 
 	private FormToolkit fDialogsFormToolkit;
 
@@ -83,4 +87,15 @@ public class Angular2UIPlugin extends AbstractUIPlugin {
 		return getActiveWorkbenchWindow().getActivePage();
 	}
 
+	public static void log(IStatus status) {
+		getDefault().getLog().log(status);
+	}
+
+	public static void log(String message, Throwable e) {
+		log(new Status(IStatus.ERROR, PLUGIN_ID, INTERNAL_ERROR, message, e));
+	}
+
+	public static void logErrorMessage(String message) {
+		log(new Status(IStatus.ERROR, PLUGIN_ID, INTERNAL_ERROR, message, null));
+	}
 }

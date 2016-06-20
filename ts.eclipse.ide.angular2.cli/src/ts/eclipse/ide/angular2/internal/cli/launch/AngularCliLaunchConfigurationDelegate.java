@@ -10,24 +10,22 @@
  */
 package ts.eclipse.ide.angular2.internal.cli.launch;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.IStreamListener;
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
-import org.eclipse.debug.core.model.IProcess;
 
 import ts.eclipse.ide.angular2.cli.launch.AngularCliLaunchConstants;
 
 /**
- * Launch configuration which consumes angular-cli to generate project, component, etc.
+ * Launch configuration which consumes angular-cli to generate project,
+ * component, etc.
  *
  */
 public class AngularCliLaunchConfigurationDelegate implements ILaunchConfigurationDelegate {
@@ -35,6 +33,7 @@ public class AngularCliLaunchConfigurationDelegate implements ILaunchConfigurati
 	@Override
 	public void launch(ILaunchConfiguration configuration, String arg1, ILaunch launch, IProgressMonitor monitor)
 			throws CoreException {
+		String ngFilePath = configuration.getAttribute(AngularCliLaunchConstants.NG_FILE_PATH, (String) null);
 		String workingDir = configuration.getAttribute(AngularCliLaunchConstants.WORKING_DIR, (String) null);
 		String operation = configuration.getAttribute(AngularCliLaunchConstants.OPERATION, (String) null);
 		String operationName = configuration.getAttribute(AngularCliLaunchConstants.OPERATION_NAME, (String) null);
@@ -42,48 +41,63 @@ public class AngularCliLaunchConfigurationDelegate implements ILaunchConfigurati
 			return;
 		}
 
-		List<String> cmds = new ArrayList<String>();
-		
-//		IProject cli = ResourcesPlugin.getWorkspace().getRoot().getProject("test-angular-cli");
-//		cmds.add("node");
-//		cmds.add(new File(cli.getLocation().toFile(), "node_modules/angular-cli/bin/ng").toString());
-//		cmds.add(operation);
-//		if (operationName != null) {
-//			cmds.add(operationName);
-//		}
+		CLICommand command = new CLICommand("ng", "init", null, null);
+		IStreamListener streamListener = null;
+		IPath wd = new Path(workingDir);
 
-		Process p = DebugPlugin.exec(cmds.toArray(new String[0]), new File(workingDir), null);
-		IProcess process = null;
+		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(wd.segment(0));
+		new AngularCLI(project, wd, command).execute(monitor);
 
-		Map<String, String> processAttributes = new HashMap<String, String>();
-		processAttributes.put(IProcess.ATTR_PROCESS_TYPE, "ng");
-
-		if (p != null) {
-			monitor.beginTask("ng...", -1);
-			process = DebugPlugin.newProcess(launch, p, "TODO", processAttributes);
-		}
-
-		AngularCliStreamListener reporter = new AngularCliStreamListener(null);
-		process.getStreamsProxy().getOutputStreamMonitor().addListener(reporter);
-
-		// if (!reporter.isWatch()) {
-		while (!process.isTerminated()) {
-			try {
-				if (monitor.isCanceled()) {
-					process.terminate();
-					break;
-				}
-				Thread.sleep(50L);
-			} catch (InterruptedException localInterruptedException) {
-			}
+		// IProcess process = startShell(streamListener, monitor,
+		// getLaunchConfiguration(command), wd);
+		// sendCLICommand(process, command, monitor);
+		//
+		// List<String> cmds = new ArrayList<String>();
+		//// if (isWindows()) {
+		//// cmds.add("cmd"); //$NON-NLS-1$
+		//// } else {
+		//// cmds.add("/bin/bash"); //$NON-NLS-1$
+		//// cmds.add("-l"); //$NON-NLS-1$
+		//// }
+		// if (ngFilePath == null) {
+		// cmds.add("grunt.cmd");
+		// } else {
+		// cmds.add(ngFilePath);
+		// }
+		// cmds.add(operation);
+		// if (operationName != null) {
+		// cmds.add(operationName);
+		// }
+		//
+		// Process p = DebugPlugin.exec(cmds.toArray(new String[0]), new
+		// File(workingDir), null);
+		// IProcess process = null;
+		//
+		// Map<String, String> processAttributes = new HashMap<String,
+		// String>();
+		// processAttributes.put(IProcess.ATTR_PROCESS_TYPE, "ng");
+		//
+		// if (p != null) {
+		// monitor.beginTask("ng...", -1);
+		// process = DebugPlugin.newProcess(launch, p, "TODO",
+		// processAttributes);
+		// }
+		//
+		// AngularCliStreamListener reporter = new
+		// AngularCliStreamListener(null);
+		// process.getStreamsProxy().getOutputStreamMonitor().addListener(reporter);
+//
+//		while (!process.isTerminated()) {
+//			try {
+//				if (monitor.isCanceled()) {
+//					process.terminate();
+//					break;
+//				}
+//				Thread.sleep(50L);
+//			} catch (InterruptedException localInterruptedException) {
+//			}
 		}
 		// project.refreshLocal(1, monitor);
-		// reporter.onCompilationCompleteWatchingForFileChanges();
-		// }
-		// } catch (TypeScriptException e) {
-		// throw new CoreException(new Status(IStatus.ERROR,
-		// TypeScriptCorePlugin.PLUGIN_ID, "Error while tsc", e));
-		// }
-	}
+	
 
 }

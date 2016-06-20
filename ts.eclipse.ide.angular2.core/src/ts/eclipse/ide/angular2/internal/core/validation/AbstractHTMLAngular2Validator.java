@@ -26,7 +26,7 @@ public class AbstractHTMLAngular2Validator {
 		if (doc instanceof IDocument) {
 			IFile file = DOMUtils.getFile((IDocument) doc);
 			IProject project = file.getProject();
-			if (Angular2Project.hasAngular2Nature(project)) {
+			if (Angular2Project.isAngular2Project(project)) {
 				// project has angular2 nature, cache the project
 				this.project = project;
 			}
@@ -39,6 +39,6 @@ public class AbstractHTMLAngular2Validator {
 	 * @return true if the project has angular2 nature and false otherwise.
 	 */
 	protected boolean hasAngular2Nature() {
-		return project != null && Angular2Project.hasAngular2Nature(project);
+		return project != null && Angular2Project.isAngular2Project(project);
 	}
 }

@@ -13,6 +13,7 @@
  *******************************************************************************/
 package ts.eclipse.ide.angular2.internal.cli.wizards;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.util.ArrayList;
@@ -82,6 +83,8 @@ import org.eclipse.ui.wizards.newresource.BasicNewResourceWizard;
 
 import ts.eclipse.ide.angular2.cli.launch.AngularCliLaunchConstants;
 import ts.eclipse.ide.angular2.cli.launch.AngularCliOperation;
+import ts.eclipse.ide.angular2.internal.cli.AngularCliProject;
+import ts.utils.FileUtils;
 
 /**
  * Standard workbench wizard that creates a new project resource in the
@@ -187,6 +190,10 @@ public class NewAngular2ProjectWizard extends BasicNewResourceWizard implements 
 		public Throwable getError() {
 			return error;
 		}
+
+		private void setError(Throwable error) {
+			this.error = error;
+		}
 	}
 
 	/**
@@ -254,15 +261,22 @@ public class NewAngular2ProjectWizard extends BasicNewResourceWizard implements 
 					public void run() {
 						try {
 							ILaunchConfigurationWorkingCopy newConfiguration = createEmptyLaunchConfiguration();
+							File ngFile = AngularCliProject.getAngularCliProject(newProjectHandle).getSettings()
+									.getNgFile();
+							if (ngFile != null) {
+								newConfiguration.setAttribute(AngularCliLaunchConstants.NG_FILE_PATH,
+										FileUtils.getPath(ngFile));
+							}
 							newConfiguration.setAttribute(AngularCliLaunchConstants.WORKING_DIR,
 									newProjectHandle.getLocation().toString());
 							newConfiguration.setAttribute(AngularCliLaunchConstants.OPERATION,
 									AngularCliOperation.init.name());
 							DebugUITools.launch(newConfiguration, ILaunchManager.RUN_MODE);
 						} catch (CoreException e) {
-
+							super.setError(e);
 						}
 					}
+
 				};
 				getShell().getDisplay().syncExec(runnable);
 				if (runnable.getError() != null) {

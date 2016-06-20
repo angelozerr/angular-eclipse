@@ -10,24 +10,25 @@
  */
 package ts.eclipse.ide.angular2.cli;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Angular2CliPlugin extends AbstractUIPlugin {
+public class AngularCliPlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "ts.eclipse.ide.angular2.cli"; //$NON-NLS-1$
 
 	// The shared instance
-	private static Angular2CliPlugin plugin;
+	private static AngularCliPlugin plugin;
 
 	/**
 	 * The constructor
 	 */
-	public Angular2CliPlugin() {
+	public AngularCliPlugin() {
 	}
 
 	@Override
@@ -47,8 +48,13 @@ public class Angular2CliPlugin extends AbstractUIPlugin {
 	 *
 	 * @return the shared instance
 	 */
-	public static Angular2CliPlugin getDefault() {
+	public static AngularCliPlugin getDefault() {
 		return plugin;
+	}
+
+	public static void logError(Throwable e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

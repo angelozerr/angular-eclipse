@@ -32,4 +32,14 @@ public class AngularCliStreamListener implements IStreamListener {
 
 	}
 
+	public String getErrorMessage() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getMessage() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

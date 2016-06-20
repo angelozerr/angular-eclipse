@@ -22,6 +22,7 @@ import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
 import org.w3c.dom.NamedNodeMap;
 
 import ts.eclipse.ide.angular2.core.Angular2Project;
+import ts.eclipse.ide.angular2.core.Angular2ProjectSettings;
 import ts.eclipse.ide.angular2.internal.ui.preferences.Angular2UIPreferenceNames;
 
 /**
@@ -29,8 +30,7 @@ import ts.eclipse.ide.angular2.internal.ui.preferences.Angular2UIPreferenceNames
  * content).
  *
  */
-public abstract class AbstractAngularExpressionSemanticHighlighting extends
-		AbstractAngularSemanticHighlighting {
+public abstract class AbstractAngularExpressionSemanticHighlighting extends AbstractAngularSemanticHighlighting {
 
 	@Override
 	public String getEnabledPreferenceKey() {
@@ -38,20 +38,18 @@ public abstract class AbstractAngularExpressionSemanticHighlighting extends
 	}
 
 	@Override
-	protected List<Position> consumes(IDOMNode node, IFile file,
-			IStructuredDocumentRegion documentRegion) {
-		if (!(DOMRegionContext.XML_CONTENT.equals(documentRegion.getType()) || DOMRegionContext.XML_TAG_NAME
-				.equals(documentRegion.getType()))) {
+	protected List<Position> consumes(IDOMNode node, IFile file, IStructuredDocumentRegion documentRegion) {
+		if (!(DOMRegionContext.XML_CONTENT.equals(documentRegion.getType())
+				|| DOMRegionContext.XML_TAG_NAME.equals(documentRegion.getType()))) {
 			return null;
 		}
-		String startSymbol = Angular2Project.DEFAULT_START_SYMBOL;
-		String endSymbol = Angular2Project.DEFAULT_END_SYMBOL;
+		String startSymbol = Angular2ProjectSettings.DEFAULT_START_SYMBOL;
+		String endSymbol = Angular2ProjectSettings.DEFAULT_END_SYMBOL;
 		if (file != null) {
 			try {
-				Angular2Project angularProject = Angular2Project
-						.getAngular2Project(file.getProject());
-				startSymbol = angularProject.getStartSymbol();
-				endSymbol = angularProject.getEndSymbol();
+				Angular2Project angularProject = Angular2Project.getAngular2Project(file.getProject());
+				startSymbol = angularProject.getSettings().getStartSymbol();
+				endSymbol = angularProject.getSettings().getEndSymbol();
 			} catch (Throwable e) {
 			}
 		}
@@ -61,12 +59,10 @@ public abstract class AbstractAngularExpressionSemanticHighlighting extends
 			List<Position> positions = new ArrayList<Position>();
 			String regionText = documentRegion.getText();
 			int startOffset = documentRegion.getStartOffset();
-			fillPositions(positions, startSymbol, endSymbol, regionText,
-					startOffset);
+			fillPositions(positions, startSymbol, endSymbol, regionText, startOffset);
 			return positions;
 
-		} else if (DOMRegionContext.XML_TAG_NAME.equals(documentRegion
-				.getType())) {
+		} else if (DOMRegionContext.XML_TAG_NAME.equals(documentRegion.getType())) {
 			// element node, check if this node contains attributes which
 			// contains {{ and }}.
 			// ex : <span class="done-{{todo.done}}">
@@ -78,8 +74,7 @@ public abstract class AbstractAngularExpressionSemanticHighlighting extends
 					attr = (IDOMAttr) attributes.item(i);
 					String regionText = attr.getValue();
 					int startOffset = attr.getValueRegionStartOffset() + 1;
-					fillPositions(positions, startSymbol, endSymbol,
-							regionText, startOffset);
+					fillPositions(positions, startSymbol, endSymbol, regionText, startOffset);
 				}
 				return positions;
 			}
@@ -96,14 +91,12 @@ public abstract class AbstractAngularExpressionSemanticHighlighting extends
 	 * @param regionText
 	 * @param startOffset
 	 */
-	private void fillPositions(List<Position> positions,
-			String startExpression, String endExpression, String regionText,
-			int startOffset) {
+	private void fillPositions(List<Position> positions, String startExpression, String endExpression,
+			String regionText, int startOffset) {
 		int startIndex = regionText.indexOf(startExpression);
 		int endIndex = -1;
 		while (startIndex != -1) {
-			endIndex = fillPosition(positions, startExpression, endExpression,
-					regionText, startIndex, startOffset);
+			endIndex = fillPosition(positions, startExpression, endExpression, regionText, startIndex, startOffset);
 			if (endIndex == -1) {
 				break;
 			} else {
@@ -124,7 +117,6 @@ public abstract class AbstractAngularExpressionSemanticHighlighting extends
 	 * @param startOffset
 	 * @return
 	 */
-	protected abstract int fillPosition(List<Position> positions,
-			String startExpression, String endExpression, String regionText,
-			int startIndex, int startOffset);
+	protected abstract int fillPosition(List<Position> positions, String startExpression, String endExpression,
+			String regionText, int startIndex, int startOffset);
 }

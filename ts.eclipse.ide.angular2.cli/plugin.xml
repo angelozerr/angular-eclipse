@@ -14,6 +14,7 @@
  -->
 <plugin>
 
+	<!-- Wizards -->
 	<extension
 	      point="org.eclipse.ui.newWizards">
 	 	<wizard
@@ -38,4 +39,46 @@
 	    </launchConfigurationType>
 	</extension>
 		
+ 	<!-- Preference Pages -->          		
+  <extension
+         point="org.eclipse.ui.preferencePages">		      
+      <page
+            name="%AngularCliPreferencePage.name"        
+            class="ts.eclipse.ide.angular2.internal.cli.preferences.AngularCliPreferencePage"
+            id="ts.eclipse.ide.angular2.cli.preference.AngularCliPreferencePage"
+            category="ts.eclipse.ide.angular2.preferences">
+      </page>
+   </extension>
+         		
+  <!-- Property Pages -->          		
+  <extension
+         point="org.eclipse.ui.propertyPages">		      
+      <page
+            name="%AngularCliPreferencePage.name"        
+            class="ts.eclipse.ide.angular2.internal.cli.preferences.AngularCliPreferencePage"
+            id="ts.eclipse.ide.angular2.cli.property.AngularCliPreferencePage"
+            category="ts.eclipse.ide.angular2.preferences.Angular2MainPropertyPage" >
+         <enabledWhen>
+		     <adapt type="org.eclipse.core.resources.IProject">
+		     	  <test property="ts.eclipse.ide.angular2.core.isAngular2Project" />
+		     </adapt>         
+         </enabledWhen>
+      </page>
+   </extension>
+   
+   <extension point="org.eclipse.core.runtime.preferences">
+		<initializer
+			class="ts.eclipse.ide.angular2.internal.cli.preferences.AngularCliPreferenceInitializer" />
+	</extension>
+	
+   <extension
+         point="ts.eclipse.ide.terminal.interpreter.commandInterpreterFactories">
+      <factory
+            id="ts.eclipse.ide.angular2.cli.terminal.NgCommandInterpreter"
+            name="%interpreter.ng.name"
+            commands="npm"
+            class="ts.eclipse.ide.angular2.internal.cli.terminal.NgCommandInterpreter">
+      </factory>
+   </extension>
+   	
 </plugin>        

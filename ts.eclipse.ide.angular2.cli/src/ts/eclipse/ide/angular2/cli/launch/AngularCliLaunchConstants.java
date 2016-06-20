@@ -10,7 +10,7 @@
  */
 package ts.eclipse.ide.angular2.cli.launch;
 
-import ts.eclipse.ide.angular2.cli.Angular2CliPlugin;
+import ts.eclipse.ide.angular2.cli.AngularCliPlugin;
 import ts.eclipse.ide.core.TypeScriptCorePlugin;
 
 /**
@@ -20,8 +20,9 @@ import ts.eclipse.ide.core.TypeScriptCorePlugin;
 public class AngularCliLaunchConstants {
 
 	// Launch constants
-	public static final String LAUNCH_CONFIGURATION_ID = Angular2CliPlugin.PLUGIN_ID
+	public static final String LAUNCH_CONFIGURATION_ID = AngularCliPlugin.PLUGIN_ID
 			+ ".angularCliLaunchConfigurationType"; //$NON-NLS-1$
+	public static final String NG_FILE_PATH = TypeScriptCorePlugin.PLUGIN_ID + ".NG_FILE_PATH"; //$NON-NLS-1$
 	public static final String WORKING_DIR = TypeScriptCorePlugin.PLUGIN_ID + ".WORKING_DIR"; //$NON-NLS-1$
 	public static final String OPERATION = TypeScriptCorePlugin.PLUGIN_ID + ".OPERATION"; //$NON-NLS-1$
 	public static final String OPERATION_NAME = TypeScriptCorePlugin.PLUGIN_ID + ".OPERATION_NAME"; //$NON-NLS-1$

@@ -74,10 +74,10 @@
    <extension
          point="ts.eclipse.ide.terminal.interpreter.commandInterpreterFactories">
       <factory
-            id="ts.eclipse.ide.angular2.cli.terminal.NgCommandInterpreter"
+            id="ts.eclipse.ide.angular2.cli.terminal.NgCommandInterpreterFactory"
             name="%interpreter.ng.name"
-            commands="npm"
-            class="ts.eclipse.ide.angular2.internal.cli.terminal.NgCommandInterpreter">
+            commands="ng"
+            class="ts.eclipse.ide.angular2.internal.cli.terminal.NgCommandInterpreterFactory">
       </factory>
    </extension>
    	

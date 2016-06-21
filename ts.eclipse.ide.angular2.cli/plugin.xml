@@ -14,6 +14,40 @@
  -->
 <plugin>
 
+	<!-- JSON Schema for angular-cli.json -->
+	<extension point="org.eclipse.core.contenttype.contentTypes">
+		<content-type
+		    file-names="angular-cli.json"
+			priority="high"
+			name="%angular_cli_Content_Type_Extension_Element"
+			id="ts.eclipse.ide.angular2.cli.angularclisource"
+			base-type="org.eclipse.wst.json.core.jsonsource">
+		</content-type>
+	</extension>
+			
+   <extension
+         point="org.eclipse.wst.json.core.schemaCatalogContributions">
+         <schemaCatalogContribution id="http://schemastore.org/ts">
+         	<schema name="angular-cli.json"
+         			description="JSON schema for Angular CLI configuration file"
+         			fileMatch="angular-cli.json"
+         			url="https://raw.githubusercontent.com/angular/angular-cli/master/lib/config/schema.json"
+         			uri="jsonschema/angular-cli.json" />        			
+         </schemaCatalogContribution>
+	</extension>
+	
+	<extension point="org.eclipse.ui.editors">
+		<editor
+			name="%angular_cli_Editor.name"
+			icon="$nl$/icons/full/obj16/angular2.png"
+			class="org.eclipse.wst.sse.ui.StructuredTextEditor"
+			symbolicFontName="org.eclipse.wst.sse.ui.textfont"
+			id="ts.eclipse.ide.angular2.cli.AngularCLIEditor">
+			<contentTypeBinding
+				contentTypeId="ts.eclipse.ide.angular2.cli.angularclisource" />
+		</editor>
+	</extension>
+		
 	<!-- Wizards -->
 	<!--<extension
 	      point="org.eclipse.ui.newWizards">

@@ -17,18 +17,18 @@ import org.osgi.framework.BundleContext;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class AngularCliPlugin extends AbstractUIPlugin {
+public class AngularCLIPlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "ts.eclipse.ide.angular2.cli"; //$NON-NLS-1$
 
 	// The shared instance
-	private static AngularCliPlugin plugin;
+	private static AngularCLIPlugin plugin;
 
 	/**
 	 * The constructor
 	 */
-	public AngularCliPlugin() {
+	public AngularCLIPlugin() {
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class AngularCliPlugin extends AbstractUIPlugin {
 	 *
 	 * @return the shared instance
 	 */
-	public static AngularCliPlugin getDefault() {
+	public static AngularCLIPlugin getDefault() {
 		return plugin;
 	}
 

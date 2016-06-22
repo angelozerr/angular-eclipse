@@ -1,3 +1,14 @@
+/**
+ *  Copyright (c) 2015-2016 Angelo ZERR.
+ *  All rights reserved. This program and the accompanying materials
+ *  are made available under the terms of the Eclipse Public License v1.0
+ *  which accompanies this distribution, and is available at
+ *  http://www.eclipse.org/legal/epl-v10.html
+ *
+ *  Contributors:
+ *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ *  
+ */
 package ts.eclipse.ide.angular2.internal.cli.terminal;
 
 import java.util.List;
@@ -19,11 +30,18 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ISetSelectionTarget;
 import org.eclipse.ui.progress.UIJob;
 
+import ts.eclipse.ide.angular2.cli.AngularCLIPlugin;
+import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
 import ts.eclipse.ide.terminal.interpreter.AbstractCommandInterpreter;
 
+/**
+ * "ng build" interpreter to refresh the "dist" folder.
+ *
+ */
 public class NgBuildCommandInterpreter extends AbstractCommandInterpreter {
 
-	private String folder;
+	private static final String BUILT_PROJECT_SUCCESSFULLY_STORED_IN = "Built project successfully. Stored in \"";
+	private String distDir;
 
 	public NgBuildCommandInterpreter(List<String> parameters, String workingDir) {
 		super(parameters, workingDir);
@@ -31,24 +49,22 @@ public class NgBuildCommandInterpreter extends AbstractCommandInterpreter {
 
 	@Override
 	protected void execute(List<String> parameters, String workingDir) {
-
 		final IContainer[] c = ResourcesPlugin.getWorkspace().getRoot().findContainersForLocation(new Path(workingDir));
 		if (c != null && c.length > 0) {
-
-			new UIJob("Refresh dist folder") {
+			new UIJob(AngularCLIMessages.NgBuildCommandInterpreter_jobName) {
 				@Override
 				public IStatus runInUIThread(IProgressMonitor monitor) {
-					final IFolder f = c[0].getFolder(new Path(folder));
 					try {
-						f.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+						IFolder distFolder = c[0].getFolder(new Path(distDir));
+						distFolder.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+						if (distFolder.exists()) {
+							IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+							final IViewPart view = page.findView(IPageLayout.ID_PROJECT_EXPLORER);
+							((ISetSelectionTarget) view).selectReveal(new StructuredSelection(distFolder));
+						}
 					} catch (CoreException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					if (f.exists()) {
-						IWorkbenchPage page = PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage();
-						final IViewPart view = page.findView(IPageLayout.ID_PROJECT_EXPLORER);
-						((ISetSelectionTarget) view).selectReveal(new StructuredSelection(f));
+						return new Status(IStatus.ERROR, AngularCLIPlugin.PLUGIN_ID,
+								AngularCLIMessages.NgBuildCommandInterpreter_error, e);
 					}
 					return Status.OK_STATUS;
 				}
@@ -58,12 +74,10 @@ public class NgBuildCommandInterpreter extends AbstractCommandInterpreter {
 
 	@Override
 	public void onTrace(String trace) {
-		if (trace.startsWith("Built project successfully. Stored in \"")) {
-			folder = trace.substring("Built project successfully. Stored in \"".length(), trace.length());
-			folder = folder.substring(0, folder.indexOf("\""));
-
+		if (trace.startsWith(BUILT_PROJECT_SUCCESSFULLY_STORED_IN)) {
+			distDir = trace.substring(BUILT_PROJECT_SUCCESSFULLY_STORED_IN.length(), trace.length());
+			distDir = distDir.substring(0, distDir.indexOf("\""));
 		}
-
 	}
 
 }

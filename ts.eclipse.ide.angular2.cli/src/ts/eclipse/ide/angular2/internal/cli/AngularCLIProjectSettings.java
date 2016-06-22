@@ -5,15 +5,15 @@ import java.io.File;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.PreferenceChangeEvent;
 
-import ts.eclipse.ide.angular2.cli.AngularCliPlugin;
-import ts.eclipse.ide.angular2.cli.preferences.AngularCliPreferenceConstants;
+import ts.eclipse.ide.angular2.cli.AngularCLIPlugin;
+import ts.eclipse.ide.angular2.cli.preferences.AngularCLIPreferenceConstants;
 import ts.eclipse.ide.core.resources.AbstractTypeScriptSettings;
 import ts.utils.StringUtils;
 
-public class AngularCliProjectSettings extends AbstractTypeScriptSettings {
+public class AngularCLIProjectSettings extends AbstractTypeScriptSettings {
 
-	public AngularCliProjectSettings(IProject project) {
-		super(project, AngularCliPlugin.PLUGIN_ID);
+	public AngularCLIProjectSettings(IProject project) {
+		super(project, AngularCLIPlugin.PLUGIN_ID);
 	}
 
 	@Override
@@ -22,7 +22,7 @@ public class AngularCliProjectSettings extends AbstractTypeScriptSettings {
 	}
 
 	public File getNgFile() {
-		String path = super.getStringPreferencesValue(AngularCliPreferenceConstants.NG_CUSTOM_FILE_PATH, null);
+		String path = super.getStringPreferencesValue(AngularCLIPreferenceConstants.NG_CUSTOM_FILE_PATH, null);
 		if (!StringUtils.isEmpty(path)) {
 			File resolvedPath = resolvePath(path);
 			return resolvedPath != null ? getNgFile(resolvedPath) : null;

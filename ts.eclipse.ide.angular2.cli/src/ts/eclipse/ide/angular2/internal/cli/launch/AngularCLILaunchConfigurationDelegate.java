@@ -21,22 +21,22 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.IStreamListener;
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
 
-import ts.eclipse.ide.angular2.cli.launch.AngularCliLaunchConstants;
+import ts.eclipse.ide.angular2.cli.launch.AngularCLILaunchConstants;
 
 /**
  * Launch configuration which consumes angular-cli to generate project,
  * component, etc.
  *
  */
-public class AngularCliLaunchConfigurationDelegate implements ILaunchConfigurationDelegate {
+public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurationDelegate {
 
 	@Override
 	public void launch(ILaunchConfiguration configuration, String arg1, ILaunch launch, IProgressMonitor monitor)
 			throws CoreException {
-		String ngFilePath = configuration.getAttribute(AngularCliLaunchConstants.NG_FILE_PATH, (String) null);
-		String workingDir = configuration.getAttribute(AngularCliLaunchConstants.WORKING_DIR, (String) null);
-		String operation = configuration.getAttribute(AngularCliLaunchConstants.OPERATION, (String) null);
-		String operationName = configuration.getAttribute(AngularCliLaunchConstants.OPERATION_NAME, (String) null);
+		String ngFilePath = configuration.getAttribute(AngularCLILaunchConstants.NG_FILE_PATH, (String) null);
+		String workingDir = configuration.getAttribute(AngularCLILaunchConstants.WORKING_DIR, (String) null);
+		String operation = configuration.getAttribute(AngularCLILaunchConstants.OPERATION, (String) null);
+		String operationName = configuration.getAttribute(AngularCLILaunchConstants.OPERATION_NAME, (String) null);
 		if (monitor.isCanceled()) {
 			return;
 		}

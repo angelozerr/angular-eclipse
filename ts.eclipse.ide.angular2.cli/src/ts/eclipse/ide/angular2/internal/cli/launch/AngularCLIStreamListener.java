@@ -19,11 +19,11 @@ import org.eclipse.debug.core.model.IStreamMonitor;
  * {@link IStreamListener} implementation to track angular-cli messages.
  *
  */
-public class AngularCliStreamListener implements IStreamListener {
+public class AngularCLIStreamListener implements IStreamListener {
 
 	private final IProject project;
 	
-	public AngularCliStreamListener(IProject project) throws CoreException {
+	public AngularCLIStreamListener(IProject project) throws CoreException {
 		this.project = project;
 	}
 

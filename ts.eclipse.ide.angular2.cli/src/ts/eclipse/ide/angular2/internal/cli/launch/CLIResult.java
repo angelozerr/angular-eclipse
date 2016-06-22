@@ -14,7 +14,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
-import ts.eclipse.ide.angular2.cli.AngularCliPlugin;
+import ts.eclipse.ide.angular2.cli.AngularCLIPlugin;
 
 /**
  * Generic execution result for Cordova CLI.
@@ -46,7 +46,7 @@ public class CLIResult {
 	
 	IStatus asStatus(){
 		if(hasError()){
-			return new CLIStatus(IStatus.ERROR, AngularCliPlugin.PLUGIN_ID, 500, getErrorMessage(), null);
+			return new CLIStatus(IStatus.ERROR, AngularCLIPlugin.PLUGIN_ID, 500, getErrorMessage(), null);
 		}
 		return Status.OK_STATUS;
 	}

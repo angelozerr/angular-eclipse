@@ -14,7 +14,7 @@ package ts.eclipse.ide.angular2.cli.preferences;
  * Angular cli preferences constants.
  *
  */
-public class AngularCliPreferenceConstants {
+public class AngularCLIPreferenceConstants {
 
 	public static final String NG_USE_GLOBAL_INSTALLATION = "ngUseGlobalInstallation"; //$NON-NLS-1$
 	public static final String NG_CUSTOM_FILE_PATH = "ngCustomFilePath"; //$NON-NLS-1$

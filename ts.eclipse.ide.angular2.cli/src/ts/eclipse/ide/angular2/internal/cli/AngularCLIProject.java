@@ -23,15 +23,14 @@ import ts.eclipse.ide.core.resources.watcher.ProjectWatcherListenerAdapter;
  * Angular2 project.
  *
  */
-public class AngularCliProject {
+public class AngularCLIProject {
 
-	private static final String NG_PROJECT = AngularCliProject.class.getName();
-	private final static Map<IProject, AngularCliProject> ngProjects = new HashMap<IProject, AngularCliProject>();
+	private final static Map<IProject, AngularCLIProject> ngProjects = new HashMap<IProject, AngularCLIProject>();
 
-	private final AngularCliProjectSettings settings;
+	private final AngularCLIProjectSettings settings;
 
-	AngularCliProject(IProject project) {
-		this.settings = new AngularCliProjectSettings(project);
+	AngularCLIProject(IProject project) {
+		this.settings = new AngularCLIProjectSettings(project);
 		synchronized (ngProjects) {
 			ngProjects.put(project, this);
 		}
@@ -58,17 +57,17 @@ public class AngularCliProject {
 				});
 	}
 
-	public static AngularCliProject getAngularCliProject(IProject project) throws CoreException {
+	public static AngularCLIProject getAngularCLIProject(IProject project) throws CoreException {
 		synchronized (ngProjects) {
-			AngularCliProject ngProject = ngProjects.get(project);
+			AngularCLIProject ngProject = ngProjects.get(project);
 			if (ngProject == null) {
-				ngProject = new AngularCliProject(project);
+				ngProject = new AngularCLIProject(project);
 			}
 			return ngProject;
 		}
 	}
 
-	public AngularCliProjectSettings getSettings() {
+	public AngularCLIProjectSettings getSettings() {
 		return settings;
 	}
 }

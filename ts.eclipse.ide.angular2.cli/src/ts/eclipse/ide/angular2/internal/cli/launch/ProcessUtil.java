@@ -17,7 +17,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import ts.eclipse.ide.angular2.cli.AngularCliPlugin;
+import ts.eclipse.ide.angular2.cli.AngularCLIPlugin;
 
 /**
  * @author "Adalberto Lopez Venegas (adalbert)"
@@ -96,10 +96,10 @@ public class ProcessUtil {
 			exit = processBuilder.start().waitFor();
 		} catch (IOException e) {
 			exit = 1;
-			AngularCliPlugin.logError(e);
+			AngularCLIPlugin.logError(e);
 		} catch (InterruptedException e) {
 			exit = 1;
-			AngularCliPlugin.logError(e);
+			AngularCLIPlugin.logError(e);
 		}
 		return exit;
 	}
@@ -151,9 +151,9 @@ public class ProcessUtil {
 				}
 			}
 		} catch (IOException e) {
-			AngularCliPlugin.logError(e);
+			AngularCLIPlugin.logError(e);
 		} catch (InterruptedException e) {
-			AngularCliPlugin.logError(e);
+			AngularCLIPlugin.logError(e);
 		}
 		return pid;
 	}
@@ -190,9 +190,9 @@ public class ProcessUtil {
 				}
 			}
 		} catch (IOException e) {
-			AngularCliPlugin.logError(e);
+			AngularCLIPlugin.logError(e);
 		} catch (InterruptedException e) {
-			AngularCliPlugin.logError(e);
+			AngularCLIPlugin.logError(e);
 		}
 		// if there is only one match - just return it, otherwise need to perform path match
 		return (mathingPIDs.size() == 1) ?  mathingPIDs.get(0) : findPID(mathingPIDs, path); 
@@ -218,9 +218,9 @@ public class ProcessUtil {
 					}
 				}
 			} catch (IOException e) {
-				AngularCliPlugin.logError(e);
+				AngularCLIPlugin.logError(e);
 			} catch (InterruptedException e) {
-				AngularCliPlugin.logError(e);
+				AngularCLIPlugin.logError(e);
 			}
 		}
 		return pid;

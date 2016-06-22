@@ -67,10 +67,10 @@
 	<!--<extension
        point="org.eclipse.debug.core.launchConfigurationTypes">
 	    <launchConfigurationType
-	          id="ts.eclipse.ide.angular2.cli.angularCliLaunchConfigurationType"
-	          delegate="ts.eclipse.ide.angular2.internal.cli.launch.AngularCliLaunchConfigurationDelegate"
+	          id="ts.eclipse.ide.angular2.cli.angularCLILaunchConfigurationType"
+	          delegate="ts.eclipse.ide.angular2.internal.cli.launch.AngularCLILaunchConfigurationDelegate"
 	          modes="run"
-	          name="%AngularCliLaunchConfigurationDelegate.label">
+	          name="%AngularCLILaunchConfigurationDelegate.label">
 	    </launchConfigurationType>
 	</extension>
 	-->
@@ -79,9 +79,9 @@
   <extension
          point="org.eclipse.ui.preferencePages">		      
       <page
-            name="%AngularCliPreferencePage.name"        
-            class="ts.eclipse.ide.angular2.internal.cli.preferences.AngularCliPreferencePage"
-            id="ts.eclipse.ide.angular2.cli.preference.AngularCliPreferencePage"
+            name="%AngularCLIPreferencePage.name"        
+            class="ts.eclipse.ide.angular2.internal.cli.preferences.AngularCLIPreferencePage"
+            id="ts.eclipse.ide.angular2.cli.preference.AngularCLIPreferencePage"
             category="ts.eclipse.ide.angular2.preferences">
       </page>
    </extension>
@@ -90,9 +90,9 @@
   <extension
          point="org.eclipse.ui.propertyPages">		      
       <page
-            name="%AngularCliPreferencePage.name"        
-            class="ts.eclipse.ide.angular2.internal.cli.preferences.AngularCliPreferencePage"
-            id="ts.eclipse.ide.angular2.cli.property.AngularCliPreferencePage"
+            name="%AngularCLIPreferencePage.name"        
+            class="ts.eclipse.ide.angular2.internal.cli.preferences.AngularCLIPreferencePage"
+            id="ts.eclipse.ide.angular2.cli.property.AngularCLIPreferencePage"
             category="ts.eclipse.ide.angular2.preferences.Angular2MainPropertyPage" >
          <enabledWhen>
 		     <adapt type="org.eclipse.core.resources.IProject">
@@ -104,9 +104,10 @@
    
    <extension point="org.eclipse.core.runtime.preferences">
 		<initializer
-			class="ts.eclipse.ide.angular2.internal.cli.preferences.AngularCliPreferenceInitializer" />
+			class="ts.eclipse.ide.angular2.internal.cli.preferences.AngularCLIPreferenceInitializer" />
 	</extension>
 	
+	<!-- Terminal Interpreter for angular-cli ng -->
    <extension
          point="ts.eclipse.ide.terminal.interpreter.commandInterpreterFactories">
       <factory

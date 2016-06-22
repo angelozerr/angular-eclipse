@@ -41,8 +41,8 @@ import org.eclipse.debug.core.Launch;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IStreamsProxy;
 
-import ts.eclipse.ide.angular2.cli.AngularCliPlugin;
-import ts.eclipse.ide.angular2.internal.cli.AngularCliMessages;
+import ts.eclipse.ide.angular2.cli.AngularCLIPlugin;
+import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
 
 /**
  * Wrapper around CLI. Provides low level 
@@ -78,7 +78,7 @@ public class AngularCLI {
 		if (monitor == null) {
 			monitor = new NullProgressMonitor();
 		}
-		final AngularCliStreamListener streamListener = new AngularCliStreamListener(project); // choose your stream listner
+		final AngularCLIStreamListener streamListener = new AngularCLIStreamListener(project); // choose your stream listner
 		IProcess process = startShell(streamListener, monitor, getLaunchConfiguration(command));
 		sendCLICommand(process, command, monitor);
 		CLIResult result = new CLIResult(streamListener.getErrorMessage(), streamListener.getMessage());
@@ -97,7 +97,7 @@ public class AngularCLI {
 			cfg = wc.doSave();
 			return cfg;
 		} catch (CoreException e) {
-			AngularCliPlugin.logError(e);
+			AngularCLIPlugin.logError(e);
 		}
 		return null;
 	}
@@ -118,9 +118,9 @@ public class AngularCLI {
 				Thread.sleep(100);
 			}
 		} catch (IOException e) {
-			throw new CoreException(new Status(IStatus.ERROR, AngularCliPlugin.PLUGIN_ID, AngularCliMessages.Error_FatalInvokingCLI, e));
+			throw new CoreException(new Status(IStatus.ERROR, AngularCLIPlugin.PLUGIN_ID, AngularCLIMessages.Error_FatalInvokingCLI, e));
 		} catch (InterruptedException e) {
-			throw new CoreException(new Status(IStatus.ERROR, AngularCliPlugin.PLUGIN_ID, AngularCliMessages.Error_FatalInvokingCLI, e));
+			throw new CoreException(new Status(IStatus.ERROR, AngularCLIPlugin.PLUGIN_ID, AngularCLIMessages.Error_FatalInvokingCLI, e));
 		} finally {
 			// Something went wrong during termination - need to kill process
 			if (process.getExitValue() != 0) {
@@ -241,7 +241,7 @@ public class AngularCLI {
 								try {
 									project.refreshLocal(IResource.DEPTH_INFINITE, null);
 								} catch (CoreException e) {
-									AngularCliPlugin.logError(e);
+									AngularCLIPlugin.logError(e);
 								} finally {
 									DebugPlugin.getDefault().removeDebugEventListener(this);
 								}

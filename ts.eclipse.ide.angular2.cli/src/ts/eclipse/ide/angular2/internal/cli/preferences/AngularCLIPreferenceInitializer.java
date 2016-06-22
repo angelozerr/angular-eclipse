@@ -13,20 +13,20 @@ package ts.eclipse.ide.angular2.internal.cli.preferences;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 
-import ts.eclipse.ide.angular2.cli.AngularCliPlugin;
-import ts.eclipse.ide.angular2.cli.preferences.AngularCliPreferenceConstants;
+import ts.eclipse.ide.angular2.cli.AngularCLIPlugin;
+import ts.eclipse.ide.angular2.cli.preferences.AngularCLIPreferenceConstants;
 import ts.eclipse.ide.core.resources.WorkspaceTypeScriptSettingsHelper;
 
 /**
  * Angular cli preferences initializer.
  *
  */
-public class AngularCliPreferenceInitializer extends AbstractPreferenceInitializer {
+public class AngularCLIPreferenceInitializer extends AbstractPreferenceInitializer {
 
 	@Override
 	public void initializeDefaultPreferences() {
 		IEclipsePreferences node = WorkspaceTypeScriptSettingsHelper
-				.getWorkspacePreferences(AngularCliPlugin.PLUGIN_ID);
+				.getWorkspacePreferences(AngularCLIPlugin.PLUGIN_ID);
 
 		// initialize properties for direct access of node.js server (start an
 		// internal process)
@@ -34,7 +34,7 @@ public class AngularCliPreferenceInitializer extends AbstractPreferenceInitializ
 	}
 
 	private void initializeCliPreferences(IEclipsePreferences node) {
-		node.putBoolean(AngularCliPreferenceConstants.NG_USE_GLOBAL_INSTALLATION, true);
-		node.put(AngularCliPreferenceConstants.NG_CUSTOM_FILE_PATH, "");
+		node.putBoolean(AngularCLIPreferenceConstants.NG_USE_GLOBAL_INSTALLATION, true);
+		node.put(AngularCLIPreferenceConstants.NG_CUSTOM_FILE_PATH, "");
 	}
 }

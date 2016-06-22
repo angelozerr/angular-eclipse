@@ -19,9 +19,9 @@ import org.eclipse.osgi.util.NLS;
  * angular-cli messages.
  *
  */
-public class AngularCliMessages extends NLS {
+public class AngularCLIMessages extends NLS {
 
-	private static final String BUNDLE_NAME = "ts.eclipse.ide.angular2.internal.cli.AngularCliMessages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages"; //$NON-NLS-1$
 
 	private static ResourceBundle fResourceBundle;
 
@@ -31,7 +31,18 @@ public class AngularCliMessages extends NLS {
 	public static String AngularCliConfigurationBlock_ngUseCustomFile_label;
 
 	public static String Error_FatalInvokingCLI;
-	
+
+	// Interpreter
+	public static String NgServeCommandInterpreter_jobName;
+	public static String NgServeCommandInterpreter_error;
+	public static String NgGenerateCommandInterpreter_jobName;
+	public static String NgGenerateCommandInterpreter_error;
+	public static String NgBuildCommandInterpreter_jobName;
+	public static String NgBuildCommandInterpreter_error;
+	public static String AbstractProjectCommandInterpreter_jobName;
+	public static String AbstractProjectCommandInterpreter_error;
+	public static String AbstractProjectCommandInterpreter_anotherProjectWithSameNameExists_description;
+
 	public static ResourceBundle getResourceBundle() {
 		try {
 			if (fResourceBundle == null)
@@ -43,6 +54,6 @@ public class AngularCliMessages extends NLS {
 	}
 
 	static {
-		NLS.initializeMessages(BUNDLE_NAME, AngularCliMessages.class);
+		NLS.initializeMessages(BUNDLE_NAME, AngularCLIMessages.class);
 	}
 }

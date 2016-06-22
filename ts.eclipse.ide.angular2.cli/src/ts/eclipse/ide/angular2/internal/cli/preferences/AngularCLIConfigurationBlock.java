@@ -24,9 +24,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.preferences.IWorkbenchPreferenceContainer;
 
-import ts.eclipse.ide.angular2.cli.AngularCliPlugin;
-import ts.eclipse.ide.angular2.cli.preferences.AngularCliPreferenceConstants;
-import ts.eclipse.ide.angular2.internal.cli.AngularCliMessages;
+import ts.eclipse.ide.angular2.cli.AngularCLIPlugin;
+import ts.eclipse.ide.angular2.cli.preferences.AngularCLIPreferenceConstants;
+import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
 import ts.eclipse.ide.ui.preferences.BrowseButtonsComposite;
 import ts.eclipse.ide.ui.preferences.OptionsConfigurationBlock;
 import ts.eclipse.ide.ui.preferences.ScrolledPageContent;
@@ -35,7 +35,7 @@ import ts.eclipse.ide.ui.preferences.ScrolledPageContent;
  * angular-cli configuration block.
  *
  */
-public class AngularCliConfigurationBlock extends OptionsConfigurationBlock {
+public class AngularCLIConfigurationBlock extends OptionsConfigurationBlock {
 
 	private ControlEnableState blockEnableState;
 	private Composite controlsComposite;
@@ -47,11 +47,11 @@ public class AngularCliConfigurationBlock extends OptionsConfigurationBlock {
 	private static final String[] DEFAULT_PATHS = new String[] { "${project_loc:node_modules/angular-cli}" };
 
 	private static final Key PREF_NG_USE_GLOBAL_INSTALLATION = getAngularCliKey(
-			AngularCliPreferenceConstants.NG_USE_GLOBAL_INSTALLATION);
+			AngularCLIPreferenceConstants.NG_USE_GLOBAL_INSTALLATION);
 	private static final Key PREF_NG_CUSTOM_FILE_PATH = getAngularCliKey(
-			AngularCliPreferenceConstants.NG_CUSTOM_FILE_PATH);
+			AngularCLIPreferenceConstants.NG_CUSTOM_FILE_PATH);
 
-	public AngularCliConfigurationBlock(IProject project, IWorkbenchPreferenceContainer container) {
+	public AngularCLIConfigurationBlock(IProject project, IWorkbenchPreferenceContainer container) {
 		super(project, getKeys(), container);
 		blockEnableState = null;
 	}
@@ -61,7 +61,7 @@ public class AngularCliConfigurationBlock extends OptionsConfigurationBlock {
 	}
 
 	protected final static Key getAngularCliKey(String key) {
-		return getKey(AngularCliPlugin.PLUGIN_ID, key);
+		return getKey(AngularCLIPlugin.PLUGIN_ID, key);
 	}
 
 	@Override
@@ -101,7 +101,7 @@ public class AngularCliConfigurationBlock extends OptionsConfigurationBlock {
 
 		Group group = new Group(parent, SWT.NONE);
 		group.setFont(parent.getFont());
-		group.setText(AngularCliMessages.AngularCliConfigurationBlock_cli_group_label);
+		group.setText(AngularCLIMessages.AngularCliConfigurationBlock_cli_group_label);
 		group.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, false));
 		group.setLayout(layout);
 
@@ -113,7 +113,7 @@ public class AngularCliConfigurationBlock extends OptionsConfigurationBlock {
 	private void createNgUseGlobalInstallation(Composite parent) {
 		// Create "Use ng global installation" checkbox
 		ngUseGlobalInstallation = addRadioBox(parent,
-				AngularCliMessages.AngularCliConfigurationBlock_ngUseGlobalInstallation_label,
+				AngularCLIMessages.AngularCliConfigurationBlock_ngUseGlobalInstallation_label,
 				PREF_NG_USE_GLOBAL_INSTALLATION, new String[] { "true", "true" }, 1);
 		ngUseGlobalInstallation.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -130,7 +130,7 @@ public class AngularCliConfigurationBlock extends OptionsConfigurationBlock {
 	private void createNgUseCustomFile(Composite parent) {
 		// Create "Installed TypeScript" checkbox
 		Button ngUseCustomFile = addRadioBox(parent,
-				AngularCliMessages.AngularCliConfigurationBlock_ngUseCustomFile_label, PREF_NG_USE_GLOBAL_INSTALLATION,
+				AngularCLIMessages.AngularCliConfigurationBlock_ngUseCustomFile_label, PREF_NG_USE_GLOBAL_INSTALLATION,
 				new String[] { "false", "false" }, 0);
 		ngUseCustomFile.addSelectionListener(new SelectionAdapter() {
 			@Override

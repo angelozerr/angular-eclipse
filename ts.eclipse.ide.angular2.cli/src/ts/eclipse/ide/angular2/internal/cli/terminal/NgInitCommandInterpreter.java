@@ -15,22 +15,18 @@ import java.io.File;
 import java.util.List;
 
 /**
- * "ng new myproject" interpreter to create an Eclipse project at the end of the
- * process and open the generated angular-cli.json file.
+ * "ng init" interpreter to create an Eclipse project at the end of the process
+ * and open the generated angular-cli.json file.
  *
  */
-public class NgNewCommandInterpreter extends AbstractProjectCommandInterpreter {
+public class NgInitCommandInterpreter extends AbstractProjectCommandInterpreter {
 
-	public NgNewCommandInterpreter(List<String> parameters, String workingDir) {
+	public NgInitCommandInterpreter(List<String> parameters, String workingDir) {
 		super(parameters, workingDir);
 	}
 
 	@Override
 	protected File getProjectDir(List<String> parameters, String workingDir) {
-		if (parameters.size() < 2) {
-			return null;
-		}
-		String projectName = parameters.get(1);
-		return new File(workingDir, projectName);
+		return new File(workingDir);
 	}
 }

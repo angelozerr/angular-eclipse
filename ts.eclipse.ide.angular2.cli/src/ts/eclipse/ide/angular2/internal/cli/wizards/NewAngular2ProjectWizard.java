@@ -81,9 +81,9 @@ import org.eclipse.ui.statushandlers.StatusAdapter;
 import org.eclipse.ui.statushandlers.StatusManager;
 import org.eclipse.ui.wizards.newresource.BasicNewResourceWizard;
 
-import ts.eclipse.ide.angular2.cli.launch.AngularCliLaunchConstants;
-import ts.eclipse.ide.angular2.cli.launch.AngularCliOperation;
-import ts.eclipse.ide.angular2.internal.cli.AngularCliProject;
+import ts.eclipse.ide.angular2.cli.launch.AngularCLILaunchConstants;
+import ts.eclipse.ide.angular2.cli.launch.NgCommand;
+import ts.eclipse.ide.angular2.internal.cli.AngularCLIProject;
 import ts.utils.FileUtils;
 
 /**
@@ -261,16 +261,15 @@ public class NewAngular2ProjectWizard extends BasicNewResourceWizard implements 
 					public void run() {
 						try {
 							ILaunchConfigurationWorkingCopy newConfiguration = createEmptyLaunchConfiguration();
-							File ngFile = AngularCliProject.getAngularCliProject(newProjectHandle).getSettings()
+							File ngFile = AngularCLIProject.getAngularCLIProject(newProjectHandle).getSettings()
 									.getNgFile();
 							if (ngFile != null) {
-								newConfiguration.setAttribute(AngularCliLaunchConstants.NG_FILE_PATH,
+								newConfiguration.setAttribute(AngularCLILaunchConstants.NG_FILE_PATH,
 										FileUtils.getPath(ngFile));
 							}
-							newConfiguration.setAttribute(AngularCliLaunchConstants.WORKING_DIR,
+							newConfiguration.setAttribute(AngularCLILaunchConstants.WORKING_DIR,
 									newProjectHandle.getLocation().toString());
-							newConfiguration.setAttribute(AngularCliLaunchConstants.OPERATION,
-									AngularCliOperation.init.name());
+							newConfiguration.setAttribute(AngularCLILaunchConstants.OPERATION, NgCommand.INIT.name());
 							DebugUITools.launch(newConfiguration, ILaunchManager.RUN_MODE);
 						} catch (CoreException e) {
 							super.setError(e);
@@ -327,7 +326,7 @@ public class NewAngular2ProjectWizard extends BasicNewResourceWizard implements 
 	private ILaunchConfigurationWorkingCopy createEmptyLaunchConfiguration() throws CoreException {
 		ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
 		ILaunchConfigurationType launchConfigurationType = launchManager
-				.getLaunchConfigurationType(AngularCliLaunchConstants.LAUNCH_CONFIGURATION_ID);
+				.getLaunchConfigurationType(AngularCLILaunchConstants.LAUNCH_CONFIGURATION_ID);
 		ILaunchConfigurationWorkingCopy launchConfiguration = launchConfigurationType.newInstance(null,
 				launchManager.generateLaunchConfigurationName("angular-cli"));
 		return launchConfiguration;

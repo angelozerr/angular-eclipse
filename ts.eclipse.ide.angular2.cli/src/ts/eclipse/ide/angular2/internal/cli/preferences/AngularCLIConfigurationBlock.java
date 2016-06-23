@@ -101,7 +101,7 @@ public class AngularCLIConfigurationBlock extends OptionsConfigurationBlock {
 
 		Group group = new Group(parent, SWT.NONE);
 		group.setFont(parent.getFont());
-		group.setText(AngularCLIMessages.AngularCliConfigurationBlock_cli_group_label);
+		group.setText(AngularCLIMessages.AngularCLIConfigurationBlock_cli_group_label);
 		group.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, false));
 		group.setLayout(layout);
 
@@ -113,7 +113,7 @@ public class AngularCLIConfigurationBlock extends OptionsConfigurationBlock {
 	private void createNgUseGlobalInstallation(Composite parent) {
 		// Create "Use ng global installation" checkbox
 		ngUseGlobalInstallation = addRadioBox(parent,
-				AngularCLIMessages.AngularCliConfigurationBlock_ngUseGlobalInstallation_label,
+				AngularCLIMessages.AngularCLIConfigurationBlock_ngUseGlobalInstallation_label,
 				PREF_NG_USE_GLOBAL_INSTALLATION, new String[] { "true", "true" }, 1);
 		ngUseGlobalInstallation.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -130,7 +130,7 @@ public class AngularCLIConfigurationBlock extends OptionsConfigurationBlock {
 	private void createNgUseCustomFile(Composite parent) {
 		// Create "Installed TypeScript" checkbox
 		Button ngUseCustomFile = addRadioBox(parent,
-				AngularCLIMessages.AngularCliConfigurationBlock_ngUseCustomFile_label, PREF_NG_USE_GLOBAL_INSTALLATION,
+				AngularCLIMessages.AngularCLIConfigurationBlock_ngUseCustomFile_label, PREF_NG_USE_GLOBAL_INSTALLATION,
 				new String[] { "false", "false" }, 0);
 		ngUseCustomFile.addSelectionListener(new SelectionAdapter() {
 			@Override

@@ -269,7 +269,7 @@ public class NewAngular2ProjectWizard extends BasicNewResourceWizard implements 
 							}
 							newConfiguration.setAttribute(AngularCLILaunchConstants.WORKING_DIR,
 									newProjectHandle.getLocation().toString());
-							newConfiguration.setAttribute(AngularCLILaunchConstants.OPERATION, NgCommand.INIT.name());
+							newConfiguration.setAttribute(AngularCLILaunchConstants.OPERATION, NgCommand.INIT.name().toLowerCase());
 							DebugUITools.launch(newConfiguration, ILaunchManager.RUN_MODE);
 						} catch (CoreException e) {
 							super.setError(e);

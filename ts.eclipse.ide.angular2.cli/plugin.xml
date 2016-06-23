@@ -49,7 +49,7 @@
 	</extension>
 		
 	<!-- Wizards -->
-	<!--<extension
+	<extension
 	      point="org.eclipse.ui.newWizards">
 	 	<wizard
 		   id="ts.eclipse.ide.angular2.cli.wizards.new.project"
@@ -60,11 +60,10 @@
 		   icon="icons/full/obj16/angular2.png">
 	       <description>%NewAngular2ProjectWizard.desc</description>
 		</wizard>
-	</extension>
-	-->
+	</extension>	
 	
 	<!-- Launch -->
-	<!--<extension
+	<extension
        point="org.eclipse.debug.core.launchConfigurationTypes">
 	    <launchConfigurationType
 	          id="ts.eclipse.ide.angular2.cli.angularCLILaunchConfigurationType"
@@ -72,11 +71,10 @@
 	          modes="run"
 	          name="%AngularCLILaunchConfigurationDelegate.label">
 	    </launchConfigurationType>
-	</extension>
-	-->
+	</extension>	
 		
  	<!-- Preference Pages -->          		
-  <extension
+ 	<extension
          point="org.eclipse.ui.preferencePages">		      
       <page
             name="%AngularCLIPreferencePage.name"        

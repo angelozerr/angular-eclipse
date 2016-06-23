@@ -10,6 +10,8 @@
  */
 package ts.eclipse.ide.angular2.internal.cli.launch;
 
+import java.io.File;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -22,6 +24,8 @@ import org.eclipse.debug.core.IStreamListener;
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
 
 import ts.eclipse.ide.angular2.cli.launch.AngularCLILaunchConstants;
+import ts.eclipse.ide.angular2.cli.launch.NgCommand;
+import ts.eclipse.ide.angular2.internal.cli.AngularCLIUtils;
 
 /**
  * Launch configuration which consumes angular-cli to generate project,
@@ -41,12 +45,18 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 			return;
 		}
 
-		CLICommand command = new CLICommand("ng", "init", null, null);
+		CLICommand command = new CLICommand("ng", operation, null, null);
 		IStreamListener streamListener = null;
 		IPath wd = new Path(workingDir);
 
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(wd.segment(0));
-		new AngularCLI(project, wd, command).execute(monitor);
+		try {
+			new AngularCLI(project, wd, command).execute(monitor);
+		} finally {
+			if (NgCommand.INIT.equals(operation.toUpperCase())) {
+				AngularCLIUtils.refreshProjectAndOpenAngularCLIJson(new File(workingDir), monitor);
+			}
+		}
 
 		// IProcess process = startShell(streamListener, monitor,
 		// getLaunchConfiguration(command), wd);
@@ -86,18 +96,17 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 		// AngularCliStreamListener reporter = new
 		// AngularCliStreamListener(null);
 		// process.getStreamsProxy().getOutputStreamMonitor().addListener(reporter);
-//
-//		while (!process.isTerminated()) {
-//			try {
-//				if (monitor.isCanceled()) {
-//					process.terminate();
-//					break;
-//				}
-//				Thread.sleep(50L);
-//			} catch (InterruptedException localInterruptedException) {
-//			}
-		}
-		// project.refreshLocal(1, monitor);
-	
+		//
+		// while (!process.isTerminated()) {
+		// try {
+		// if (monitor.isCanceled()) {
+		// process.terminate();
+		// break;
+		// }
+		// Thread.sleep(50L);
+		// } catch (InterruptedException localInterruptedException) {
+		// }
+	}
+	// project.refreshLocal(1, monitor);
 
 }

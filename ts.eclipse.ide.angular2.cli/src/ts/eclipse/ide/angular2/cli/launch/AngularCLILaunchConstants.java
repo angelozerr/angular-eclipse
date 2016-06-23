@@ -21,7 +21,7 @@ public class AngularCLILaunchConstants {
 
 	// Launch constants
 	public static final String LAUNCH_CONFIGURATION_ID = AngularCLIPlugin.PLUGIN_ID
-			+ ".angularCliLaunchConfigurationType"; //$NON-NLS-1$
+			+ ".angularCLILaunchConfigurationType"; //$NON-NLS-1$
 	public static final String NG_FILE_PATH = TypeScriptCorePlugin.PLUGIN_ID + ".NG_FILE_PATH"; //$NON-NLS-1$
 	public static final String WORKING_DIR = TypeScriptCorePlugin.PLUGIN_ID + ".WORKING_DIR"; //$NON-NLS-1$
 	public static final String OPERATION = TypeScriptCorePlugin.PLUGIN_ID + ".OPERATION"; //$NON-NLS-1$

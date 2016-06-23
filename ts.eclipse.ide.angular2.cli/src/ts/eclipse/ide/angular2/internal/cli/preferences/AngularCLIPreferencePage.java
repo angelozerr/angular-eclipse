@@ -23,8 +23,8 @@ import ts.eclipse.ide.ui.preferences.PropertyAndPreferencePage;
  */
 public class AngularCLIPreferencePage extends PropertyAndPreferencePage {
 
-	public static final String PREF_ID = "ts.eclipse.ide.angular2.cli.preference.AngularCliPreferencePage"; //$NON-NLS-1$
-	public static final String PROP_ID = "ts.eclipse.ide.angular2.cli.property.AngularCliPreferencePage"; //$NON-NLS-1$
+	public static final String PREF_ID = "ts.eclipse.ide.angular2.cli.preference.AngularCLIPreferencePage"; //$NON-NLS-1$
+	public static final String PROP_ID = "ts.eclipse.ide.angular2.cli.property.AngularCLIPreferencePage"; //$NON-NLS-1$
 
 	private AngularCLIConfigurationBlock configurationBlock;
 

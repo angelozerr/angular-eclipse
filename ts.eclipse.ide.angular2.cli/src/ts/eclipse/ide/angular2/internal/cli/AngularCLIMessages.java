@@ -26,9 +26,9 @@ public class AngularCLIMessages extends NLS {
 	private static ResourceBundle fResourceBundle;
 
 	// Preferences
-	public static String AngularCliConfigurationBlock_cli_group_label;
-	public static String AngularCliConfigurationBlock_ngUseGlobalInstallation_label;
-	public static String AngularCliConfigurationBlock_ngUseCustomFile_label;
+	public static String AngularCLIConfigurationBlock_cli_group_label;
+	public static String AngularCLIConfigurationBlock_ngUseGlobalInstallation_label;
+	public static String AngularCLIConfigurationBlock_ngUseCustomFile_label;
 
 	public static String Error_FatalInvokingCLI;
 

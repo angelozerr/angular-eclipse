@@ -15,14 +15,9 @@ package ts.eclipse.ide.angular2.internal.cli.terminal;
 import java.io.File;
 import java.util.List;
 
-import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.ui.progress.UIJob;
 
-import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
-import ts.eclipse.ide.angular2.internal.cli.AngularCLIUtils;
+import ts.eclipse.ide.angular2.internal.cli.jobs.NgProjectJob;
 import ts.eclipse.ide.terminal.interpreter.AbstractCommandInterpreter;
 
 /**
@@ -31,13 +26,8 @@ import ts.eclipse.ide.terminal.interpreter.AbstractCommandInterpreter;
  */
 public abstract class AbstractProjectCommandInterpreter extends AbstractCommandInterpreter {
 
-	private static final String ANGULAR_CLI_JSON = "angular-cli.json";
-
-	private IWorkspaceRoot workspaceRoot;
-
 	public AbstractProjectCommandInterpreter(List<String> parameters, String workingDir) {
 		super(parameters, workingDir);
-		workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
 	}
 
 	@Override
@@ -46,16 +36,10 @@ public abstract class AbstractProjectCommandInterpreter extends AbstractCommandI
 		if (projectDir == null) {
 			return;
 		}
-		UIJob job = new UIJob(AngularCLIMessages.AbstractProjectCommandInterpreter_jobName) {
-
-			@Override
-			public IStatus runInUIThread(IProgressMonitor monitor) {
-				return AngularCLIUtils.refreshProjectAndOpenAngularCLIJson(projectDir, monitor);
-			}
-		};
+		// Refresh Eclipse project and open angular-cli.json
+		NgProjectJob job = new NgProjectJob(projectDir);
 		job.setRule(ResourcesPlugin.getWorkspace().getRoot());
 		job.schedule();
-
 	}
 
 	protected abstract File getProjectDir(List<String> parameters, String workingDir);

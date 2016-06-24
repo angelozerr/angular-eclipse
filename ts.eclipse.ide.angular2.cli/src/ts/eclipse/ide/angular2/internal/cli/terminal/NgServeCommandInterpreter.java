@@ -11,19 +11,9 @@
  */
 package ts.eclipse.ide.angular2.internal.cli.terminal;
 
-import java.net.URL;
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.browser.IWebBrowser;
-import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
-import org.eclipse.ui.progress.UIJob;
-
-import ts.eclipse.ide.angular2.cli.AngularCLIPlugin;
-import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
+import ts.eclipse.ide.angular2.internal.cli.jobs.NgServeJob;
 import ts.eclipse.ide.terminal.interpreter.AbstractCommandInterpreter;
 
 /**
@@ -51,23 +41,7 @@ public class NgServeCommandInterpreter extends AbstractCommandInterpreter {
 		if (line.startsWith(SERVING_ON)) {
 			final String serverURL = line.substring(SERVING_ON.length(), line.length()).trim();
 			// Open a Web Browser with the given server URL
-			new UIJob(AngularCLIMessages.NgServeCommandInterpreter_jobName) {
-
-				@Override
-				public IStatus runInUIThread(IProgressMonitor monitor) {
-					try {
-						IWorkbenchBrowserSupport browserSupport = PlatformUI.getWorkbench().getBrowserSupport();
-						IWebBrowser browser = browserSupport.createBrowser(
-								IWorkbenchBrowserSupport.LOCATION_BAR | IWorkbenchBrowserSupport.NAVIGATION_BAR, null,
-								null, null);
-						browser.openURL(new URL(serverURL));
-					} catch (Exception e) {
-						return new Status(IStatus.ERROR, AngularCLIPlugin.PLUGIN_ID,
-								AngularCLIMessages.NgServeCommandInterpreter_error, e);
-					}
-					return Status.OK_STATUS;
-				}
-			}.schedule();
+			new NgServeJob(serverURL).schedule();
 
 		}
 	}

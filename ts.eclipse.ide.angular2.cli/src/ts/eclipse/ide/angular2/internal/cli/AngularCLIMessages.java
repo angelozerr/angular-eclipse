@@ -33,10 +33,10 @@ public class AngularCLIMessages extends NLS {
 	public static String Error_FatalInvokingCLI;
 
 	// Interpreter
-	public static String NgServeCommandInterpreter_jobName;
-	public static String NgServeCommandInterpreter_error;
-	public static String NgGenerateCommandInterpreter_jobName;
-	public static String NgGenerateCommandInterpreter_error;
+	public static String NgServeJob_jobName;
+	public static String NgServeJob_error;
+	public static String NgGenerateJob_jobName;
+	public static String NgGenerateJob_error;
 	public static String NgBuildCommandInterpreter_jobName;
 	public static String NgBuildCommandInterpreter_error;
 	public static String AbstractProjectCommandInterpreter_jobName;

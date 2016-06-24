@@ -13,7 +13,7 @@ package ts.eclipse.ide.angular2.internal.cli.terminal;
 
 import java.util.List;
 
-import ts.eclipse.ide.angular2.cli.launch.NgCommand;
+import ts.eclipse.ide.angular2.cli.NgCommand;
 import ts.eclipse.ide.terminal.interpreter.ICommandInterpreter;
 import ts.eclipse.ide.terminal.interpreter.ICommandInterpreterFactory;
 
@@ -31,7 +31,6 @@ public class NgCommandInterpreterFactory implements ICommandInterpreterFactory {
 		case INIT:
 			return new NgInitCommandInterpreter(parameters, workingDir);
 		case GENERATE:
-		case G:
 			return new NgGenerateCommandInterpreter(parameters, workingDir);
 		case SERVE:
 			return new NgServeCommandInterpreter(parameters, workingDir);
@@ -46,10 +45,6 @@ public class NgCommandInterpreterFactory implements ICommandInterpreterFactory {
 		if (parameters.size() < 1) {
 			return null;
 		}
-		try {
-			return NgCommand.valueOf(parameters.get(0).toUpperCase());
-		} catch (Throwable e) {
-			return null;
-		}
+		return NgCommand.getCommand(parameters.get(0));
 	}
 }

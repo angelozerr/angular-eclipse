@@ -60,6 +60,15 @@
 		   icon="icons/full/obj16/angular2.png">
 	       <description>%NewAngular2ProjectWizard.desc</description>
 		</wizard>
+		<wizard
+		   id="ts.eclipse.ide.angular2.cli.wizards.generate.service"
+	       name="%NewNgServiceWizard.name"
+		   class="ts.eclipse.ide.angular2.internal.cli.wizards.NewNgServiceWizard"
+		   project="true"
+		   category="ts.eclipse.ide.angular2.ui.new"
+		   icon="icons/full/obj16/angular2.png">
+	       <description>%NewNgServiceWizard.desc</description>
+		</wizard>
 	</extension>	
 	
 	<!-- Launch -->

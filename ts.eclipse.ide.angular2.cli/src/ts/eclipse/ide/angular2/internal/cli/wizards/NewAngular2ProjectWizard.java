@@ -81,8 +81,8 @@ import org.eclipse.ui.statushandlers.StatusAdapter;
 import org.eclipse.ui.statushandlers.StatusManager;
 import org.eclipse.ui.wizards.newresource.BasicNewResourceWizard;
 
+import ts.eclipse.ide.angular2.cli.NgCommand;
 import ts.eclipse.ide.angular2.cli.launch.AngularCLILaunchConstants;
-import ts.eclipse.ide.angular2.cli.launch.NgCommand;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIProject;
 import ts.utils.FileUtils;
 
@@ -269,7 +269,7 @@ public class NewAngular2ProjectWizard extends BasicNewResourceWizard implements 
 							}
 							newConfiguration.setAttribute(AngularCLILaunchConstants.WORKING_DIR,
 									newProjectHandle.getLocation().toString());
-							newConfiguration.setAttribute(AngularCLILaunchConstants.OPERATION, NgCommand.INIT.name().toLowerCase());
+							newConfiguration.setAttribute(AngularCLILaunchConstants.OPERATION, NgCommand.INIT.name());
 							DebugUITools.launch(newConfiguration, ILaunchManager.RUN_MODE);
 						} catch (CoreException e) {
 							super.setError(e);

@@ -23,9 +23,9 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.IStreamListener;
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
 
+import ts.eclipse.ide.angular2.cli.NgCommand;
 import ts.eclipse.ide.angular2.cli.launch.AngularCLILaunchConstants;
-import ts.eclipse.ide.angular2.cli.launch.NgCommand;
-import ts.eclipse.ide.angular2.internal.cli.AngularCLIUtils;
+import ts.eclipse.ide.angular2.internal.cli.jobs.NgProjectJob;
 
 /**
  * Launch configuration which consumes angular-cli to generate project,
@@ -45,7 +45,7 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 			return;
 		}
 
-		CLICommand command = new CLICommand("ng", operation, null, null);
+		CLICommand command = new CLICommand("ng", operation.toLowerCase(), null, null);
 		IStreamListener streamListener = null;
 		IPath wd = new Path(workingDir);
 
@@ -53,8 +53,21 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 		try {
 			new AngularCLI(project, wd, command).execute(monitor);
 		} finally {
-			if (NgCommand.INIT.equals(operation.toUpperCase())) {
-				AngularCLIUtils.refreshProjectAndOpenAngularCLIJson(new File(workingDir), monitor);
+			NgCommand ngCommand = NgCommand.getCommand(operation);
+			if (ngCommand != null) {
+				switch (ngCommand) {
+				case NEW:
+				case INIT:
+					// Refresh Eclipse project and open angular-cli.json
+					File projectDir = new File(workingDir);
+					// Refresh Eclipse project and open angular-cli.json
+					NgProjectJob job = new NgProjectJob(projectDir);
+					job.setRule(ResourcesPlugin.getWorkspace().getRoot());
+					job.schedule();
+					break;
+				default:
+					break;
+				}
 			}
 		}
 

@@ -1,10 +1,9 @@
 package ts.eclipse.ide.angular2.internal.cli.wizards;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.FocusAdapter;
-import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -17,14 +16,16 @@ import ts.eclipse.ide.angular2.cli.NgBlueprint;
 public class NgGenerateBlueprintWizardPage extends WizardPage {
 
 	private static final int SIZING_TEXT_FIELD_WIDTH = 250;
-	
+
 	private final NgBlueprint blueprint;
 	private Text resourceNameField;
+	private final IProject project;
 
 	protected NgGenerateBlueprintWizardPage(String pageName, String title, ImageDescriptor titleImage,
-			NgBlueprint blueprint) {
+			NgBlueprint blueprint, IProject project) {
 		super(pageName, title, titleImage);
 		this.blueprint = blueprint;
+		this.project = project;
 	}
 
 	@Override
@@ -62,17 +63,17 @@ public class NgGenerateBlueprintWizardPage extends WizardPage {
 
 		// resource name entry field
 		resourceNameField = new Text(nameGroup, SWT.BORDER);
-		//resourceNameField.addListener(SWT.Modify, this);
-//		resourceNameField.addFocusListener(new FocusAdapter() {
-//			public void focusLost(FocusEvent e) {
-//				handleResourceNameFocusLostEvent();
-//			}
-//		});
+		// resourceNameField.addListener(SWT.Modify, this);
+		// resourceNameField.addFocusListener(new FocusAdapter() {
+		// public void focusLost(FocusEvent e) {
+		// handleResourceNameFocusLostEvent();
+		// }
+		// });
 		GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		data.widthHint = SIZING_TEXT_FIELD_WIDTH;
 		resourceNameField.setLayoutData(data);
 		resourceNameField.setFont(font);
-		//validateControls();
+		// validateControls();
 
 	}
 
@@ -80,6 +81,19 @@ public class NgGenerateBlueprintWizardPage extends WizardPage {
 		boolean valid = true;
 
 		return valid;
+	}
+
+	public IProject getProject() {
+		return project;
+	}
+
+	public NgBlueprint getNgBluePrint() {
+		return blueprint;
+	}
+
+	public String getBluepringName() {
+		// TODO Auto-generated method stub
+		return resourceNameField.getText();
 	}
 
 }

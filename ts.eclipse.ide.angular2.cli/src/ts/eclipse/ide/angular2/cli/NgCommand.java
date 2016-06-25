@@ -44,6 +44,6 @@ public enum NgCommand {
 	}
 
 	public static NgCommand getCommand(String cmd) {
-		return commandMaps.get(cmd);
+		return commandMaps.get(cmd.toLowerCase());
 	}
 }

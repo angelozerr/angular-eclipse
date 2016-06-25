@@ -11,6 +11,7 @@
 package ts.eclipse.ide.angular2.internal.cli.launch;
 
 import java.io.File;
+import java.util.Collection;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -20,11 +21,14 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.debug.core.IStreamListener;
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
+import org.eclipse.ui.progress.UIJob;
+import org.eclipse.wst.jsdt.js.cli.core.CLICommand;
+import org.eclipse.wst.jsdt.js.cli.core.CLIStreamListener;
 
 import ts.eclipse.ide.angular2.cli.NgCommand;
 import ts.eclipse.ide.angular2.cli.launch.AngularCLILaunchConstants;
+import ts.eclipse.ide.angular2.internal.cli.jobs.NgGenerateJob;
 import ts.eclipse.ide.angular2.internal.cli.jobs.NgProjectJob;
 
 /**
@@ -40,28 +44,35 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 		String ngFilePath = configuration.getAttribute(AngularCLILaunchConstants.NG_FILE_PATH, (String) null);
 		String workingDir = configuration.getAttribute(AngularCLILaunchConstants.WORKING_DIR, (String) null);
 		String operation = configuration.getAttribute(AngularCLILaunchConstants.OPERATION, (String) null);
-		String operationName = configuration.getAttribute(AngularCLILaunchConstants.OPERATION_NAME, (String) null);
+		String[] options = configuration.getAttribute(AngularCLILaunchConstants.OPERATION_PARAMETERS, "").split(" ");
 		if (monitor.isCanceled()) {
 			return;
 		}
 
-		CLICommand command = new CLICommand("ng", operation.toLowerCase(), null, null);
-		IStreamListener streamListener = null;
+		CLICommand command = new CLICommand("ng", operation.toLowerCase(), null, options);
 		IPath wd = new Path(workingDir);
 
-		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(wd.segment(0));
+		NgCommand ngCommand = NgCommand.getCommand(operation);
+		IProject project = (IProject) ResourcesPlugin.getWorkspace().getRoot().getContainerForLocation(wd);
+		CLIStreamListener listener = create(ngCommand);
 		try {
-			new AngularCLI(project, wd, command).execute(monitor);
+			new ExtendedCLI(project, wd, command).execute(listener, monitor);
 		} finally {
-			NgCommand ngCommand = NgCommand.getCommand(operation);
 			if (ngCommand != null) {
+				File projectDir = new File(workingDir);
+				UIJob job = null;
 				switch (ngCommand) {
 				case NEW:
 				case INIT:
 					// Refresh Eclipse project and open angular-cli.json
-					File projectDir = new File(workingDir);
-					// Refresh Eclipse project and open angular-cli.json
-					NgProjectJob job = new NgProjectJob(projectDir);
+					job = new NgProjectJob(projectDir);
+					job.setRule(ResourcesPlugin.getWorkspace().getRoot());
+					job.schedule();
+					break;
+				case GENERATE:
+					// Refresh the generated files
+					Collection<String> fileNames = ((NgGenerateCLIStreamListener) listener).getFileNames();
+					job = new NgGenerateJob(fileNames, project);
 					job.setRule(ResourcesPlugin.getWorkspace().getRoot());
 					job.schedule();
 					break;
@@ -70,56 +81,20 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 				}
 			}
 		}
-
-		// IProcess process = startShell(streamListener, monitor,
-		// getLaunchConfiguration(command), wd);
-		// sendCLICommand(process, command, monitor);
-		//
-		// List<String> cmds = new ArrayList<String>();
-		//// if (isWindows()) {
-		//// cmds.add("cmd"); //$NON-NLS-1$
-		//// } else {
-		//// cmds.add("/bin/bash"); //$NON-NLS-1$
-		//// cmds.add("-l"); //$NON-NLS-1$
-		//// }
-		// if (ngFilePath == null) {
-		// cmds.add("grunt.cmd");
-		// } else {
-		// cmds.add(ngFilePath);
-		// }
-		// cmds.add(operation);
-		// if (operationName != null) {
-		// cmds.add(operationName);
-		// }
-		//
-		// Process p = DebugPlugin.exec(cmds.toArray(new String[0]), new
-		// File(workingDir), null);
-		// IProcess process = null;
-		//
-		// Map<String, String> processAttributes = new HashMap<String,
-		// String>();
-		// processAttributes.put(IProcess.ATTR_PROCESS_TYPE, "ng");
-		//
-		// if (p != null) {
-		// monitor.beginTask("ng...", -1);
-		// process = DebugPlugin.newProcess(launch, p, "TODO",
-		// processAttributes);
-		// }
-		//
-		// AngularCliStreamListener reporter = new
-		// AngularCliStreamListener(null);
-		// process.getStreamsProxy().getOutputStreamMonitor().addListener(reporter);
-		//
-		// while (!process.isTerminated()) {
-		// try {
-		// if (monitor.isCanceled()) {
-		// process.terminate();
-		// break;
-		// }
-		// Thread.sleep(50L);
-		// } catch (InterruptedException localInterruptedException) {
-		// }
 	}
-	// project.refreshLocal(1, monitor);
+
+	private CLIStreamListener create(NgCommand ngCommand) {
+		if (ngCommand == null) {
+			return new CLIStreamListener();
+		}
+		switch (ngCommand) {
+		case GENERATE:
+			return new NgGenerateCLIStreamListener();
+		case SERVE:
+			return new NgServeCLIStreamListener();
+		default:
+			return new CLIStreamListener();
+		}
+	}
 
 }

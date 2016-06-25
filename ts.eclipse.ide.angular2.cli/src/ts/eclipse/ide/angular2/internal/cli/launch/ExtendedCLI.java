@@ -19,12 +19,10 @@ import org.eclipse.wst.jsdt.js.cli.core.CLIStreamListener;
 
 public class ExtendedCLI extends CLI {
 
-	private IProject project;
 	private CLICommand command;
 
 	public ExtendedCLI(IProject project, IPath workingDir, CLICommand command) {
 		super(project, workingDir, command);
-		this.project = project;
 		this.command = command;
 	}
 

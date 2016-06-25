@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import ts.eclipse.ide.angular2.cli.NgBlueprint;
+import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
 
 public class NgGenerateBlueprintWizardPage extends WizardPage {
 
@@ -20,6 +21,8 @@ public class NgGenerateBlueprintWizardPage extends WizardPage {
 	private final NgBlueprint blueprint;
 	private Text resourceNameField;
 	private final IProject project;
+
+	private Text projectField;
 
 	protected NgGenerateBlueprintWizardPage(String pageName, String title, ImageDescriptor titleImage,
 			NgBlueprint blueprint, IProject project) {
@@ -57,8 +60,21 @@ public class NgGenerateBlueprintWizardPage extends WizardPage {
 		nameGroup.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
 		nameGroup.setFont(font);
 
+		// Project
 		Label label = new Label(nameGroup, SWT.NONE);
-		label.setText("Name:");
+		label.setText(AngularCLIMessages.NgGenerateBlueprintWizardPage_projectName);
+		label.setFont(font);
+
+		projectField = new Text(nameGroup, SWT.BORDER);
+		GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		data.widthHint = SIZING_TEXT_FIELD_WIDTH;
+		projectField.setLayoutData(data);
+		projectField.setFont(font);
+		projectField.setText(project != null ? project.getName() : "");
+
+		// Blueprint name
+		label = new Label(nameGroup, SWT.NONE);
+		label.setText(AngularCLIMessages.NgGenerateBlueprintWizardPage_bluePrintName);
 		label.setFont(font);
 
 		// resource name entry field
@@ -69,7 +85,7 @@ public class NgGenerateBlueprintWizardPage extends WizardPage {
 		// handleResourceNameFocusLostEvent();
 		// }
 		// });
-		GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		data.widthHint = SIZING_TEXT_FIELD_WIDTH;
 		resourceNameField.setLayoutData(data);
 		resourceNameField.setFont(font);

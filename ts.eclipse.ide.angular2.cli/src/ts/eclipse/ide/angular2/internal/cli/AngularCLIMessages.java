@@ -43,6 +43,13 @@ public class AngularCLIMessages extends NLS {
 	public static String AbstractProjectCommandInterpreter_error;
 	public static String AbstractProjectCommandInterpreter_anotherProjectWithSameNameExists_description;
 
+	// Wizard
+	public static String NgGenerateBlueprintWizardPage_projectName;
+	public static String NgGenerateBlueprintWizardPage_bluePrintName;
+
+	public static String NewNgServiceWizardPage_title;
+	public static String NewNgServiceWizardPage_description;
+
 	public static ResourceBundle getResourceBundle() {
 		try {
 			if (fResourceBundle == null)

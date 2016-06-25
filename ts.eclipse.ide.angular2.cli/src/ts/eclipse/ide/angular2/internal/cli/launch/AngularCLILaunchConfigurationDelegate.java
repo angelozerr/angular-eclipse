@@ -42,6 +42,7 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 	public void launch(ILaunchConfiguration configuration, String arg1, ILaunch launch, IProgressMonitor monitor)
 			throws CoreException {
 		String ngFilePath = configuration.getAttribute(AngularCLILaunchConstants.NG_FILE_PATH, (String) null);
+		String nodeFilePath = configuration.getAttribute(AngularCLILaunchConstants.NODE_FILE_PATH, (String) null);
 		String workingDir = configuration.getAttribute(AngularCLILaunchConstants.WORKING_DIR, (String) null);
 		String operation = configuration.getAttribute(AngularCLILaunchConstants.OPERATION, (String) null);
 		String[] options = configuration.getAttribute(AngularCLILaunchConstants.OPERATION_PARAMETERS, "").split(" ");
@@ -49,12 +50,12 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 			return;
 		}
 
-		CLICommand command = new CLICommand("ng", operation.toLowerCase(), null, options);
+		CLICommand command = createCommand(ngFilePath, nodeFilePath, operation, options);
 		IPath wd = new Path(workingDir);
 
 		NgCommand ngCommand = NgCommand.getCommand(operation);
 		IProject project = (IProject) ResourcesPlugin.getWorkspace().getRoot().getContainerForLocation(wd);
-		CLIStreamListener listener = create(ngCommand);
+		CLIStreamListener listener = createListener(ngCommand);
 		try {
 			new ExtendedCLI(project, wd, command).execute(listener, monitor);
 		} finally {
@@ -83,7 +84,17 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 		}
 	}
 
-	private CLIStreamListener create(NgCommand ngCommand) {
+	private CLICommand createCommand(String ngFilePath, String nodeFilePath, String operation, String[] options) {
+		if (ngFilePath != null) {
+			if (nodeFilePath != null) {
+				return new CLICommand(nodeFilePath, ngFilePath, operation.toLowerCase(), options);
+			}
+			return new CLICommand("node", ngFilePath, operation.toLowerCase(), options);
+		}
+		return new CLICommand("ng", operation.toLowerCase(), null, options);
+	}
+
+	private CLIStreamListener createListener(NgCommand ngCommand) {
 		if (ngCommand == null) {
 			return new CLIStreamListener();
 		}

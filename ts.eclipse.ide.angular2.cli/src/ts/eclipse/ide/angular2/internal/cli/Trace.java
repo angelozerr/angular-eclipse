@@ -8,7 +8,7 @@
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
-package ts.eclipse.ide.angular2.internal.ui;
+package ts.eclipse.ide.angular2.internal.cli;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,7 +18,8 @@ import java.util.Set;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
-import ts.eclipse.ide.angular2.ui.Angular2UIPlugin;
+import ts.eclipse.ide.angular2.cli.AngularCLIPlugin;
+import ts.eclipse.ide.angular2.core.Angular2CorePlugin;
 
 /**
  * Helper class to route trace output.
@@ -75,15 +76,15 @@ public class Trace {
 
 		if (level == SEVERE) {
 			if (!logged.contains(s)) {
-				Angular2UIPlugin.getDefault().getLog().log(new Status(IStatus.ERROR, Angular2UIPlugin.PLUGIN_ID, s, t));
+				AngularCLIPlugin.getDefault().getLog().log(new Status(IStatus.ERROR, AngularCLIPlugin.PLUGIN_ID, s, t));
 				logged.add(s);
 			}
 		}
 
-		if (!Angular2UIPlugin.getDefault().isDebugging())
+		if (!Angular2CorePlugin.getDefault().isDebugging())
 			return;
 
-		StringBuilder sb = new StringBuilder(Angular2UIPlugin.PLUGIN_ID);
+		StringBuilder sb = new StringBuilder(AngularCLIPlugin.PLUGIN_ID);
 		sb.append(" ");
 		sb.append(levelNames[level]);
 		sb.append(" ");

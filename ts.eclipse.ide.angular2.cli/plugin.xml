@@ -66,7 +66,7 @@
 		   class="ts.eclipse.ide.angular2.internal.cli.wizards.NewNgServiceWizard"
 		   project="true"
 		   category="ts.eclipse.ide.angular2.ui.new"
-		   icon="icons/full/obj16/angular2.png">
+		   icon="icons/full/obj16/service.png">
 	       <description>%NewNgServiceWizard.desc</description>
 		</wizard>
 	</extension>	

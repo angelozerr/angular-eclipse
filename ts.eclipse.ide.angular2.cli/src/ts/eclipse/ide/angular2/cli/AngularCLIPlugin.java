@@ -10,7 +10,8 @@
  */
 package ts.eclipse.ide.angular2.cli;
 
-import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -53,8 +54,16 @@ public class AngularCLIPlugin extends AbstractUIPlugin {
 	}
 
 	public static void logError(Throwable e) {
-		// TODO Auto-generated method stub
-		
+		getDefault().getLog().log(new Status(IStatus.ERROR, PLUGIN_ID, e.getMessage(), e));
 	}
+	
+	public static void logError(Throwable e, String message) {
+		getDefault().getLog().log(new Status(IStatus.ERROR, PLUGIN_ID, message, e));
+	}
+	
+	public static void logInfo(String info) {
+		getDefault().getLog().log(new Status(IStatus.INFO, PLUGIN_ID, info));
+	}
+
 
 }

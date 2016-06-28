@@ -15,15 +15,19 @@ import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 
 import ts.eclipse.ide.core.TypeScriptCorePlugin;
 import ts.eclipse.ide.core.resources.watcher.ProjectWatcherListenerAdapter;
 
 /**
- * Angular2 project.
+ * Angular CLI project.
  *
  */
 public class AngularCLIProject {
+
+	private static final IPath ANGULAR_CLI_JSON_PATH = new Path("angular-cli.json");
 
 	private final static Map<IProject, AngularCLIProject> ngProjects = new HashMap<IProject, AngularCLIProject>();
 
@@ -67,7 +71,25 @@ public class AngularCLIProject {
 		}
 	}
 
+	/**
+	 * Returns the settings if the Angular CLI project.
+	 * 
+	 * @return the settings if the Angular CLI project.
+	 */
 	public AngularCLIProjectSettings getSettings() {
 		return settings;
+	}
+
+	/**
+	 * Returns true if the given project is an angular CLI project (contains
+	 * "angular-cli.json" file in the root of the project) and false otherwise.
+	 * 
+	 * @param project
+	 * @return true if the given project is an angular CLI project (contains
+	 *         "angular-cli.json" file in the root of the project) and false
+	 *         otherwise.
+	 */
+	public static boolean isAngularCLIProject(IProject project) {
+		return project.exists(ANGULAR_CLI_JSON_PATH);
 	}
 }

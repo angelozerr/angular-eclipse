@@ -11,6 +11,7 @@
  */
 package ts.eclipse.ide.angular2.internal.cli.terminal;
 
+import java.io.File;
 import java.util.List;
 
 import ts.eclipse.ide.angular2.cli.NgCommand;
@@ -25,15 +26,25 @@ public class NgCommandInterpreterFactory implements ICommandInterpreterFactory {
 		if (command == null) {
 			return null;
 		}
+		File projectDir = null;
 		switch (command) {
 		case NEW:
-			return new NgNewCommandInterpreter(parameters, workingDir);
+			projectDir = getNgNewProjectDir(parameters, workingDir);
+			if (projectDir == null) {
+				return null;
+			}
+			return new NgProjectCommandInterpreter(projectDir, workingDir);
 		case INIT:
-			return new NgInitCommandInterpreter(parameters, workingDir);
+			projectDir = new File(workingDir);
+			return new NgProjectCommandInterpreter(projectDir, workingDir);
 		case GENERATE:
-			return new NgGenerateCommandInterpreter(parameters, workingDir);
+			String blueprint = getBluePrint(parameters);
+			if (blueprint == null) {
+				return null;
+			}
+			return new NgGenerateCommandInterpreter(blueprint, workingDir);
 		case SERVE:
-			return new NgServeCommandInterpreter(parameters, workingDir);
+			return new NgServeCommandInterpreter(workingDir);
 		case BUILD:
 			return new NgBuildCommandInterpreter(parameters, workingDir);
 		default:
@@ -41,10 +52,25 @@ public class NgCommandInterpreterFactory implements ICommandInterpreterFactory {
 		}
 	}
 
+	private String getBluePrint(List<String> parameters) {
+		if (parameters.size() < 2) {
+			return null;
+		}
+		return parameters.get(1);
+	}
+
 	private NgCommand getCommand(List<String> parameters) {
 		if (parameters.size() < 1) {
 			return null;
 		}
 		return NgCommand.getCommand(parameters.get(0));
+	}
+
+	private File getNgNewProjectDir(List<String> parameters, String workingDir) {
+		if (parameters.size() < 2) {
+			return null;
+		}
+		String projectName = parameters.get(1);
+		return new File(workingDir, projectName);
 	}
 }

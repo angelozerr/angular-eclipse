@@ -7,8 +7,7 @@
  *
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
- *  
- *  some code copied/pasted from org.eclipse.ui.internal.wizards.datatransfer.SmartImportJob
+ * 
  */
 package ts.eclipse.ide.angular2.internal.cli.jobs;
 
@@ -25,16 +24,11 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.ui.IPageLayout;
-import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.ISetSelectionTarget;
 import org.eclipse.ui.progress.UIJob;
 
 import ts.eclipse.ide.angular2.cli.AngularCLIPlugin;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
+import ts.eclipse.ide.terminal.interpreter.UIInterpreterHelper;
 
 /**
  * Refresh generated files and select it in the Project Explorer.
@@ -44,11 +38,13 @@ public class NgGenerateJob extends UIJob {
 
 	private final Collection<String> fileNames;
 	private final IContainer parent;
+	private final String blueprint;
 
-	public NgGenerateJob(Collection<String> fileNames, IContainer parent) {
+	public NgGenerateJob(Collection<String> fileNames, IContainer parent, String blueprint) {
 		super(AngularCLIMessages.NgGenerateJob_jobName);
 		this.fileNames = fileNames;
 		this.parent = parent;
+		this.blueprint = blueprint;
 	}
 
 	@Override
@@ -56,9 +52,11 @@ public class NgGenerateJob extends UIJob {
 		try {
 			List<IResource> resources = getResources(parent, monitor);
 			if (resources.size() > 0) {
-				IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-				final IViewPart view = page.findView(IPageLayout.ID_PROJECT_EXPLORER);
-				((ISetSelectionTarget) view).selectReveal(new StructuredSelection(resources));
+				// Open the blueprint file in an editor
+				IFile fileToOpen = getFileToOpen(resources);
+				UIInterpreterHelper.openFile(fileToOpen);
+				// Select in the Project Explorer the generated files.
+				UIInterpreterHelper.selectRevealInProjectExplorer(resources);
 			}
 		} catch (CoreException e) {
 			return new Status(IStatus.ERROR, AngularCLIPlugin.PLUGIN_ID, AngularCLIMessages.NgGenerateJob_error, e);
@@ -85,5 +83,15 @@ public class NgGenerateJob extends UIJob {
 			}
 		}
 		return resources;
+	}
+
+	private IFile getFileToOpen(List<IResource> resources) {
+		String suffix = "." + blueprint.toLowerCase() + ".ts";
+		for (IResource resource : resources) {
+			if (resource.getName().endsWith(suffix)) {
+				return (IFile) resource;
+			}
+		}
+		return (IFile) resources.get(resources.size() - 1);
 	}
 }

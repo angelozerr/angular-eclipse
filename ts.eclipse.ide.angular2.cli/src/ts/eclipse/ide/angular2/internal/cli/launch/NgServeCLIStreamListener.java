@@ -1,10 +1,28 @@
+/**
+ *  Copyright (c) 2015-2016 Angelo ZERR.
+ *  All rights reserved. This program and the accompanying materials
+ *  are made available under the terms of the Eclipse Public License v1.0
+ *  which accompanies this distribution, and is available at
+ *  http://www.eclipse.org/legal/epl-v10.html
+ *
+ *  Contributors:
+ *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ *  
+ */
 package ts.eclipse.ide.angular2.internal.cli.launch;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.eclipse.wst.jsdt.js.cli.core.CLIStreamListener;
+
 import ts.eclipse.ide.angular2.internal.cli.jobs.NgServeJob;
 
+/**
+ * {@link CLIStreamListener} extension to track message of "ng serve" and open a
+ * Web Browser.
+ *
+ */
 public class NgServeCLIStreamListener extends ExtendedCLIStreamListener {
 
 	private static final String SERVING_ON = "Serving on";

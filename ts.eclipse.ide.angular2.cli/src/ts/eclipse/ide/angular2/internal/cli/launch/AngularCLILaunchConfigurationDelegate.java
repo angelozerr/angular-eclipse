@@ -11,7 +11,6 @@
 package ts.eclipse.ide.angular2.internal.cli.launch;
 
 import java.io.File;
-import java.util.Collection;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -28,8 +27,8 @@ import org.eclipse.wst.jsdt.js.cli.core.CLIStreamListener;
 
 import ts.eclipse.ide.angular2.cli.NgCommand;
 import ts.eclipse.ide.angular2.cli.launch.AngularCLILaunchConstants;
-import ts.eclipse.ide.angular2.internal.cli.jobs.NgGenerateJob;
 import ts.eclipse.ide.angular2.internal.cli.jobs.NgProjectJob;
+import ts.eclipse.ide.angular2.internal.cli.jsdt.CLI;
 
 /**
  * Launch configuration which consumes angular-cli to generate project,
@@ -54,10 +53,12 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 		IPath wd = new Path(workingDir);
 
 		NgCommand ngCommand = NgCommand.getCommand(operation);
+		boolean waitForTerminate = isWaitForTerminate(ngCommand);
+
 		IProject project = (IProject) ResourcesPlugin.getWorkspace().getRoot().getContainerForLocation(wd);
-		CLIStreamListener listener = createListener(ngCommand);
+		CLIStreamListener listener = createListener(ngCommand, project, options);
 		try {
-			new ExtendedCLI(project, wd, command).execute(listener, monitor);
+			new CLI(null, wd, command).execute(listener, waitForTerminate, monitor);
 		} finally {
 			if (ngCommand != null) {
 				File projectDir = new File(workingDir);
@@ -70,18 +71,23 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 					job.setRule(ResourcesPlugin.getWorkspace().getRoot());
 					job.schedule();
 					break;
-				case GENERATE:
-					// Refresh the generated files
-					Collection<String> fileNames = ((NgGenerateCLIStreamListener) listener).getFileNames();
-					job = new NgGenerateJob(fileNames, project);
-					job.setRule(ResourcesPlugin.getWorkspace().getRoot());
-					job.schedule();
-					break;
 				default:
 					break;
 				}
 			}
 		}
+	}
+
+	private boolean isWaitForTerminate(NgCommand ngCommand) {
+		if (ngCommand != null) {
+			switch (ngCommand) {
+			case SERVE:
+				return false;
+			default:
+				return true;
+			}
+		}
+		return true;
 	}
 
 	private CLICommand createCommand(String ngFilePath, String nodeFilePath, String operation, String[] options) {
@@ -94,13 +100,15 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 		return new CLICommand("ng", operation.toLowerCase(), null, options);
 	}
 
-	private CLIStreamListener createListener(NgCommand ngCommand) {
+	private CLIStreamListener createListener(NgCommand ngCommand, IProject project, String[] options) {
 		if (ngCommand == null) {
 			return new CLIStreamListener();
 		}
 		switch (ngCommand) {
 		case GENERATE:
-			return new NgGenerateCLIStreamListener();
+			if (options != null && options.length > 1) {
+				return new NgGenerateCLIStreamListener(options[0], project);
+			}
 		case SERVE:
 			return new NgServeCLIStreamListener();
 		default:

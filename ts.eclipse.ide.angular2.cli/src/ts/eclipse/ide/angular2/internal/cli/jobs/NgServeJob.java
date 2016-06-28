@@ -8,7 +8,6 @@
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  *  
- *  some code copied/pasted from org.eclipse.ui.internal.wizards.datatransfer.SmartImportJob
  */
 package ts.eclipse.ide.angular2.internal.cli.jobs;
 

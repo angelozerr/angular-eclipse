@@ -18,22 +18,23 @@ import org.eclipse.ui.IWorkbench;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
 
 /**
- * Wizard to generate Angular2 Service with "ng generate service $name".
+ * Wizard to generate Angular2 Class with "ng generate class $name".
  *
  */
-public class NewNgServiceWizard extends AbstractNewNgGenerateWizard {
+public class NewNgClassWizard extends AbstractNewNgGenerateWizard {
 
-	public NewNgServiceWizard() {
+	public NewNgClassWizard() {
 	}
 
 	@Override
 	protected NgGenerateBlueprintWizardPage createMainPage(IProject project) {
-		return new NewNgServiceWizardPage(project);
+		return new NewNgClassWizardPage(project);
 	}
-
+	
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		super.init(workbench, selection);
-		super.setWindowTitle(AngularCLIMessages.NewNgServiceWizard_windowTitle);
+		super.setWindowTitle(AngularCLIMessages.NewNgClassWizard_windowTitle);
 	}
+
 }

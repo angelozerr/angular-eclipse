@@ -13,7 +13,6 @@
 package ts.eclipse.ide.angular2.internal.cli.terminal;
 
 import java.io.File;
-import java.util.List;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 
@@ -21,26 +20,24 @@ import ts.eclipse.ide.angular2.internal.cli.jobs.NgProjectJob;
 import ts.eclipse.ide.terminal.interpreter.AbstractCommandInterpreter;
 
 /**
- * Abstract class used to create an Angular2 project (ng new or ng init).
+ * (ng new or ng init) interpreter to create an Eclipse project at the end of
+ * the process and open the generated angular-cli.json file.
  *
  */
-public abstract class AbstractProjectCommandInterpreter extends AbstractCommandInterpreter {
+public class NgProjectCommandInterpreter extends AbstractCommandInterpreter {
 
-	public AbstractProjectCommandInterpreter(List<String> parameters, String workingDir) {
-		super(parameters, workingDir);
+	private final File projectDir;
+
+	public NgProjectCommandInterpreter(File projectDir, String workingDir) {
+		super(workingDir);
+		this.projectDir = projectDir;
 	}
 
 	@Override
-	public void execute(List<String> parameters, String workingDir) {
-		final File projectDir = getProjectDir(parameters, workingDir);
-		if (projectDir == null) {
-			return;
-		}
+	public void execute() {
 		// Refresh Eclipse project and open angular-cli.json
 		NgProjectJob job = new NgProjectJob(projectDir);
 		job.setRule(ResourcesPlugin.getWorkspace().getRoot());
 		job.schedule();
 	}
-
-	protected abstract File getProjectDir(List<String> parameters, String workingDir);
 }

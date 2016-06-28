@@ -18,22 +18,22 @@ import org.eclipse.ui.IWorkbench;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
 
 /**
- * Wizard to generate Angular2 Service with "ng generate service $name".
+ * Wizard to generate Angular2 Pipe with "ng generate pipe $name".
  *
  */
-public class NewNgServiceWizard extends AbstractNewNgGenerateWizard {
+public class NewNgPipeWizard extends AbstractNewNgGenerateWizard {
 
-	public NewNgServiceWizard() {
+	public NewNgPipeWizard() {
 	}
 
 	@Override
 	protected NgGenerateBlueprintWizardPage createMainPage(IProject project) {
-		return new NewNgServiceWizardPage(project);
+		return new NewNgPipeWizardPage(project);
 	}
 
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		super.init(workbench, selection);
-		super.setWindowTitle(AngularCLIMessages.NewNgServiceWizard_windowTitle);
+		super.setWindowTitle(AngularCLIMessages.NewNgPipeWizard_windowTitle);
 	}
 }

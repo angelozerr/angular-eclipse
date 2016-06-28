@@ -1,32 +1,56 @@
+/**
+ *  Copyright (c) 2015-2016 Angelo ZERR.
+ *  All rights reserved. This program and the accompanying materials
+ *  are made available under the terms of the Eclipse Public License v1.0
+ *  which accompanies this distribution, and is available at
+ *  http://www.eclipse.org/legal/epl-v10.html
+ *
+ *  Contributors:
+ *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ *  
+ */
 package ts.eclipse.ide.angular2.internal.cli.wizards;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
 import ts.eclipse.ide.angular2.cli.NgBlueprint;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
+import ts.eclipse.ide.angular2.internal.cli.AngularCLIProject;
+import ts.utils.StringUtils;
 
-public class NgGenerateBlueprintWizardPage extends WizardPage {
+/**
+ * Generic wizard page which generates Angular2 resources by using "ng
+ * generate".
+ *
+ */
+public class NgGenerateBlueprintWizardPage extends WizardPage implements Listener {
 
 	private static final int SIZING_TEXT_FIELD_WIDTH = 250;
 
 	private final NgBlueprint blueprint;
 	private Text resourceNameField;
-	private final IProject project;
-
-	private Text projectField;
+	private IProject project;
+	private Combo projectCombo;
 
 	protected NgGenerateBlueprintWizardPage(String pageName, String title, ImageDescriptor titleImage,
 			NgBlueprint blueprint, IProject project) {
 		super(pageName, title, titleImage);
+		setPageComplete(false);
 		this.blueprint = blueprint;
 		this.project = project;
 	}
@@ -41,12 +65,18 @@ public class NgGenerateBlueprintWizardPage extends WizardPage {
 		topLevel.setFont(parent.getFont());
 
 		createNameControl(topLevel);
+		// initialize project based on the current selection
+		setProject(project);
 
 		validatePage();
 		// Show description on opening
 		setErrorMessage(null);
 		setMessage(null);
 		setControl(topLevel);
+	}
+
+	public void handleEvent(Event event) {
+		setPageComplete(validatePage());
 	}
 
 	private void createNameControl(Composite parent) {
@@ -65,12 +95,25 @@ public class NgGenerateBlueprintWizardPage extends WizardPage {
 		label.setText(AngularCLIMessages.NgGenerateBlueprintWizardPage_projectName);
 		label.setFont(font);
 
-		projectField = new Text(nameGroup, SWT.BORDER);
-		GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-		data.widthHint = SIZING_TEXT_FIELD_WIDTH;
-		projectField.setLayoutData(data);
-		projectField.setFont(font);
-		projectField.setText(project != null ? project.getName() : "");
+		// project selection combo
+		projectCombo = new Combo(nameGroup, SWT.BORDER | SWT.DROP_DOWN | SWT.READ_ONLY);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		projectCombo.setLayoutData(gd);
+		for (IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
+			if (AngularCLIProject.isAngularCLIProject(project)) {
+				projectCombo.add(project.getName());
+			}
+		}
+		projectCombo.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				if (!"".equals(projectCombo.getText())) {
+					setProject(ResourcesPlugin.getWorkspace().getRoot().getProject(projectCombo.getText()));
+				} else {
+					setProject(null);
+				}
+			}
+		});
+		projectCombo.addListener(SWT.Modify, this);
 
 		// Blueprint name
 		label = new Label(nameGroup, SWT.NONE);
@@ -79,13 +122,13 @@ public class NgGenerateBlueprintWizardPage extends WizardPage {
 
 		// resource name entry field
 		resourceNameField = new Text(nameGroup, SWT.BORDER);
-		// resourceNameField.addListener(SWT.Modify, this);
+		resourceNameField.addListener(SWT.Modify, this);
 		// resourceNameField.addFocusListener(new FocusAdapter() {
 		// public void focusLost(FocusEvent e) {
 		// handleResourceNameFocusLostEvent();
 		// }
 		// });
-		data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		data.widthHint = SIZING_TEXT_FIELD_WIDTH;
 		resourceNameField.setLayoutData(data);
 		resourceNameField.setFont(font);
@@ -93,10 +136,36 @@ public class NgGenerateBlueprintWizardPage extends WizardPage {
 
 	}
 
-	protected boolean validatePage() {
-		boolean valid = true;
+	private void setProject(IProject project) {
+		IProject previousProject = this.project;
+		this.project = project;
 
-		return valid;
+		// select correct project in the combo box
+		int index;
+		if (project != null) {
+			index = projectCombo.indexOf(project.getName());
+		} else {
+			index = -1;
+		}
+		if (index == -1) {
+			index = projectCombo.indexOf("");
+		}
+		// on Linux, Combo.select(int) always causes a ModifyEvent
+		if (index != projectCombo.getSelectionIndex()) {
+			projectCombo.select(index);
+		}
+	}
+
+	protected boolean validatePage() {
+		if (StringUtils.isEmpty(projectCombo.getText())) {
+			setErrorMessage(AngularCLIMessages.NgGenerateBlueprintWizardPage_select_ngProject_error);
+			return false;
+		} else if (StringUtils.isEmpty(resourceNameField.getText())) {
+			setErrorMessage(AngularCLIMessages.NgGenerateBlueprintWizardPage_select_name_required_error);
+			return false;
+		}
+		setErrorMessage(null);
+		return true;
 	}
 
 	public IProject getProject() {
@@ -108,8 +177,23 @@ public class NgGenerateBlueprintWizardPage extends WizardPage {
 	}
 
 	public String getBluepringName() {
-		// TODO Auto-generated method stub
 		return resourceNameField.getText();
 	}
 
+	@Override
+	public void setVisible(boolean visible) {
+		super.setVisible(visible);
+		if (visible) {
+			setFocus();
+		}
+	}
+
+	/**
+	 * Gives focus to the resource name field and selects its contents
+	 */
+	private void setFocus() {
+		// select the whole resource name.
+		resourceNameField.setSelection(0, resourceNameField.getText().length());
+		resourceNameField.setFocus();
+	}
 }

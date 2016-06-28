@@ -18,22 +18,22 @@ import org.eclipse.ui.IWorkbench;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
 
 /**
- * Wizard to generate Angular2 Service with "ng generate service $name".
+ * Wizard to generate Angular2 Enum with "ng generate enum $name".
  *
  */
-public class NewNgServiceWizard extends AbstractNewNgGenerateWizard {
+public class NewNgEnumWizard extends AbstractNewNgGenerateWizard {
 
-	public NewNgServiceWizard() {
+	public NewNgEnumWizard() {
 	}
 
 	@Override
 	protected NgGenerateBlueprintWizardPage createMainPage(IProject project) {
-		return new NewNgServiceWizardPage(project);
+		return new NewNgEnumWizardPage(project);
 	}
 
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		super.init(workbench, selection);
-		super.setWindowTitle(AngularCLIMessages.NewNgServiceWizard_windowTitle);
+		super.setWindowTitle(AngularCLIMessages.NewNgEnumWizard_windowTitle);
 	}
 }

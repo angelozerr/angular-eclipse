@@ -22,17 +22,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.ui.IPageLayout;
-import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.ISetSelectionTarget;
 import org.eclipse.ui.progress.UIJob;
 
 import ts.eclipse.ide.angular2.cli.AngularCLIPlugin;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
 import ts.eclipse.ide.terminal.interpreter.AbstractCommandInterpreter;
+import ts.eclipse.ide.terminal.interpreter.UIInterpreterHelper;
 
 /**
  * "ng build" interpreter to refresh the "dist" folder.
@@ -44,12 +39,12 @@ public class NgBuildCommandInterpreter extends AbstractCommandInterpreter {
 	private String distDir;
 
 	public NgBuildCommandInterpreter(List<String> parameters, String workingDir) {
-		super(parameters, workingDir);
+		super(workingDir);
 	}
 
 	@Override
-	protected void execute(List<String> parameters, String workingDir) {
-		final IContainer[] c = ResourcesPlugin.getWorkspace().getRoot().findContainersForLocation(new Path(workingDir));
+	public void execute() {
+		final IContainer[] c = ResourcesPlugin.getWorkspace().getRoot().findContainersForLocation(getWorkingDirPath());
 		if (c != null && c.length > 0) {
 			new UIJob(AngularCLIMessages.NgBuildCommandInterpreter_jobName) {
 				@Override
@@ -58,9 +53,8 @@ public class NgBuildCommandInterpreter extends AbstractCommandInterpreter {
 						IFolder distFolder = c[0].getFolder(new Path(distDir));
 						distFolder.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 						if (distFolder.exists()) {
-							IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-							final IViewPart view = page.findView(IPageLayout.ID_PROJECT_EXPLORER);
-							((ISetSelectionTarget) view).selectReveal(new StructuredSelection(distFolder));
+							// Select dist folder in the Project Explorer.
+							UIInterpreterHelper.selectRevealInProjectExplorer(distFolder);
 						}
 					} catch (CoreException e) {
 						return new Status(IStatus.ERROR, AngularCLIPlugin.PLUGIN_ID,

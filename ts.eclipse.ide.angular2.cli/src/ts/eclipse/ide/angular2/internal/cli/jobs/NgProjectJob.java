@@ -25,19 +25,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.osgi.util.NLS;
-import org.eclipse.ui.IEditorDescriptor;
-import org.eclipse.ui.IPageLayout;
-import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.FileEditorInput;
-import org.eclipse.ui.part.ISetSelectionTarget;
 import org.eclipse.ui.progress.UIJob;
 
 import ts.eclipse.ide.angular2.cli.AngularCLIPlugin;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
+import ts.eclipse.ide.terminal.interpreter.UIInterpreterHelper;
 
 /**
  * Refresh Eclipse project and open angular-cli.json.
@@ -85,14 +78,10 @@ public class NgProjectJob extends UIJob {
 				angularCliJsonFile.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 			}
 			if (angularCliJsonFile.exists()) {
-
-				IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-				final IViewPart view = page.findView(IPageLayout.ID_PROJECT_EXPLORER);
-				((ISetSelectionTarget) view).selectReveal(new StructuredSelection(angularCliJsonFile));
-
-				IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
-						.getDefaultEditor(angularCliJsonFile.getName());
-				page.openEditor(new FileEditorInput(angularCliJsonFile), desc.getId());
+				// Open the angular-cli.json file in an editor
+				UIInterpreterHelper.openFile(angularCliJsonFile);
+				// Select in the Project Explorer the angular-cli.json file.
+				UIInterpreterHelper.selectRevealInProjectExplorer(angularCliJsonFile);
 			}
 		} catch (CoreException e) {
 			return new Status(IStatus.ERROR, AngularCLIPlugin.PLUGIN_ID,

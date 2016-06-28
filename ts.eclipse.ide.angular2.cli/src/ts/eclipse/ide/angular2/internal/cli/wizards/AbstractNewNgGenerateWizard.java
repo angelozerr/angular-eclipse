@@ -1,3 +1,14 @@
+/**
+ *  Copyright (c) 2015-2016 Angelo ZERR.
+ *  All rights reserved. This program and the accompanying materials
+ *  are made available under the terms of the Eclipse Public License v1.0
+ *  which accompanies this distribution, and is available at
+ *  http://www.eclipse.org/legal/epl-v10.html
+ *
+ *  Contributors:
+ *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ *  
+ */
 package ts.eclipse.ide.angular2.internal.cli.wizards;
 
 import java.io.File;
@@ -13,10 +24,12 @@ import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 
 import ts.eclipse.ide.angular2.cli.NgBlueprint;
 import ts.eclipse.ide.angular2.cli.NgCommand;
@@ -24,6 +37,11 @@ import ts.eclipse.ide.angular2.cli.launch.AngularCLILaunchConstants;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIProject;
 import ts.utils.FileUtils;
 
+/**
+ * Abstract class for wizard which generates Angular2 resources by using "ng
+ * generate".
+ *
+ */
 public abstract class AbstractNewNgGenerateWizard extends Wizard implements INewWizard {
 
 	private IStructuredSelection selection;
@@ -32,13 +50,19 @@ public abstract class AbstractNewNgGenerateWizard extends Wizard implements INew
 
 	public void addPages() {
 		super.addPages();
-		mainPage = createMainPage(getSelectedProject());// $NON-NLS-1$
+		mainPage = createMainPage(getSelectedProject());
 		addPage(mainPage);
 	}
 
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		this.selection = selection;
+		initializeDefaultPageImageDescriptor();
+	}
+
+	protected void initializeDefaultPageImageDescriptor() {
+		ImageDescriptor desc = IDEWorkbenchPlugin.getIDEImageDescriptor("wizban/new_wiz.png");//$NON-NLS-1$
+		setDefaultPageImageDescriptor(desc);
 	}
 
 	@Override
@@ -65,7 +89,7 @@ public abstract class AbstractNewNgGenerateWizard extends Wizard implements INew
 							blueprint.name().toLowerCase() + " " + name);
 					DebugUITools.launch(newConfiguration, ILaunchManager.RUN_MODE);
 				} catch (CoreException e) {
-					// super.setError(e);
+
 				}
 			}
 		};

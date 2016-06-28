@@ -11,8 +11,6 @@
  */
 package ts.eclipse.ide.angular2.internal.cli.terminal;
 
-import java.util.List;
-
 import ts.eclipse.ide.angular2.internal.cli.jobs.NgServeJob;
 import ts.eclipse.ide.terminal.interpreter.AbstractCommandInterpreter;
 
@@ -25,12 +23,12 @@ public class NgServeCommandInterpreter extends AbstractCommandInterpreter {
 
 	private static final String SERVING_ON = "Serving on";
 
-	public NgServeCommandInterpreter(List<String> parameters, String workingDir) {
-		super(parameters, workingDir);
+	public NgServeCommandInterpreter(String workingDir) {
+		super(workingDir);
 	}
 
 	@Override
-	public void execute(List<String> parameters, String workingDir) {
+	public void execute() {
 		// Do nothing, the open of web browser is done when trace "Serving on
 		// http://localhost:4200/"
 		// is found.

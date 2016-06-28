@@ -30,8 +30,6 @@ public class AngularCLIMessages extends NLS {
 	public static String AngularCLIConfigurationBlock_ngUseGlobalInstallation_label;
 	public static String AngularCLIConfigurationBlock_ngUseCustomFile_label;
 
-	public static String Error_FatalInvokingCLI;
-
 	// Interpreter
 	public static String NgServeJob_jobName;
 	public static String NgServeJob_error;
@@ -46,9 +44,30 @@ public class AngularCLIMessages extends NLS {
 	// Wizard
 	public static String NgGenerateBlueprintWizardPage_projectName;
 	public static String NgGenerateBlueprintWizardPage_bluePrintName;
+	public static String NgGenerateBlueprintWizardPage_select_ngProject_error;
+	public static String NgGenerateBlueprintWizardPage_select_name_required_error;
 
+	public static String NewNgComponentWizard_windowTitle;
+	public static String NewNgComponentWizardPage_title;
+	public static String NewNgComponentWizardPage_description;
+	public static String NewNgDirectiveWizard_windowTitle;
+	public static String NewNgDirectiveWizardPage_title;
+	public static String NewNgDirectiveWizardPage_description;
+	public static String NewNgPipeWizard_windowTitle;
+	public static String NewNgPipeWizardPage_title;
+	public static String NewNgPipeWizardPage_description;
+	public static String NewNgServiceWizard_windowTitle;
 	public static String NewNgServiceWizardPage_title;
 	public static String NewNgServiceWizardPage_description;
+	public static String NewNgClassWizard_windowTitle;
+	public static String NewNgClassWizardPage_title;
+	public static String NewNgClassWizardPage_description;
+	public static String NewNgInterfaceWizard_windowTitle;
+	public static String NewNgInterfaceWizardPage_title;
+	public static String NewNgInterfaceWizardPage_description;
+	public static String NewNgEnumWizard_windowTitle;
+	public static String NewNgEnumWizardPage_title;
+	public static String NewNgEnumWizardPage_description;
 
 	public static ResourceBundle getResourceBundle() {
 		try {

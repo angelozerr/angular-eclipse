@@ -54,7 +54,7 @@ public class NgBuildCommandInterpreter extends AbstractCommandInterpreter {
 						distFolder.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 						if (distFolder.exists()) {
 							// Select dist folder in the Project Explorer.
-							UIInterpreterHelper.selectRevealInProjectExplorer(distFolder);
+							UIInterpreterHelper.selectRevealInDefaultViews(distFolder);
 						}
 					} catch (CoreException e) {
 						return new Status(IStatus.ERROR, AngularCLIPlugin.PLUGIN_ID,

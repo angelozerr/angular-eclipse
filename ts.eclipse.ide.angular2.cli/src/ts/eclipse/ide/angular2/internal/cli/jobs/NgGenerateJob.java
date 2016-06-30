@@ -56,7 +56,7 @@ public class NgGenerateJob extends UIJob {
 				IFile fileToOpen = getFileToOpen(resources);
 				UIInterpreterHelper.openFile(fileToOpen);
 				// Select in the Project Explorer the generated files.
-				UIInterpreterHelper.selectRevealInProjectExplorer(resources);
+				UIInterpreterHelper.selectRevealInDefaultViews(resources);
 			}
 		} catch (CoreException e) {
 			return new Status(IStatus.ERROR, AngularCLIPlugin.PLUGIN_ID, AngularCLIMessages.NgGenerateJob_error, e);

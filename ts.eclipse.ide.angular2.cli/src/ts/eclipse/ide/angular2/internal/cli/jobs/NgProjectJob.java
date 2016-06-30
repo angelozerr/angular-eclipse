@@ -81,7 +81,7 @@ public class NgProjectJob extends UIJob {
 				// Open the angular-cli.json file in an editor
 				UIInterpreterHelper.openFile(angularCliJsonFile);
 				// Select in the Project Explorer the angular-cli.json file.
-				UIInterpreterHelper.selectRevealInProjectExplorer(angularCliJsonFile);
+				UIInterpreterHelper.selectRevealInDefaultViews(angularCliJsonFile);
 			}
 		} catch (CoreException e) {
 			return new Status(IStatus.ERROR, AngularCLIPlugin.PLUGIN_ID,

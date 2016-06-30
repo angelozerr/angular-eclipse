@@ -14,7 +14,7 @@
  -->
 <plugin>
 
-	<!-- JSON Schema for angular-cli.json -->
+	<!-- JSON Schema for angular-cli.json, .ember-cli -->
 	<extension point="org.eclipse.core.contenttype.contentTypes">
 		<content-type
 		    file-names="angular-cli.json"
@@ -23,16 +23,27 @@
 			id="ts.eclipse.ide.angular2.cli.angularclisource"
 			base-type="org.eclipse.wst.json.core.jsonsource">
 		</content-type>
+		<content-type
+		    file-names=".ember-cli"
+			priority="high"
+			name="%ember_cli_Content_Type_Extension_Element"
+			id="ts.eclipse.ide.angular2.cli.emberclisource"
+			base-type="org.eclipse.wst.json.core.jsonsource">
+		</content-type>		
 	</extension>
 			
    <extension
          point="org.eclipse.wst.json.core.schemaCatalogContributions">
-         <schemaCatalogContribution id="http://schemastore.org/ts">
+         <schemaCatalogContribution id="http://schemastore.org/ng">
          	<schema name="angular-cli.json"
          			description="JSON schema for Angular CLI configuration file"
          			fileMatch="angular-cli.json"
          			url="https://raw.githubusercontent.com/angular/angular-cli/master/lib/config/schema.json"
-         			uri="jsonschema/angular-cli.json" />        			
+         			uri="jsonschema/angular-cli.json" />
+			<schema name="angular-cli.json"
+         			description="JSON schema for Ember CLI configuration file"
+         			fileMatch=".ember-cli"
+         			uri="jsonschema/ember-cli.json" />         			        			
          </schemaCatalogContribution>
 	</extension>
 	
@@ -46,6 +57,15 @@
 			<contentTypeBinding
 				contentTypeId="ts.eclipse.ide.angular2.cli.angularclisource" />
 		</editor>
+		<editor
+			name="%ember_cli_Editor.name"
+			icon="$nl$/icons/full/obj16/ember.png"
+			class="org.eclipse.wst.sse.ui.StructuredTextEditor"
+			symbolicFontName="org.eclipse.wst.sse.ui.textfont"
+			id="ts.eclipse.ide.angular2.cli.EmberCLIEditor">
+			<contentTypeBinding
+				contentTypeId="ts.eclipse.ide.angular2.cli.emberclisource" />
+		</editor>		
 	</extension>
 		
 	<!-- Wizards -->

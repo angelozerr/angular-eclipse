@@ -25,6 +25,7 @@ import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
+import ts.eclipse.ide.angular2.core.html.NgAttributeType;
 import ts.eclipse.ide.angular2.core.utils.Angular2DOMUtils;
 import ts.eclipse.ide.angular2.internal.ui.preferences.Angular2UIPreferenceNames;
 import ts.eclipse.ide.angular2.internal.ui.style.IStyleConstantsForAngular;
@@ -104,11 +105,13 @@ public class DirectiveSemanticHighlighting extends
 		if (node.getNodeType() != Node.ATTRIBUTE_NODE) {
 			return false;
 		}
-		if (file == null) {
-			return node.getNodeName().startsWith("ng");
-		}
-		return Angular2DOMUtils.getAngularDirective(file.getProject(),
-				(IDOMAttr) node) != null;
+		return NgAttributeType.getType(node.getNodeName()) != null;
+//		
+//		if (file == null) {
+//			return node.getNodeName().startsWith("ng");
+//		}
+//		return Angular2DOMUtils.getAngularDirective(file.getProject(),
+//				(IDOMAttr) node) != null;
 	}
 
 	private List<Position> consumesElement(IStructuredDocumentRegion region) {

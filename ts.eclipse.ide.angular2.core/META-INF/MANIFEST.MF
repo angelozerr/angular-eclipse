@@ -19,6 +19,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.wst.html.core;bundle-version="1.2.0",
  ts.eclipse.ide.core
 Export-Package: ts.eclipse.ide.angular2.core,
+ ts.eclipse.ide.angular2.core.html,
  ts.eclipse.ide.angular2.core.utils
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: ts.eclipse.ide.angular2.core.Angular2CorePlugin

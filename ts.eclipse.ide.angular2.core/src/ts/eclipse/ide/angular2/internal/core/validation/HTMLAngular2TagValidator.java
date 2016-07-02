@@ -25,6 +25,7 @@ public class HTMLAngular2TagValidator extends AbstractHTMLAngular2Validator impl
 		if (!super.hasAngular2Nature()) {
 			return false;
 		}
+		// TODO: search definition of directive inside *.ts files
 		return false;
 	}
 

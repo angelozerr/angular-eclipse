@@ -20,10 +20,15 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
  */
 public class HTMLAngular2TagValidator extends AbstractHTMLAngular2Validator implements IHTMLCustomTagValidator {
 
+	private static final String TEMPLATE_ELEMENT = "template";
+
 	@Override
 	public boolean canValidate(IDOMElement target) {
 		if (!super.hasAngular2Nature()) {
 			return false;
+		}
+		if (TEMPLATE_ELEMENT.equals(target.getTagName())) {
+			return true;
 		}
 		// TODO: search definition of directive inside *.ts files
 		return false;

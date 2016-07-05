@@ -25,7 +25,7 @@ import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
-import ts.eclipse.ide.angular2.core.html.NgAttributeType;
+import ts.eclipse.ide.angular2.core.Angular2CorePlugin;
 import ts.eclipse.ide.angular2.core.utils.Angular2DOMUtils;
 import ts.eclipse.ide.angular2.internal.ui.preferences.Angular2UIPreferenceNames;
 import ts.eclipse.ide.angular2.internal.ui.style.IStyleConstantsForAngular;
@@ -40,8 +40,7 @@ import ts.eclipse.ide.angular2.internal.ui.style.IStyleConstantsForAngular;
  * </ul>
  *
  */
-public class DirectiveSemanticHighlighting extends
-		AbstractAngularSemanticHighlighting {
+public class DirectiveSemanticHighlighting extends AbstractAngularSemanticHighlighting {
 
 	@Override
 	public String getStyleStringKey() {
@@ -54,8 +53,7 @@ public class DirectiveSemanticHighlighting extends
 	}
 
 	@Override
-	protected List<Position> consumes(IDOMNode node, IFile file,
-			IStructuredDocumentRegion documentRegion) {
+	protected List<Position> consumes(IDOMNode node, IFile file, IStructuredDocumentRegion documentRegion) {
 		if (isDirectiveElement(node, file)) {
 			// ex : highlight ng-include
 			// <ng-include src=""></ng-include>
@@ -74,10 +72,8 @@ public class DirectiveSemanticHighlighting extends
 					if (isDirectiveAttr(currentNode, file)) {
 						// attribute is a directive.
 						attr = (IDOMAttr) currentNode;
-						Position pos = new Position(
-								attr.getNameRegionStartOffset(),
-								attr.getNameRegionEndOffset()
-										- attr.getNameRegionStartOffset());
+						Position pos = new Position(attr.getNameRegionStartOffset(),
+								attr.getNameRegionEndOffset() - attr.getNameRegionStartOffset());
 						if (positions == null) {
 							positions = new ArrayList<Position>();
 						}
@@ -94,24 +90,14 @@ public class DirectiveSemanticHighlighting extends
 		if (node.getNodeType() != Node.ELEMENT_NODE) {
 			return false;
 		}
-		if (file == null) {
-			return node.getNodeName().startsWith("ng");
-		}
-		return Angular2DOMUtils.getAngularDirective(file.getProject(),
-				(IDOMElement) node) != null;
+		return Angular2DOMUtils.getAngularDirective(file.getProject(), (IDOMElement) node) != null;
 	}
 
 	protected boolean isDirectiveAttr(IDOMNode node, IFile file) {
 		if (node.getNodeType() != Node.ATTRIBUTE_NODE) {
 			return false;
 		}
-		return NgAttributeType.getType(node.getNodeName()) != null;
-//		
-//		if (file == null) {
-//			return node.getNodeName().startsWith("ng");
-//		}
-//		return Angular2DOMUtils.getAngularDirective(file.getProject(),
-//				(IDOMAttr) node) != null;
+		return Angular2CorePlugin.getBindingManager().getType(node.getNodeName()) != null;
 	}
 
 	private List<Position> consumesElement(IStructuredDocumentRegion region) {
@@ -120,9 +106,7 @@ public class DirectiveSemanticHighlighting extends
 		for (int i = 0; i < regionList.size(); i++) {
 			ITextRegion textRegion = regionList.get(i);
 			if (textRegion.getType().equals(DOMRegionContext.XML_TAG_NAME)) {
-				Position position = new Position(
-						region.getStartOffset(textRegion),
-						textRegion.getLength());
+				Position position = new Position(region.getStartOffset(textRegion), textRegion.getLength());
 				if (positions == null) {
 					positions = new ArrayList<Position>();
 				}

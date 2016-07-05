@@ -13,6 +13,9 @@ package ts.eclipse.ide.angular2.core;
 import org.eclipse.core.runtime.Plugin;
 import org.osgi.framework.BundleContext;
 
+import ts.eclipse.ide.angular2.core.html.INgBindingManager;
+import ts.eclipse.ide.angular2.internal.core.html.NgBindingManager;
+
 /**
  * The activator class controls the plug-in life cycle
  */
@@ -45,4 +48,7 @@ public class Angular2CorePlugin extends Plugin {
 		return plugin;
 	}
 
+	public static INgBindingManager getBindingManager() {
+		return NgBindingManager.INSTANCE;
+	}
 }

@@ -21,6 +21,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
 import org.w3c.dom.NamedNodeMap;
 
+import ts.eclipse.ide.angular2.core.Angular2CorePlugin;
 import ts.eclipse.ide.angular2.core.Angular2Project;
 import ts.eclipse.ide.angular2.core.Angular2ProjectSettings;
 import ts.eclipse.ide.angular2.internal.ui.preferences.Angular2UIPreferenceNames;
@@ -66,21 +67,29 @@ public abstract class AbstractAngularExpressionSemanticHighlighting extends Abst
 			// element node, check if this node contains attributes which
 			// contains {{ and }}.
 			// ex : <span class="done-{{todo.done}}">
+			// or attributes which are ng like <button
+			// (click)="callPhone(phone.value)">
 			NamedNodeMap attributes = node.getAttributes();
 			if (attributes != null) {
 				List<Position> positions = new ArrayList<Position>();
 				IDOMAttr attr = null;
 				for (int i = 0; i < attributes.getLength(); i++) {
 					attr = (IDOMAttr) attributes.item(i);
-					String regionText = attr.getValue();
-					int startOffset = attr.getValueRegionStartOffset() + 1;
-					fillPositions(positions, startSymbol, endSymbol, regionText, startOffset);
+//					if (Angular2CorePlugin.getBindingManager().isNgBindingType((attr.getName()))) {
+//						fillPosition(positions, attr);
+//					} else {
+						String regionText = attr.getValue();
+						int startOffset = attr.getValueRegionStartOffset() + 1;
+						fillPositions(positions, startSymbol, endSymbol, regionText, startOffset);
+//					}
 				}
 				return positions;
 			}
 		}
 		return null;
 	}
+
+	//protected abstract void fillPosition(List<Position> positions, IDOMAttr attr);
 
 	/**
 	 * Fill positions.

@@ -13,6 +13,7 @@ package ts.eclipse.ide.angular2.ui.style;
 import java.util.List;
 
 import org.eclipse.jface.text.Position;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMAttr;
 
 import ts.eclipse.ide.angular2.internal.ui.style.IStyleConstantsForAngular;
 
@@ -48,4 +49,8 @@ public class AngularExpressionSemanticHighlighting extends
 		return endIndex;
 	}
 
+//	@Override
+//	protected void fillPosition(List<Position> positions, IDOMAttr attr) {
+//		positions.add(new Position(attr.getValueRegionStartOffset(), attr.getLength()));	
+//	}
 }

@@ -60,20 +60,18 @@ public class HTMLAngular2ValidatorTest {
 		List messages = validate("<input [value='' />");
 		Assert.assertEquals(1, messages.size());
 		assertMessage((LocalizedMessage) messages.get(0),
-				"Binding syntax error: the attribute '[value' must be closed with ']'.", 7, 6,
-				ValidationMessage.ERROR);
-		
+				"Binding syntax error: the attribute '[value' must be closed with ']'.", 7, 6, ValidationMessage.ERROR);
+
 		messages = validate("<input (value='' />");
 		Assert.assertEquals(1, messages.size());
 		assertMessage((LocalizedMessage) messages.get(0),
-				"Binding syntax error: the attribute '(value' must be closed with ')'.", 7, 6,
-				ValidationMessage.ERROR);
-		
+				"Binding syntax error: the attribute '(value' must be closed with ')'.", 7, 6, ValidationMessage.ERROR);
+
 		messages = validate("<input [(value='' />");
 		Assert.assertEquals(1, messages.size());
 		assertMessage((LocalizedMessage) messages.get(0),
 				"Binding syntax error: the attribute '[(value' must be closed with ')]'.", 7, 7,
-				ValidationMessage.ERROR);		
+				ValidationMessage.ERROR);
 	}
 
 	@Test
@@ -153,6 +151,61 @@ public class HTMLAngular2ValidatorTest {
 				"\"var-\" on non <template> elements is deprecated. Use \"ref-\" instead!", 7, 5,
 				ValidationMessage.WARNING);
 
+	}
+
+	@Test
+	public void keyEventBinding() throws CoreException {
+		// keyup
+		List messages = validate("<input (keyup)='' />");
+		Assert.assertEquals(0, messages.size());
+
+		messages = validate("<input (keyup.enter)='' />");
+		Assert.assertEquals(0, messages.size());
+
+		messages = validate("<input (keyup.control.space)='' />");
+		Assert.assertEquals(0, messages.size());
+
+		messages = validate("<input (keyup.a)='' />");
+		Assert.assertEquals(0, messages.size());
+
+		messages = validate("<input (keyup.aa)='' />");
+		Assert.assertEquals(1, messages.size());
+		assertMessage((LocalizedMessage) messages.get(0), "Undefined key event part 'aa'.", 14, 2,
+				ValidationMessage.WARNING);
+
+		messages = validate("<input (keyup.)='' />");
+		Assert.assertEquals(1, messages.size());
+		assertMessage((LocalizedMessage) messages.get(0), "Undefined ng event binding 'keyup.'.", 7, 8,
+				ValidationMessage.WARNING);
+
+		// keydown
+		messages = validate("<input (keydown)='' />");
+		Assert.assertEquals(0, messages.size());
+
+		messages = validate("<input (keydown.enter)='' />");
+		Assert.assertEquals(0, messages.size());
+
+		messages = validate("<input (keydown.control.space)='' />");
+		Assert.assertEquals(0, messages.size());
+
+		messages = validate("<input (keydown.a)='' />");
+		Assert.assertEquals(0, messages.size());
+
+		messages = validate("<input (keydown.aa)='' />");
+		Assert.assertEquals(1, messages.size());
+		assertMessage((LocalizedMessage) messages.get(0), "Undefined key event part 'aa'.", 16, 2,
+				ValidationMessage.WARNING);
+
+		messages = validate("<input (keydown.)='' />");
+		Assert.assertEquals(1, messages.size());
+		assertMessage((LocalizedMessage) messages.get(0), "Undefined ng event binding 'keydown.'.", 7, 10,
+				ValidationMessage.WARNING);
+
+		// keydown
+		messages = validate("<input (keypress.enter)='' />");
+		Assert.assertEquals(1, messages.size());
+		assertMessage((LocalizedMessage) messages.get(0), "Undefined ng event binding 'keypress.enter'.", 7, 16,
+				ValidationMessage.WARNING);
 	}
 
 	@Test

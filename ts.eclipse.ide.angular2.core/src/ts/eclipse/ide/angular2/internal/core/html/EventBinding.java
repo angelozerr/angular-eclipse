@@ -10,31 +10,14 @@
  */
 package ts.eclipse.ide.angular2.internal.core.html;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.osgi.util.NLS;
-import org.eclipse.wst.sse.core.internal.validate.ValidationMessage;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
-
-import ts.eclipse.ide.angular2.internal.core.Angular2CoreMessages;
-import ts.eclipse.ide.angular2.internal.core.html.schema.DomElementSchemaRegistry;
-
 /**
  * Event binding: ($name).
  *
  */
-public class EventBinding extends AbstractNgBindingType {
+public class EventBinding extends BaseEventBinding {
 
 	public EventBinding() {
 		super("(", ")");
 	}
 
-	@Override
-	protected ValidationMessage validate(String name, IDOMElement target, String attrName, IFile file) {
-		String tagName = target.getTagName();
-		if (DomElementSchemaRegistry.INSTANCE.hasEvent(tagName, name)) {
-			return null;
-		}
-		return createValidationMessage(target, attrName,
-				NLS.bind(Angular2CoreMessages.UndefinedEventBinding_error, name), ValidationMessage.WARNING);
-	}
 }

@@ -10,33 +10,13 @@
  */
 package ts.eclipse.ide.angular2.internal.core.html;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.osgi.util.NLS;
-import org.eclipse.wst.sse.core.internal.validate.ValidationMessage;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
-
-import ts.eclipse.ide.angular2.internal.core.Angular2CoreMessages;
-import ts.eclipse.ide.angular2.internal.core.html.schema.DomElementSchemaRegistry;
-
 /**
  * Property binding: bind-$name.
  *
  */
-public class PropertyBindingCanonicalSyntax extends AbstractNgBindingType {
+public class PropertyBindingCanonicalSyntax extends BasePropertyBinding {
 
 	public PropertyBindingCanonicalSyntax() {
-		super("bind-");
+		super("bind-", null);
 	}
-
-	@Override
-	protected ValidationMessage validate(String name, IDOMElement target, String attrName, IFile file) {
-		String tagName = target.getTagName();
-		if (DomElementSchemaRegistry.INSTANCE.hasProperty(tagName,
-				DomElementSchemaRegistry.INSTANCE.getMappedPropName(name))) {
-			return null;
-		}
-		return createValidationMessage(target, attrName,
-				NLS.bind(Angular2CoreMessages.UndefinedPropertyBinding_error, name), ValidationMessage.WARNING);
-	}
-
 }

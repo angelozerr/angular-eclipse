@@ -101,4 +101,12 @@ public abstract class AbstractNgBindingType implements INgBindingType {
 	protected boolean isTemplateElement(String tagName) {
 		return TEMPLATE_ELEMENT.equals(tagName);
 	}
+
+	public String getStartsWith() {
+		return startsWith;
+	}
+
+	public String getEndsWith() {
+		return endsWith;
+	}
 }

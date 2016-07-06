@@ -29,13 +29,14 @@ public class Angular2CoreMessages extends NLS {
 	public static String AttributeBindingSyntax_error;
 	public static String UndefinedPropertyBinding_error;
 	public static String UndefinedEventBinding_error;
+	public static String UndefinedKeyEventBinding_error;
 	public static String UndefinedPropertyAndEventBinding_error;
 	public static String LetOnlySupportedOnTemplateElements_error;
 	public static String VarDontAllow_error;
 	public static String VarDeprecatedOnTemplate_error;
 	public static String VarDeprecatedOnNonTemplate_error;
 	public static String RefDontAllow_error;
-	
+
 	public static ResourceBundle getResourceBundle() {
 		try {
 			if (fResourceBundle == null)

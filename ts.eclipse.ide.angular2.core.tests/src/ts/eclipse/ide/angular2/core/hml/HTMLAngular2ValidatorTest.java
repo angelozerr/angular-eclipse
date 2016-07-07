@@ -81,6 +81,17 @@ public class HTMLAngular2ValidatorTest {
 		Assert.assertEquals(0, messages.size());
 		messages = validate("<input bind-textContent='' />");
 		Assert.assertEquals(0, messages.size());
+		
+		// 'attr.*', 'class.*', 'style.*'
+		// https://angular.io/docs/ts/latest/guide/template-syntax.html#!#attribute-binding
+		messages = validate("<td [attr.colspan]=\"1 + 1\">One-Two</td>");
+		Assert.assertEquals(0, messages.size());
+		// https://angular.io/docs/ts/latest/guide/template-syntax.html#!#class-binding
+		messages = validate("<div [class.special]=\"isSpecial\">The class binding is special</div>");
+		Assert.assertEquals(0, messages.size());
+		// https://angular.io/docs/ts/latest/guide/template-syntax.html#!#style-binding
+		messages = validate("<button [style.color] = \"isSpecial ? 'red': 'green'\">Red</button>");
+		Assert.assertEquals(0, messages.size());
 	}
 
 	@Test

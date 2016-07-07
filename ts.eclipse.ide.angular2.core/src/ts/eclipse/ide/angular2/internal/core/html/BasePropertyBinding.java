@@ -36,8 +36,12 @@ public class BasePropertyBinding extends AbstractNgBindingType {
 			return null;
 		}
 		int index = name.indexOf('.');
-		if (index != -1 && index + 1< name.length() ) {
+		if (index != -1 && index + 1 < name.length()) {
 			String part = name.substring(0, index);
+			// see
+			// https://angular.io/docs/ts/latest/guide/template-syntax.html#!#attribute-binding
+			// https://angular.io/docs/ts/latest/guide/template-syntax.html#!#class-binding
+			// https://angular.io/docs/ts/latest/guide/template-syntax.html#!#style-binding
 			if ("attr".equals(part) || "class".equals(part) || "style".equals(part)) {
 				// It's attribubte, class or style binding (ex: <button
 				// [style.color] = "" >)

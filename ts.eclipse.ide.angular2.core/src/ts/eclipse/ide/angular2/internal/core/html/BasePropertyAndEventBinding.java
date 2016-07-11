@@ -16,6 +16,7 @@ import org.eclipse.wst.sse.core.internal.validate.ValidationMessage;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 
 import ts.eclipse.ide.angular2.internal.core.Angular2CoreMessages;
+import ts.eclipse.ide.angular2.internal.core.html.directives.NgDirectiveRegistry;
 import ts.eclipse.ide.angular2.internal.core.html.schema.DomElementSchemaRegistry;
 
 /**
@@ -34,6 +35,11 @@ public class BasePropertyAndEventBinding extends AbstractNgBindingType {
 		if (DomElementSchemaRegistry.INSTANCE.hasProperty(tagName,
 				DomElementSchemaRegistry.INSTANCE.getMappedPropName(name))
 				|| DomElementSchemaRegistry.INSTANCE.hasEvent(tagName, name)) {
+			return null;
+		}
+		// Directive
+		if (NgDirectiveRegistry.INSTANCE.hasProperty(tagName, name, file)
+				|| NgDirectiveRegistry.INSTANCE.hasEvent(tagName, name, file)) {
 			return null;
 		}
 		return createValidationMessage(target, attrName,

@@ -10,10 +10,6 @@
  */
 package ts.eclipse.ide.angular2.core.html;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMAttr;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
-
 public interface INgBindingManager {
 
 	/**

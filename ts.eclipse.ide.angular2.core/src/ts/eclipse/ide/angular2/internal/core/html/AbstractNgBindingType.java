@@ -68,20 +68,9 @@ public abstract class AbstractNgBindingType implements INgBindingType {
 			// @angular/compiler/src/template_parser.ts
 			String name = extractName(this.normalizeAttributeName(attrName));
 			return validate(name, target, attrName, file);
-			// if (validateDOM(target.getTagName(), name)) {
-			// return null;
-			// }
 		} catch (NgBindingTypeException e) {
 			return createValidationMessage(target, attrName, e.getMessage(), e.getSeverity());
 		}
-		// String tagName = target.getTagName();
-		// Segment segment = CustomValidatorUtil.getAttributeSegment((IDOMNode)
-		// target.getAttributeNode(attrName),
-		// CustomValidatorUtil.ATTR_REGION_NAME);
-		// return new ValidationMessage("Undefined ng attribute name " +
-		// attrName + ".", segment.getOffset(),
-		// segment.getLength(), ValidationMessage.WARNING);
-
 	}
 
 	protected ValidationMessage createValidationMessage(IDOMElement target, String attrName, String message,

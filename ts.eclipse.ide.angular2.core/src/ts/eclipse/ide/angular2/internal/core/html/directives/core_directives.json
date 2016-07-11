@@ -1,0 +1,32 @@
+[
+	{
+		"name": "ngClass"
+	},
+	{
+		"name": "ngFor"
+	},
+	{
+		"name": "ngIf"
+	},
+	{
+		"name": "ngPlural"
+	},
+	{
+		"name": "ngPluralCase"
+	},
+	{
+		"name": "ngStyle"
+	},
+	{
+		"name": "ngSwitch"
+	},
+	{
+		"name": "ngSwitchCase"
+	},
+	{
+		"name": "ngSwitchDefault"
+	},
+	{
+		"name": "ngTemplateOutlet"
+	}
+]

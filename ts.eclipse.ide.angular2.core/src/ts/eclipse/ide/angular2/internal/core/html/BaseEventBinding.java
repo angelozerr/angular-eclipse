@@ -22,6 +22,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 
 import ts.eclipse.ide.angular2.internal.core.Angular2CoreMessages;
+import ts.eclipse.ide.angular2.internal.core.html.directives.NgDirectiveRegistry;
 import ts.eclipse.ide.angular2.internal.core.html.schema.DomElementSchemaRegistry;
 
 /**
@@ -79,6 +80,10 @@ public class BaseEventBinding extends AbstractNgBindingType {
 				}
 				return null;
 			}
+		}
+		// Directive
+		if (NgDirectiveRegistry.INSTANCE.hasEvent(tagName, name, file)) {
+			return null;
 		}
 		return createValidationMessage(target, attrName,
 				NLS.bind(Angular2CoreMessages.UndefinedEventBinding_error, name), ValidationMessage.WARNING);

@@ -4,12 +4,16 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.wst.sse.core.internal.validate.ValidationMessage;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 
+import ts.client.completions.ICompletionEntry;
+
 public interface INgBindingType {
+
+	String formatAttr(String name);
 
 	boolean match(String attrName);
 
-	String extractName(String attrName) throws NgBindingTypeException;
-
 	ValidationMessage validate(IDOMElement target, String attrName, IFile file);
+
+	void collect(IDOMElement target, String attrName, boolean fullMatch, IFile file, INgBindingCollector collector);
 
 }

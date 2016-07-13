@@ -15,9 +15,9 @@ import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.sse.core.internal.validate.ValidationMessage;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 
+import ts.eclipse.ide.angular2.core.html.INgBindingCollector;
 import ts.eclipse.ide.angular2.internal.core.Angular2CoreMessages;
 import ts.eclipse.ide.angular2.internal.core.html.directives.NgDirectiveRegistry;
-import ts.eclipse.ide.angular2.internal.core.html.schema.DomElementSchemaRegistry;
 
 /**
  * Property and event binding: [($name)].
@@ -32,11 +32,6 @@ public class BasePropertyAndEventBinding extends AbstractNgBindingType {
 	@Override
 	protected ValidationMessage validate(String name, IDOMElement target, String attrName, IFile file) {
 		String tagName = target.getTagName();
-		if (DomElementSchemaRegistry.INSTANCE.hasProperty(tagName,
-				DomElementSchemaRegistry.INSTANCE.getMappedPropName(name))
-				|| DomElementSchemaRegistry.INSTANCE.hasEvent(tagName, name)) {
-			return null;
-		}
 		// Directive
 		if (NgDirectiveRegistry.INSTANCE.hasProperty(tagName, name, file)
 				|| NgDirectiveRegistry.INSTANCE.hasEvent(tagName, name, file)) {
@@ -46,4 +41,8 @@ public class BasePropertyAndEventBinding extends AbstractNgBindingType {
 				NLS.bind(Angular2CoreMessages.UndefinedPropertyAndEventBinding_error, name), ValidationMessage.WARNING);
 	}
 
+	@Override
+	protected void doCollect(IDOMElement target, String attrName, IFile file, INgBindingCollector collector) {
+
+	}
 }

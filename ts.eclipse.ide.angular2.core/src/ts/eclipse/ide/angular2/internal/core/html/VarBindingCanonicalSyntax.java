@@ -14,6 +14,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.wst.sse.core.internal.validate.ValidationMessage;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 
+import ts.eclipse.ide.angular2.core.html.INgBindingCollector;
 import ts.eclipse.ide.angular2.internal.core.Angular2CoreMessages;
 
 /**
@@ -33,12 +34,16 @@ public class VarBindingCanonicalSyntax extends AbstractNgBindingType {
 			return createValidationMessage(target, attrName, Angular2CoreMessages.VarDontAllow_error,
 					ValidationMessage.ERROR);
 		} else if (isTemplateElement(tagName)) {
-			return createValidationMessage(target, attrName,
-					Angular2CoreMessages.VarDeprecatedOnTemplate_error, ValidationMessage.WARNING);
+			return createValidationMessage(target, attrName, Angular2CoreMessages.VarDeprecatedOnTemplate_error,
+					ValidationMessage.WARNING);
 		} else {
-			return createValidationMessage(target, attrName,
-					Angular2CoreMessages.VarDeprecatedOnNonTemplate_error,
+			return createValidationMessage(target, attrName, Angular2CoreMessages.VarDeprecatedOnNonTemplate_error,
 					ValidationMessage.WARNING);
 		}
+	}
+
+	@Override
+	protected void doCollect(IDOMElement target, String attrName, IFile file, INgBindingCollector collector) {
+
 	}
 }

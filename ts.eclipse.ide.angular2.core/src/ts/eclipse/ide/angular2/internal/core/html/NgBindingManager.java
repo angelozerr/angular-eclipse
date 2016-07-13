@@ -14,9 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMAttr;
+import org.eclipse.wst.sse.core.internal.validate.ValidationMessage;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 
-import ts.eclipse.ide.angular2.core.Angular2CorePlugin;
+import ts.eclipse.ide.angular2.core.html.INgBindingCollector;
 import ts.eclipse.ide.angular2.core.html.INgBindingManager;
 import ts.eclipse.ide.angular2.core.html.INgBindingType;
 import ts.utils.StringUtils;
@@ -58,9 +59,37 @@ public class NgBindingManager implements INgBindingManager {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public boolean isNgBindingType(String attrName) {
 		return getType(attrName) != null;
+	}
+
+	@Override
+	public ValidationMessage validate(IDOMElement target, String attrName, IFile file) {
+		// WTP do a lower case to the attrName, retrieve the real attribute
+		// name.
+		String name = target.getAttributeNode(attrName).getName();
+		INgBindingType type = getType(name);
+		return type != null ? type.validate(target, name, file) : null;
+	}
+
+	@Override
+	public void collect(IDOMElement element, String attrName, IFile file,
+			INgBindingCollector collector) {
+		if (!collect(element, file, attrName, collector)) {
+			collect(element, file, "(" + attrName, collector);
+			collect(element, file, "[" + attrName, collector);
+			collect(element, file, "[(" + attrName, collector);
+		}
+	}
+
+	private boolean collect(final IDOMElement element, IFile file, String attrName, INgBindingCollector collector) {
+		INgBindingType bindingType = getType(attrName);
+		if (bindingType == null) {
+			return false;
+		}
+		bindingType.collect(element, attrName, false, file, collector);
+		return true;
 	}
 }

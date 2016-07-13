@@ -21,6 +21,7 @@ import org.eclipse.wst.sse.core.internal.validate.ValidationMessage;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 
+import ts.eclipse.ide.angular2.core.html.INgBindingCollector;
 import ts.eclipse.ide.angular2.internal.core.Angular2CoreMessages;
 import ts.eclipse.ide.angular2.internal.core.html.directives.NgDirectiveRegistry;
 import ts.eclipse.ide.angular2.internal.core.html.schema.DomElementSchemaRegistry;
@@ -53,10 +54,6 @@ public class BaseEventBinding extends AbstractNgBindingType {
 
 	@Override
 	protected ValidationMessage validate(String name, IDOMElement target, String attrName, IFile file) {
-		String tagName = target.getTagName();
-		if (DomElementSchemaRegistry.INSTANCE.hasEvent(tagName, name)) {
-			return null;
-		}
 		// Key events
 		if (name.indexOf('.') != -1) {
 			// event binding with '.' are valid only with 'keyup' and 'keydown'
@@ -80,13 +77,39 @@ public class BaseEventBinding extends AbstractNgBindingType {
 				}
 				return null;
 			}
-		}
-		// Directive
-		if (NgDirectiveRegistry.INSTANCE.hasEvent(tagName, name, file)) {
-			return null;
+		} else {
+			String tagName = target.getTagName();
+			if (DomElementSchemaRegistry.INSTANCE.hasEvent(tagName, name)) {
+				return null;
+			}
+			// Directive
+			if (NgDirectiveRegistry.INSTANCE.hasEvent(tagName, name, file)) {
+				return null;
+			}
 		}
 		return createValidationMessage(target, attrName,
 				NLS.bind(Angular2CoreMessages.UndefinedEventBinding_error, name), ValidationMessage.WARNING);
+	}
+
+	@Override
+	protected void doCollect(IDOMElement target, String name, IFile file, INgBindingCollector collector) {
+		String tagName = target.getTagName();
+		int index = name.lastIndexOf('.');
+		if (index != -1) {
+			String[] parts = name.split("[.]");
+			if (parts.length > 0 && ("keyup".equals(parts[0]) || "keydown".equals(parts[0]))) {
+				// Validate each parts
+				List<String> keyParts = createKeyParts();
+				for (int i = 1; i < parts.length; i++) {
+					keyParts.remove(parts[i]);
+				}
+				for (String keyPart : keyParts) {
+					collector.collect(name, name.substring(0, index) + "." + keyPart, null, this);
+				}
+			}
+		} else {
+			DomElementSchemaRegistry.INSTANCE.collectEvent(tagName, name, this, collector);
+		}
 	}
 
 	private int getPartOffset(String[] parts, int length) {

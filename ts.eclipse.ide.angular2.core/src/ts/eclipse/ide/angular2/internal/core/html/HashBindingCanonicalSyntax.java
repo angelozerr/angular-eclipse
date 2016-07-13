@@ -14,6 +14,8 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.wst.sse.core.internal.validate.ValidationMessage;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 
+import ts.eclipse.ide.angular2.core.html.INgBindingCollector;
+
 /**
  * Property binding: #$name.
  *
@@ -27,5 +29,10 @@ public class HashBindingCanonicalSyntax extends AbstractNgBindingType {
 	@Override
 	protected ValidationMessage validate(String name, IDOMElement target, String attrName, IFile file) {
 		return null;
+	}
+
+	@Override
+	protected void doCollect(IDOMElement target, String attrName, IFile file, INgBindingCollector collector) {
+
 	}
 }

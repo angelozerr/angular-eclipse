@@ -14,6 +14,8 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.wst.sse.core.internal.validate.ValidationMessage;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 
+import ts.eclipse.ide.angular2.core.html.INgBindingCollector;
+
 /**
  * Template directive: *ngFor, etc.
  *
@@ -31,4 +33,8 @@ public class TemplateDirective extends AbstractNgBindingType {
 				ValidationMessage.WARNING);
 	}
 
+	@Override
+	protected void doCollect(IDOMElement target, String attrName, IFile file, INgBindingCollector collector) {
+
+	}
 }

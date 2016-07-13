@@ -35,12 +35,8 @@ public class HTMLAngular2AttributeValidator extends AbstractHTMLAngular2Validato
 	}
 
 	@Override
-	public ValidationMessage validateAttribute(IDOMElement target, String attrName) {
-		// WTP do a lower case to the attrName, retrieve the real attribute
-		// name.
-		String name = target.getAttributeNode(attrName).getName();
-		INgBindingType type = Angular2CorePlugin.getBindingManager().getType(name);
-		return type.validate(target, name, getFile());
+	public ValidationMessage validateAttribute(IDOMElement target, String attrName) {		
+		return Angular2CorePlugin.getBindingManager().validate(target, attrName, getFile());
 	}
 
 }

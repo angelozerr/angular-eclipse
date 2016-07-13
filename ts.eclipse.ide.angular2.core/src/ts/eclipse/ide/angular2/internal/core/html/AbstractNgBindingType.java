@@ -18,6 +18,7 @@ import org.eclipse.wst.sse.core.internal.validate.ValidationMessage;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 
+import ts.eclipse.ide.angular2.core.html.INgBindingCollector;
 import ts.eclipse.ide.angular2.core.html.INgBindingType;
 import ts.eclipse.ide.angular2.core.html.NgBindingTypeException;
 import ts.eclipse.ide.angular2.internal.core.Angular2CoreMessages;
@@ -48,17 +49,16 @@ public abstract class AbstractNgBindingType implements INgBindingType {
 	}
 
 	@Override
-	public String extractName(String attrName) throws NgBindingTypeException {
-		if (endsWith == null) {
-			return attrName.substring(startsWith.length(), attrName.length());
-		} else {
-			if (!attrName.endsWith(endsWith)) {
-				throw new NgBindingTypeException(
-						NLS.bind(Angular2CoreMessages.AttributeBindingSyntax_error, attrName, endsWith),
-						ValidationMessage.ERROR);
-			}
-			return attrName.substring(startsWith.length(), attrName.length() - endsWith.length());
+	public String formatAttr(String name) {
+		StringBuilder attr = new StringBuilder();
+		if (!name.startsWith(startsWith)) {
+			attr.append(startsWith);
 		}
+		attr.append(name);
+		if (endsWith != null && !name.endsWith(endsWith)) {
+			attr.append(endsWith);
+		}
+		return attr.toString();
 	}
 
 	@Override
@@ -70,6 +70,19 @@ public abstract class AbstractNgBindingType implements INgBindingType {
 			return validate(name, target, attrName, file);
 		} catch (NgBindingTypeException e) {
 			return createValidationMessage(target, attrName, e.getMessage(), e.getSeverity());
+		}
+	}
+
+	protected String extractName(String attrName) throws NgBindingTypeException {
+		if (endsWith == null) {
+			return attrName.substring(startsWith.length(), attrName.length());
+		} else {
+			if (!attrName.endsWith(endsWith)) {
+				throw new NgBindingTypeException(
+						NLS.bind(Angular2CoreMessages.AttributeBindingSyntax_error, attrName, endsWith),
+						ValidationMessage.ERROR);
+			}
+			return attrName.substring(startsWith.length(), attrName.length() - endsWith.length());
 		}
 	}
 
@@ -98,4 +111,19 @@ public abstract class AbstractNgBindingType implements INgBindingType {
 	public String getEndsWith() {
 		return endsWith;
 	}
+
+	@Override
+	public void collect(IDOMElement target, String attrName, boolean fullMatch, IFile file, INgBindingCollector collector) {
+		String name = extractName2(this.normalizeAttributeName(attrName));
+		doCollect(target, name, file, collector);
+	}
+
+	private String extractName2(String attrName) {
+		if (endsWith != null && attrName.endsWith(endsWith)) {
+			return attrName.substring(startsWith.length(), attrName.length() - endsWith.length());
+		}
+		return attrName.substring(startsWith.length(), attrName.length());
+	}
+
+	protected abstract void doCollect(IDOMElement target, String attrName, IFile file, INgBindingCollector collector);
 }

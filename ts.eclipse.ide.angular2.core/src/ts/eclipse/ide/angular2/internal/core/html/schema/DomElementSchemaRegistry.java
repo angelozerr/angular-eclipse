@@ -2,7 +2,11 @@ package ts.eclipse.ide.angular2.internal.core.html.schema;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
+import ts.eclipse.ide.angular2.core.html.INgBindingCollector;
+import ts.eclipse.ide.angular2.core.html.INgBindingType;
 import ts.utils.StringUtils;
 
 /**
@@ -179,4 +183,31 @@ public class DomElementSchemaRegistry implements IElementSchemaRegistry {
 		return isPresent(mappedPropName) ? mappedPropName : propName;
 	}
 
+	@Override
+	public void collectProperty(String tagName, String attrName, INgBindingType bindingType,
+			INgBindingCollector collector) {
+		collect(tagName, attrName, bindingType, false, collector);
+	}
+
+	@Override
+	public void collectEvent(String tagName, String attrName, INgBindingType bindingType,
+			INgBindingCollector collector) {
+		collect(tagName, attrName, bindingType, true, collector);
+	}
+
+	private void collect(String tagName, String attrName, INgBindingType bindingType, boolean event,
+			INgBindingCollector collector) {
+		Map<String, PropertyType> elementProperties = this.schema.get(tagName.toLowerCase());
+		Set<Entry<String, PropertyType>> entries = elementProperties.entrySet();
+		for (Entry<String, PropertyType> entry : entries) {
+			if (isMatch(event, entry)) {
+				collector.collect(attrName, entry.getKey(), null, bindingType);
+			}
+		}
+	}
+
+	private boolean isMatch(boolean event, Entry<String, PropertyType> entry) {
+		PropertyType type = entry.getValue();
+		return event ? type.equals(PropertyType.EVENT) : !type.equals(PropertyType.EVENT);
+	}
 }

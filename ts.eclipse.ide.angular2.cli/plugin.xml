@@ -172,7 +172,8 @@
             category="ts.eclipse.ide.angular2.preferences.Angular2MainPropertyPage" >
          <enabledWhen>
 		     <adapt type="org.eclipse.core.resources.IProject">
-		     	  <test property="ts.eclipse.ide.angular2.core.isAngular2Project" />
+		     	  <test property="ts.eclipse.ide.angular2.core.isAngular2Project"
+		     	        forcePluginActivation="true" />
 		     </adapt>         
          </enabledWhen>
       </page>
@@ -225,7 +226,7 @@
                     <iterate>
                         <adapt  type="org.eclipse.core.resources.IResource">
 	                        <test property="ts.eclipse.ide.angular2.cli.isAngularCLIProject" 
-	                           	forcePluginActivation="true"/>
+	                           	  forcePluginActivation="true"/>
                         </adapt>
                     </iterate>   
                  </with>   
@@ -253,7 +254,7 @@
                     <iterate>
                         <adapt  type="org.eclipse.core.resources.IResource">
 	                        <test property="ts.eclipse.ide.angular2.cli.isAngularCLIProject" 
-	                           	forcePluginActivation="true"/>
+	                           	  forcePluginActivation="true"/>
                         </adapt>
                     </iterate>   
                  </with>   

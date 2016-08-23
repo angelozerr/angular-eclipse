@@ -1,6 +1,7 @@
 # angular2-eclipse
 
 [![Build Status](https://secure.travis-ci.org/angelozerr/angular2-eclipse.png)](http://travis-ci.org/angelozerr/angular2-eclipse)
+[![Eclipse install](https://marketplace.eclipse.org/sites/all/themes/solstice/public/images/marketplace/btn-install.png)](http://marketplace.eclipse.org/marketplace-client-intro?mpc_install=3037144)
 
 Angular2 Eclipse Plugin is based on [typescript.java](https://github.com/angelozerr/typescript.java).
 

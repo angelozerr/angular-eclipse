@@ -11,6 +11,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMAttr;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
+import org.junit.Assert;
 import org.junit.Test;
 
 import ts.eclipse.ide.angular2.core.Angular2CorePlugin;
@@ -20,6 +21,16 @@ import ts.eclipse.ide.angular2.core.utils.DOMUtils;
 import ts.utils.IOUtils;
 
 public class HTMLAngular2CompletionTest {
+
+	@Test
+	public void domPropertyBinding() throws CoreException {
+		List<CompletionItem> messages = completion("<input [va />", 10);
+		Assert.assertEquals(3, messages.size());
+		// valueAsNumber
+		Assert.assertEquals("valueAsNumber", messages.get(0).name);
+		Assert.assertEquals("value", messages.get(1).name);
+		Assert.assertEquals("valueAsDate", messages.get(2).name);
+	}
 
 	private class CompletionItem {
 		private final String name;
@@ -50,12 +61,6 @@ public class HTMLAngular2CompletionTest {
 		public List<CompletionItem> getList() {
 			return list;
 		}
-	}
-
-	@Test
-	public void domPropertyBinding() throws CoreException {
-		List<CompletionItem> messages = completion("<input [va />", 10);
-		System.err.println(messages);
 	}
 
 	private List<CompletionItem> completion(String html, int offset) throws CoreException {

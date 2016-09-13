@@ -157,12 +157,29 @@
 			translations="$nl$/templates/htmlangular2-templates.properties">
 		</include>
 		<!-- TypeScript Angular2 template which looks like https://github.com/johnpapa/vscode-angular2-snippets/blob/master/snippets/typescript.json -->
+        <contextType
+            name="%templates.angular2.contextType.name"
+            class="ts.eclipse.ide.angular2.core.template.Angular2ContextType"
+            registryId="ts.eclipse.ide.jsdt.ui.ContextTypeRegistry"
+            id="Angular2">
+        </contextType>		
 		<include
 			file="templates/typescriptangular2-templates.xml"
 			translations="$nl$/templates/typescriptangular2-templates.properties">
 		</include>			
 	</extension>
 
+	<!-- template proposals for Angular2 TypeScript-->
+	<extension
+		point="org.eclipse.wst.jsdt.ui.javaCompletionProposalComputer"
+		id="Angular2TemplateProposalComputer">
+		<javaCompletionProposalComputer
+			class="ts.eclipse.ide.angular2.internal.ui.contentassist.TypeScriptAngular2TemplateCompletionProposalComputer"
+			categoryId="org.eclipse.wst.jsdt.ui.templateProposalCategory">
+			<partition type="__dftl_partition_content_type"/>
+		</javaCompletionProposalComputer>		
+	</extension>
+	
 	<!-- Wizards -->
 	<extension
 	      point="org.eclipse.ui.newWizards">
@@ -172,4 +189,9 @@
 		</category>
 	</extension>
 	
+	 <!-- I don't know why, but startup should be done, otherwise TypeScriptAngular2TemplateCompletionProposalComputer is not registered? -->
+	 <extension
+	       point="org.eclipse.ui.startup">	
+	       <startup class="ts.eclipse.ide.angular2.internal.ui.Angular2UIStartup" />       
+	 </extension>	
 </plugin>        

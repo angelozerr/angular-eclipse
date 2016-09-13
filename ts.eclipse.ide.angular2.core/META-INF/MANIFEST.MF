@@ -17,9 +17,11 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.wst.xml.core,
  org.eclipse.wst.html.core;bundle-version="1.2.0",
  ts.eclipse.ide.core,
- com.google.gson
+ com.google.gson,
+ ts.eclipse.ide.jsdt.core
 Export-Package: ts.eclipse.ide.angular2.core,
  ts.eclipse.ide.angular2.core.html,
+ ts.eclipse.ide.angular2.core.template,
  ts.eclipse.ide.angular2.core.utils,
  ts.eclipse.ide.angular2.internal.core.html.schema;x-friends:="ts.eclipse.ide.angular2.core.tests"
 Bundle-ActivationPolicy: lazy

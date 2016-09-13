@@ -15,20 +15,108 @@
 -->
 <templates>
 
-<template name="ng2-component" description="%Templates.ng2-component.desc" id="ts.eclipse.ide.angular2.ui.templates.ng2-component" context="javaScript" enabled="true">import { Component, OnInit } from 'angular/core';
+<template name="ng2-component" description="%Templates.ng2-component.desc" id="ts.eclipse.ide.angular2.ui.templates.ng2-component" context="Angular2" enabled="true">import { Component, OnInit } from '@angular/core';
 
 @Component({
 	moduleId: module.id,
 	selector: '${selector}',
 	templateUrl: '${name}.component.html'
 })
-
 export class ${ComponentName}Component implements OnInit {
 	constructor() { }
 
-	ngOnInit() { }	
-${cursor}
-}	
-</template>
+	ngOnInit() { }${cursor}
+}</template>
+
+<template name="ng2-service" description="%Templates.ng2-service.desc" id="ts.eclipse.ide.angular2.ui.templates.ng2-service" context="Angular2" enabled="true">import { Injectable } from '@angular/core';
+
+@Injectable()
+export class ${ServiceName}Service {
+	${cursor}constructor() { }
+}</template>
+
+<template name="ng2-pipe" description="%Templates.ng2-pipe.desc" id="ts.eclipse.ide.angular2.ui.templates.ng2-pipe" context="Angular2" enabled="true">import { Pipe, PipeTransform } from '@angular/core';"
+
+@Pipe({
+	name: '${name}'
+})
+
+export class ${PipeName}Pipe implements PipeTransform {
+	transform(value: any, args: any[]): any {
+		${cursor}
+	}
+}</template>
+
+<template name="ng2-routing" description="%Templates.ng2-routing.desc" id="ts.eclipse.ide.angular2.ui.templates.ng2-routing" context="Angular2" enabled="true">import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { ${Name}Component } from './${name}.component';
+
+const routes: Routes = [
+	{ path: '${path}', component: ${Name}Component }
+];
+
+@NgModule({
+	imports: [RouterModule.for${ChildOrRoot}(routes)],
+	exports: [RouterModule],
+})
+export class ${Name}RoutingModule { }
+
+export const routedComponents = [${Name}Component];</template>
+
+<template name="ng2-http-get" description="%Templates.ng2-http-get.desc" id="ts.eclipse.ide.angular2.ui.templates.ng2-http-get" context="Angular2" enabled="true">return this.http.get('${url}')
+	.map((response: Response) => response.json()${cursor});</template>
+
+<template name="ng2-subscribe" description="%Templates.ng2-subscribe.desc" id="ts.eclipse.ide.angular2.ui.templates.ng2-subscribe" context="Angular2" enabled="true">this.${service}.${function}()
+	.subscribe(${arg} => this.${property} = ${arg});${cursor}</template>
+
+<template name="ng2-bootstrap" description="%Templates.ng2-bootstrap.desc" id="ts.eclipse.ide.angular2.ui.templates.ng2-bootstrap" context="Angular2" enabled="true">import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { ${App}Module } from './${app}.module';
+
+platformBrowserDynamic().bootstrapModule(${App}Module)
+	.then(success => console.log(`Bootstrap success`))
+	.catch(error => console.log(error));${cursor}</template>
+
+<template name="ng2-component-root" description="%Templates.ng2-component-root.desc" id="ts.eclipse.ide.angular2.ui.templates.ng2-component-root" context="Angular2" enabled="true">import { Component } from '@angular/core';
+
+@Component({
+	moduleId: module.id,
+	selector: '${myapp}',
+	template: `
+		&lt;router-outlet&gt;&lt;/router-outlet&gt;
+	`
+})
+export class ${App}Component { }${cursor}</template>
+
+<template name="ng2-module-root" description="%Templates.ng2-module-root.desc" id="ts.eclipse.ide.angular2.ui.templates.ng2-module-root" context="Angular2" enabled="true">import { NgModule } from '@angular/core';
+import { BrowserModule  } from '@angular/platform-browser';
+import { HttpModule } from '@angular/http';
+
+import { ${App}Component } from './${app}.component';
+import { AppRoutingModule } from './${app}.routing'; //TODO: Create ${app}.routing
+
+@NgModule({
+	imports: [
+		BrowserModule,
+		HttpModule,
+		
+		AppRoutingModule,
+	],
+	declarations: [${App}Component],
+	providers: [/* TODO: Providers go here */],
+	bootstrap: [${App}Component],
+})
+export class ${App}Module { }${cursor}</template>
+
+<template name="ng2-module" description="%Templates.ng2-module.desc" id="ts.eclipse.ide.angular2.ui.templates.ng2-module" context="Angular2" enabled="true">import { NgModule } from '@angular/core';
+
+import { ${Name}Component }   from './${name}.component';
+
+@NgModule({
+	imports: [],
+	exports: [],
+	declarations: [${Name}Component],
+	providers: []
+})
+export class ${Name}Module { }${cursor}</template>
 
 </templates>

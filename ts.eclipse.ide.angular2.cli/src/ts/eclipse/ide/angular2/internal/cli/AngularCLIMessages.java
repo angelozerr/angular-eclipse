@@ -69,6 +69,9 @@ public class AngularCLIMessages extends NLS {
 	public static String NewNgEnumWizardPage_title;
 	public static String NewNgEnumWizardPage_description;
 
+	// AngularCLI editor
+	public static String AngularCLIEditor_OverviewPage_title;
+
 	public static ResourceBundle getResourceBundle() {
 		try {
 			if (fResourceBundle == null)

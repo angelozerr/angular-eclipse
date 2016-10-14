@@ -51,9 +51,9 @@
 		<editor
 			name="%angular_cli_Editor.name"
 			icon="$nl$/icons/full/obj16/angular2.png"
-			class="org.eclipse.wst.sse.ui.StructuredTextEditor"
+			class="ts.eclipse.ide.angular2.internal.cli.editor.AngularCLIEditor"
 			symbolicFontName="org.eclipse.wst.sse.ui.textfont"
-			id="ts.eclipse.ide.angular2.cli.AngularCLIEditor">
+			id="ts.eclipse.ide.angular2.cli.editor.AngularCLIEditor">
 			<contentTypeBinding
 				contentTypeId="ts.eclipse.ide.angular2.cli.angularclisource" />
 		</editor>
@@ -64,7 +64,7 @@
 			symbolicFontName="org.eclipse.wst.sse.ui.textfont"
 			id="ts.eclipse.ide.angular2.cli.EmberCLIEditor">
 			<contentTypeBinding
-				contentTypeId="ts.eclipse.ide.angular2.cli.emberclisource" />
+				contentTypeId="ts.eclipse.ide.angular2.cli.editor.emberclisource" />
 		</editor>		
 	</extension>
 		

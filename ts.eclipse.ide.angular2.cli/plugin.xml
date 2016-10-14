@@ -313,7 +313,7 @@
                     </count>   
                     <iterate>
                         <adapt  type="org.eclipse.core.resources.IResource">
-	                        <e2e property="ts.eclipse.ide.angular2.cli.isAngularCLIProject" 
+	                        <test property="ts.eclipse.ide.angular2.cli.isAngularCLIProject" 
 	                           	  forcePluginActivation="true"/>
                         </adapt>
                     </iterate>   
@@ -321,5 +321,6 @@
               </enablement>   
            </contextualLaunch> 
     	</shortcut>
-    </extension>    
+    </extension>
+        
 </plugin>        

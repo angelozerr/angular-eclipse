@@ -207,6 +207,7 @@
     	</propertyTester>
    </extension>
    
+    <!-- "ng serve" launch shortcut-->
 	<extension
          point="org.eclipse.debug.ui.launchShortcuts">
      	 <shortcut
@@ -235,6 +236,7 @@
     	</shortcut>
     </extension>
 
+    <!-- "ng build" launch shortcut-->
 	<extension
          point="org.eclipse.debug.ui.launchShortcuts">
      	 <shortcut
@@ -261,5 +263,63 @@
               </enablement>   
            </contextualLaunch> 
     	</shortcut>
-    </extension>       	
+    </extension>
+
+    <!-- "ng test" launch shortcut-->
+	<extension
+         point="org.eclipse.debug.ui.launchShortcuts">
+     	 <shortcut
+            class="ts.eclipse.ide.angular2.internal.cli.launch.shortcut.NgTestLaunchShortcut"
+            description="%NgTestLaunchShortcut.description"
+            icon="icons/full/obj16/angular2.png"
+            id="ts.eclipse.ide.angular2.cli.launch.shortcut.NgTestLaunchShortcut"
+            label="%NgTestLaunchShortcut.label"
+            modes="run">
+           <contextualLaunch>   
+              <enablement>   
+                 <with   
+                       variable= "selection">   
+                    <count   
+                          value= "1" >   
+                    </count>   
+                    <iterate>
+                        <adapt  type="org.eclipse.core.resources.IResource">
+	                        <test property="ts.eclipse.ide.angular2.cli.isAngularCLIProject" 
+	                           	  forcePluginActivation="true"/>
+                        </adapt>
+                    </iterate>   
+                 </with>   
+              </enablement>   
+           </contextualLaunch> 
+    	</shortcut>
+    </extension>
+
+    <!-- "ng e2e" launch shortcut-->
+	<extension
+         point="org.eclipse.debug.ui.launchShortcuts">
+     	 <shortcut
+            class="ts.eclipse.ide.angular2.internal.cli.launch.shortcut.NgE2eLaunchShortcut"
+            description="%NgE2eLaunchShortcut.description"
+            icon="icons/full/obj16/angular2.png"
+            id="ts.eclipse.ide.angular2.cli.launch.shortcut.NgE2eLaunchShortcut"
+            label="%NgE2eLaunchShortcut.label"
+            modes="run">
+           <contextualLaunch>   
+              <enablement>   
+                 <with   
+                       variable= "selection">   
+                    <count   
+                          value= "1" >   
+                    </count>   
+                    <iterate>
+                        <adapt  type="org.eclipse.core.resources.IResource">
+	                        <e2e property="ts.eclipse.ide.angular2.cli.isAngularCLIProject" 
+	                           	  forcePluginActivation="true"/>
+                        </adapt>
+                    </iterate>   
+                 </with>   
+              </enablement>   
+           </contextualLaunch> 
+    	</shortcut>
+    </extension>    
 </plugin>        

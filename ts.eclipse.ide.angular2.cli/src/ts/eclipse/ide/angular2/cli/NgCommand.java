@@ -19,7 +19,8 @@ import java.util.Map;
  */
 public enum NgCommand {
 
-	NEW("new"), INIT("init"), GENERATE("generate", "g"), SERVE("serve", "server", "s"), BUILD("build");
+	NEW("new"), INIT("init"), GENERATE("generate", "g"), SERVE("serve", "server",
+			"s"), BUILD("build"), TEST("test"), E2E("e2e");
 
 	private static final Map<String, NgCommand> commandMaps;
 

@@ -71,6 +71,17 @@ public class AngularCLIMessages extends NLS {
 
 	// AngularCLI editor
 	public static String AngularCLIEditor_OverviewPage_title;
+	public static String AngularCLIEditor_OverviewPage_GeneralInformationSection_title;
+	public static String AngularCLIEditor_OverviewPage_GeneralInformationSection_desc;
+	public static String AngularCLIEditor_OverviewPage_projectName_label;
+	public static String AngularCLIEditor_OverviewPage_projectVersion_label;
+	
+	public static String AngularCLIEditor_NgServeAction_text;
+	public static String AngularCLIEditor_NgBuildAction_text;
+	public static String AngularCLIEditor_NgTestAction_text;
+	public static String AngularCLIEditor_NgE2eAction_text;
+	public static String AngularCLIEditor_NgCommand_dialog_title;
+	public static String AngularCLIEditor_NgCommand_failed;
 
 	public static ResourceBundle getResourceBundle() {
 		try {

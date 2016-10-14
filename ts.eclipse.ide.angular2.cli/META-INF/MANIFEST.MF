@@ -22,7 +22,9 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.wst.sse.ui,
  org.eclipse.wst.jsdt.js.cli;bundle-version="1.0.0",
  org.eclipse.core.expressions,
- ts.eclipse.ide.json.ui
+ ts.eclipse.ide.json.ui,
+ ts.eclipse.ide.json.core,
+ org.eclipse.json
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: ts.eclipse.ide.angular2.cli.AngularCLIPlugin
 Export-Package: ts.eclipse.ide.angular2.cli,

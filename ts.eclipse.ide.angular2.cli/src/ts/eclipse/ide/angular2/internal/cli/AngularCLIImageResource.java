@@ -40,6 +40,10 @@ public class AngularCLIImageResource {
 	// General Object Images
 	public static final String IMG_ANGULAR2 = "angular2";
 	public static final String IMG_SERVICE = "service";
+	public static final String IMG_NG_SERVE = "ng-serve";
+	public static final String IMG_NG_BUILD = "ng-build";
+	public static final String IMG_NG_E2E = "ng-e2e";
+	public static final String IMG_NG_TEST = "ng-test";
 
 	static {
 		try {
@@ -123,6 +127,11 @@ public class AngularCLIImageResource {
 		// load general object images
 		registerImage(IMG_ANGULAR2, URL_OBJ + IMG_ANGULAR2 + ".png");
 		registerImage(IMG_SERVICE, URL_OBJ + IMG_SERVICE + ".png");
+		registerImage(IMG_NG_SERVE, URL_OBJ + IMG_NG_SERVE + ".gif");
+		registerImage(IMG_NG_BUILD, URL_OBJ + IMG_NG_BUILD + ".gif");
+		registerImage(IMG_NG_TEST, URL_OBJ + IMG_NG_TEST + ".png");
+		registerImage(IMG_NG_E2E, URL_OBJ + IMG_NG_E2E + ".png");
+
 	}
 
 	/**

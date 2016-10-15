@@ -35,6 +35,7 @@ import ts.eclipse.ide.angular2.cli.NgBlueprint;
 import ts.eclipse.ide.angular2.cli.NgCommand;
 import ts.eclipse.ide.angular2.cli.launch.AngularCLILaunchConstants;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIProject;
+import ts.eclipse.ide.angular2.internal.cli.launch.AngularCLILaunchHelper;
 import ts.utils.FileUtils;
 
 /**
@@ -82,7 +83,7 @@ public abstract class AbstractNewNgGenerateWizard extends Wizard implements INew
 								FileUtils.getPath(ngFile));
 					}
 					newConfiguration.setAttribute(AngularCLILaunchConstants.WORKING_DIR,
-							project.getLocation().toString());
+							AngularCLILaunchHelper.getWorkingDir(project));
 					newConfiguration.setAttribute(AngularCLILaunchConstants.OPERATION,
 							NgCommand.GENERATE.name().toLowerCase());
 					newConfiguration.setAttribute(AngularCLILaunchConstants.OPERATION_PARAMETERS,

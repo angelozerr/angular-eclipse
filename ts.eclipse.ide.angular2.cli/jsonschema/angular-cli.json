@@ -1,5 +1,7 @@
 {
+  "$comment": "Please run `npm run build-config-interface` after changing this file. Thanks!",
   "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "CliConfig",
   "title": "Angular CLI Config Schema",
   "type": "object",
   "properties": {
@@ -22,9 +24,61 @@
       "items": {
         "type": "object",
         "properties": {
-          "main": "string",
-          "tsconfig": "string",
-          "mobile": "boolean"
+          "root": {
+            "type": "string"
+          },
+          "outDir": {
+            "type": "string",
+            "default": "dist/"
+          },
+          "assets": {
+            "fixme": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": [] 
+          },
+          "index": {
+            "type": "string",
+            "default": "index.html"
+          },
+          "main": {
+            "type": "string"
+          },
+          "test": {
+            "type": "string"
+          },
+          "tsconfig": {
+            "type": "string"
+          },
+          "prefix": {
+            "type": "string"
+          },
+          "mobile": {
+            "type": "boolean"
+          },
+          "styles": {
+            "description": "Global styles to be included in the build.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "additionalProperties": false
+          },
+          "scripts": {
+            "description": "Global scripts to be included in the build.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "additionalProperties": false
+          },
+          "environments": {
+            "description": "Name and corresponding file for environment config.",
+            "type": "object",
+            "additionalProperties": true
+          }
         },
         "additionalProperties": false
       },
@@ -81,20 +135,56 @@
     "defaults": {
       "type": "object",
       "properties": {
-        "prefix": {
-          "type": "string"
-        },
-        "sourceDir": {
-          "type": "string"
-        },
         "styleExt": {
           "type": "string"
         },
         "prefixInterfaces": {
           "type": "boolean"
         },
-        "lazyRoutePrefix": {
-          "type": "string"
+        "poll": {
+          "type": "number"
+        },
+        "inline": {
+          "type": "object",
+          "properties": {
+            "style": {
+              "type": "boolean",
+              "default": false
+            },
+            "template": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        },
+        "spec": {
+          "type": "object",
+          "properties": {
+            "class": {
+              "type": "boolean",
+              "default": false
+            },
+            "component": {
+              "type": "boolean",
+              "default": true
+            },
+            "directive": {
+              "type": "boolean",
+              "default": true
+            },
+            "module": {
+              "type": "boolean",
+              "default": false
+            },
+            "pipe": {
+              "type": "boolean",
+              "default": true
+            },
+            "service": {
+              "type": "boolean",
+              "default": true
+            }
+          }
         }
       },
       "additionalProperties": false

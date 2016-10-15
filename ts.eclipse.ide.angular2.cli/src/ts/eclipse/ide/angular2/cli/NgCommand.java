@@ -40,7 +40,7 @@ public enum NgCommand {
 		this.aliases = aliases;
 	}
 
-	private String[] getAliases() {
+	public String[] getAliases() {
 		return aliases;
 	}
 

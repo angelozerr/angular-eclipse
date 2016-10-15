@@ -24,7 +24,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.expressions,
  ts.eclipse.ide.json.ui,
  ts.eclipse.ide.json.core,
- org.eclipse.json
+ org.eclipse.json,
+ org.eclipse.core.variables
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: ts.eclipse.ide.angular2.cli.AngularCLIPlugin
 Export-Package: ts.eclipse.ide.angular2.cli,

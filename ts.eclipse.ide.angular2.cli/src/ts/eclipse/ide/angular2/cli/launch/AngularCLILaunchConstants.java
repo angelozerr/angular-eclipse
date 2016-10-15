@@ -10,6 +10,8 @@
  */
 package ts.eclipse.ide.angular2.cli.launch;
 
+import org.eclipse.core.externaltools.internal.IExternalToolConstants;
+
 import ts.eclipse.ide.angular2.cli.AngularCLIPlugin;
 import ts.eclipse.ide.core.TypeScriptCorePlugin;
 
@@ -24,7 +26,7 @@ public class AngularCLILaunchConstants {
 			+ ".angularCLILaunchConfigurationType"; //$NON-NLS-1$
 	public static final String NODE_FILE_PATH = TypeScriptCorePlugin.PLUGIN_ID + ".NODE_FILE_PATH"; //$NON-NLS-1$
 	public static final String NG_FILE_PATH = TypeScriptCorePlugin.PLUGIN_ID + ".NG_FILE_PATH"; //$NON-NLS-1$
-	public static final String WORKING_DIR = TypeScriptCorePlugin.PLUGIN_ID + ".WORKING_DIR"; //$NON-NLS-1$
+	public static final String WORKING_DIR = IExternalToolConstants.ATTR_WORKING_DIRECTORY; //$NON-NLS-1$
 	public static final String OPERATION = TypeScriptCorePlugin.PLUGIN_ID + ".OPERATION"; //$NON-NLS-1$
 	public static final String OPERATION_PARAMETERS = TypeScriptCorePlugin.PLUGIN_ID + ".OPERATION_PARAMETERS"; //$NON-NLS-1$
 }

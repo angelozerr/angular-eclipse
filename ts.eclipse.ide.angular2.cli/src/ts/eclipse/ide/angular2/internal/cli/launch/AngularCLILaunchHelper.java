@@ -33,12 +33,16 @@ import ts.utils.FileUtils;
  */
 public class AngularCLILaunchHelper {
 
+	public static String getWorkingDir(IProject project) {
+		return new StringBuilder("${workspace_loc:/").append(project.getName()).append("}").toString();
+	}
+
 	public static void launch(NgCommand ngCommand, IProject project) throws CoreException {
 		launch(ngCommand, project, ILaunchManager.RUN_MODE);
 	}
 
 	public static void launch(NgCommand ngCommand, IProject project, String mode) throws CoreException {
-		String workingDir = project.getLocation().toString();
+		String workingDir = AngularCLILaunchHelper.getWorkingDir(project);
 		String operation = ngCommand.name().toLowerCase();
 
 		// Check if configuration already exists

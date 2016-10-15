@@ -24,7 +24,7 @@ public class AngularCLIMessages extends NLS {
 	private static final String BUNDLE_NAME = "ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages"; //$NON-NLS-1$
 
 	private static ResourceBundle fResourceBundle;
-
+	
 	// Preferences
 	public static String AngularCLIConfigurationBlock_cli_group_label;
 	public static String AngularCLIConfigurationBlock_ngUseGlobalInstallation_label;
@@ -82,6 +82,9 @@ public class AngularCLIMessages extends NLS {
 	public static String AngularCLIEditor_NgE2eAction_text;
 	public static String AngularCLIEditor_NgCommand_dialog_title;
 	public static String AngularCLIEditor_NgCommand_failed;
+
+	// AngularCLI Launch
+	public static String AngularCLILaunchTabGroup_MainTab_command;
 
 	public static ResourceBundle getResourceBundle() {
 		try {

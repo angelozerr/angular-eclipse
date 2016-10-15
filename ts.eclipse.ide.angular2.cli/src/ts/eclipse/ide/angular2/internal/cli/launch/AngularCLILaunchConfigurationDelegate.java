@@ -12,12 +12,12 @@ package ts.eclipse.ide.angular2.internal.cli.launch;
 
 import java.io.File;
 
+import org.eclipse.core.externaltools.internal.launchConfigurations.ExternalToolsCoreUtil;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
@@ -42,7 +42,7 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 			throws CoreException {
 		String ngFilePath = configuration.getAttribute(AngularCLILaunchConstants.NG_FILE_PATH, (String) null);
 		String nodeFilePath = configuration.getAttribute(AngularCLILaunchConstants.NODE_FILE_PATH, (String) null);
-		String workingDir = configuration.getAttribute(AngularCLILaunchConstants.WORKING_DIR, (String) null);
+		IPath workingDir = ExternalToolsCoreUtil.getWorkingDirectory(configuration);
 		String operation = configuration.getAttribute(AngularCLILaunchConstants.OPERATION, (String) null);
 		String[] options = configuration.getAttribute(AngularCLILaunchConstants.OPERATION_PARAMETERS, "").split(" ");
 		if (monitor.isCanceled()) {
@@ -50,7 +50,7 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 		}
 
 		CLICommand command = createCommand(ngFilePath, nodeFilePath, operation, options);
-		IPath wd = new Path(workingDir);
+		IPath wd = workingDir;
 
 		NgCommand ngCommand = NgCommand.getCommand(operation);
 		boolean waitForTerminate = isWaitForTerminate(ngCommand);
@@ -61,7 +61,7 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 			new CLI(null, wd, command).execute(listener, waitForTerminate, monitor);
 		} finally {
 			if (ngCommand != null) {
-				File projectDir = new File(workingDir);
+				File projectDir = workingDir.toFile();
 				UIJob job = null;
 				switch (ngCommand) {
 				case NEW:

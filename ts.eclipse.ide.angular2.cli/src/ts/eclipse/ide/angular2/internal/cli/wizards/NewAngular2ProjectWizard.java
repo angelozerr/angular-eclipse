@@ -84,6 +84,7 @@ import org.eclipse.ui.wizards.newresource.BasicNewResourceWizard;
 import ts.eclipse.ide.angular2.cli.NgCommand;
 import ts.eclipse.ide.angular2.cli.launch.AngularCLILaunchConstants;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIProject;
+import ts.eclipse.ide.angular2.internal.cli.launch.AngularCLILaunchHelper;
 import ts.utils.FileUtils;
 
 /**
@@ -268,7 +269,7 @@ public class NewAngular2ProjectWizard extends BasicNewResourceWizard implements 
 										FileUtils.getPath(ngFile));
 							}
 							newConfiguration.setAttribute(AngularCLILaunchConstants.WORKING_DIR,
-									newProjectHandle.getLocation().toString());
+									AngularCLILaunchHelper.getWorkingDir(newProjectHandle));
 							newConfiguration.setAttribute(AngularCLILaunchConstants.OPERATION, NgCommand.INIT.name());
 							DebugUITools.launch(newConfiguration, ILaunchManager.RUN_MODE);
 						} catch (CoreException e) {

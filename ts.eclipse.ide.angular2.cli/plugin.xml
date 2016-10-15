@@ -138,18 +138,7 @@
 		   icon="icons/full/obj16/enum.gif">
 	       <description>%NewNgEnumWizard.desc</description>
 		</wizard>		
-	</extension>	
-
-	<!-- Launch -->
-	<extension
-       point="org.eclipse.debug.core.launchConfigurationTypes">
-	    <launchConfigurationType
-	          id="ts.eclipse.ide.angular2.cli.angularCLILaunchConfigurationType"
-	          delegate="ts.eclipse.ide.angular2.internal.cli.launch.AngularCLILaunchConfigurationDelegate"
-	          modes="run"
-	          name="%AngularCLILaunchConfigurationDelegate.label">
-	    </launchConfigurationType>
-	</extension>	
+	</extension>
 		
  	<!-- Preference Pages -->          		
  	<extension
@@ -195,7 +184,6 @@
       </factory>
    </extension>
    	
-   	<!-- Launch Shortcut -->
    	
    <extension point="org.eclipse.core.expressions.propertyTesters">
     	<propertyTester
@@ -206,6 +194,19 @@
       		class="ts.eclipse.ide.angular2.internal.cli.AngularCLIPropertyTester">
     	</propertyTester>
    </extension>
+   
+	<!-- Launch -->
+	<extension
+       point="org.eclipse.debug.core.launchConfigurationTypes">
+	    <launchConfigurationType
+	          id="ts.eclipse.ide.angular2.cli.angularCLILaunchConfigurationType"
+	          delegate="ts.eclipse.ide.angular2.internal.cli.launch.AngularCLILaunchConfigurationDelegate"
+	          modes="run"
+	          name="%AngularCLILaunchConfigurationDelegate.label">
+	    </launchConfigurationType>
+	</extension>	
+	
+	<!-- Launch Shortcut -->
    
     <!-- "ng serve" launch shortcut-->
 	<extension
@@ -319,8 +320,27 @@
                     </iterate>   
                  </with>   
               </enablement>   
-           </contextualLaunch> 
+           </contextualLaunch>
+           <configurationType
+              id="org.eclipse.angularjs.core.protractor">
+           </configurationType> 
     	</shortcut>
     </extension>
-        
+    
+    <extension point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+     <launchConfigurationTypeImage
+        icon="icons/full/obj16/angular2.png"
+        configTypeID="ts.eclipse.ide.angular2.cli.angularCLILaunchConfigurationType"
+        id="ts.eclipse.ide.angular2.cli.angularCLILaunchConfigurationTypeImage">
+     </launchConfigurationTypeImage>
+    </extension>
+  
+  <extension point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+    <launchConfigurationTabGroup
+        type="ts.eclipse.ide.angular2.cli.angularCLILaunchConfigurationType"
+        class="ts.eclipse.ide.angular2.internal.cli.launch.ui.AngularCLILaunchTabGroup"
+        id="ts.eclipse.ide.angular2.cli.tabgroup">
+    </launchConfigurationTabGroup>
+  </extension>
+  
 </plugin>        

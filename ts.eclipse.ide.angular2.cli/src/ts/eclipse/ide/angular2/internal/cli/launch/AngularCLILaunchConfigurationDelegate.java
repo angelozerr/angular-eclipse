@@ -82,6 +82,7 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 		if (ngCommand != null) {
 			switch (ngCommand) {
 			case SERVE:
+			case TEST:
 				return false;
 			default:
 				return true;

@@ -85,6 +85,7 @@ public class AngularCLIMessages extends NLS {
 
 	// AngularCLI Launch
 	public static String AngularCLILaunchTabGroup_MainTab_command;
+	public static String AngularCLILaunchTabGroup_MainTab_arguments;
 
 	public static ResourceBundle getResourceBundle() {
 		try {

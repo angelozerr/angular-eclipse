@@ -26,7 +26,7 @@ public class AngularCLIPreferenceInitializer extends AbstractPreferenceInitializ
 	@Override
 	public void initializeDefaultPreferences() {
 		IEclipsePreferences node = WorkspaceTypeScriptSettingsHelper
-				.getWorkspacePreferences(AngularCLIPlugin.PLUGIN_ID);
+				.getWorkspaceDefaultPreferences(AngularCLIPlugin.PLUGIN_ID);
 
 		// initialize properties for direct access of node.js server (start an
 		// internal process)

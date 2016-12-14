@@ -24,6 +24,9 @@
    <bundle id="minimal-json">
       <category name="TypeScript IDE"/>
    </bundle>
+   <feature id="tm-feature" >
+      <category name="TypeScript IDE"/>
+   </feature>
    <category-def name="Angular2 IDE" label="Angular2 IDE">
       <description>
          Angular2 IDE to use Angular2 with Eclipse IDE.

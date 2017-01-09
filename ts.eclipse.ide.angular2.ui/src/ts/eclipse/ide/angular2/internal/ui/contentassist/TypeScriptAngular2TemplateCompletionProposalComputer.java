@@ -28,7 +28,7 @@ public class TypeScriptAngular2TemplateCompletionProposalComputer extends Abstra
 	protected TemplateEngine computeCompletionEngine(TypeScriptContentAssistInvocationContext context) {
 		try {
 			IResource resource = context.getResource();
-			if (!Angular2Project.isAngular2Project(resource.getProject())) {
+			if (resource == null || !Angular2Project.isAngular2Project(resource.getProject())) {
 				return null;
 			}
 			String partition = TextUtilities.getContentType(context.getDocument(),

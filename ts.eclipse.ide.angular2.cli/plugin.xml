@@ -83,6 +83,14 @@
 		</wizard>
 		<!-- ng generate -->
 		<wizard
+		   id="ts.eclipse.ide.angular2.cli.wizards.generate.module"
+	       name="%NewNgModuleWizard.name"
+		   class="ts.eclipse.ide.angular2.internal.cli.wizards.NewNgModuleWizard"
+		   category="ts.eclipse.ide.angular2.ui.new"
+		   icon="icons/full/obj16/module.png">
+	       <description>%NewNgModuleWizard.desc</description>
+		</wizard>
+		<wizard
 		   id="ts.eclipse.ide.angular2.cli.wizards.generate.component"
 	       name="%NewNgComponentWizard.name"
 		   class="ts.eclipse.ide.angular2.internal.cli.wizards.NewNgComponentWizard"

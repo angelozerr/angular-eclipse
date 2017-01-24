@@ -47,6 +47,9 @@ public class AngularCLIMessages extends NLS {
 	public static String NgGenerateBlueprintWizardPage_select_ngProject_error;
 	public static String NgGenerateBlueprintWizardPage_select_name_required_error;
 
+	public static String NewNgModuleWizard_windowTitle;
+	public static String NewNgModuleWizardPage_title;
+	public static String NewNgModuleWizardPage_description;
 	public static String NewNgComponentWizard_windowTitle;
 	public static String NewNgComponentWizardPage_title;
 	public static String NewNgComponentWizardPage_description;

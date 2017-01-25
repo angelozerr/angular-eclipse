@@ -35,4 +35,12 @@ public class NewNgModuleWizard extends AbstractNewNgGenerateWizard {
 		super.init(workbench, selection);
 		super.setWindowTitle(AngularCLIMessages.NewNgModuleWizard_windowTitle);
 	}
+	
+	@Override
+	protected void appendOperationParameters(StringBuilder sb) {
+		super.appendOperationParameters(sb);
+		NewNgModuleWizardPage mainPage = (NewNgModuleWizardPage)getMainPage();
+		if (mainPage.isRouting())
+			sb.append(' ').append("--routing");
+	}
 }

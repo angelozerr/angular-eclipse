@@ -50,6 +50,7 @@ public class AngularCLIMessages extends NLS {
 	public static String NewNgModuleWizard_windowTitle;
 	public static String NewNgModuleWizardPage_title;
 	public static String NewNgModuleWizardPage_description;
+	public static String NewNgModuleWizardPage_routing;
 	public static String NewNgComponentWizard_windowTitle;
 	public static String NewNgComponentWizardPage_title;
 	public static String NewNgComponentWizardPage_description;

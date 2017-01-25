@@ -2,7 +2,7 @@ package ts.eclipse.ide.angular2.cli;
 
 public enum NgBlueprint {
 
-	COMPONENT, DIRECTIVE, PIPE, SERVICE, CLASS, INTERFACE, ENUM;
+	MODULE, COMPONENT, DIRECTIVE, PIPE, SERVICE, CLASS, INTERFACE, ENUM;
 
 	private final String blueprint;
 

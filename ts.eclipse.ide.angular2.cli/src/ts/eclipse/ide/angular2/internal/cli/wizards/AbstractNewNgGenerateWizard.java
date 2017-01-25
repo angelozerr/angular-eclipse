@@ -55,6 +55,10 @@ public abstract class AbstractNewNgGenerateWizard extends Wizard implements INew
 		addPage(mainPage);
 	}
 
+	protected NgGenerateBlueprintWizardPage getMainPage() {
+		return mainPage;
+	}
+	
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		this.selection = selection;
@@ -71,6 +75,10 @@ public abstract class AbstractNewNgGenerateWizard extends Wizard implements INew
 		final IProject project = mainPage.getProject();
 		final NgBlueprint blueprint = mainPage.getNgBluePrint();
 		final String name = mainPage.getBluepringName();
+		
+		StringBuilder sbOptionParameters = new StringBuilder();
+		appendOperationParameters(sbOptionParameters);
+		final String operationParams = sbOptionParameters.toString();
 		IRunnableWithProgress op = new IRunnableWithProgress() {
 
 			@Override
@@ -87,7 +95,7 @@ public abstract class AbstractNewNgGenerateWizard extends Wizard implements INew
 					newConfiguration.setAttribute(AngularCLILaunchConstants.OPERATION,
 							NgCommand.GENERATE.name().toLowerCase());
 					newConfiguration.setAttribute(AngularCLILaunchConstants.OPERATION_PARAMETERS,
-							blueprint.name().toLowerCase() + " " + name);
+							blueprint.name().toLowerCase() + " " + name + " " + operationParams);
 					DebugUITools.launch(newConfiguration, ILaunchManager.RUN_MODE);
 				} catch (CoreException e) {
 
@@ -105,6 +113,9 @@ public abstract class AbstractNewNgGenerateWizard extends Wizard implements INew
 		return true;
 	}
 
+	protected void appendOperationParameters(StringBuilder sb) {
+	}
+	
 	private ILaunchConfigurationWorkingCopy createEmptyLaunchConfiguration() throws CoreException {
 		ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
 		ILaunchConfigurationType launchConfigurationType = launchManager

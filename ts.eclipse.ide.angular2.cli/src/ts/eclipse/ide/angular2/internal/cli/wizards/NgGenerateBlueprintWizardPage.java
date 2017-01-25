@@ -65,6 +65,15 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 		topLevel.setFont(parent.getFont());
 
 		createNameControl(topLevel);
+		
+		// Separator
+		Label line = new Label(topLevel, SWT.SEPARATOR | SWT.HORIZONTAL);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+			gridData.horizontalSpan = 2;
+			line.setLayoutData(gridData);
+
+		createParamsControl(topLevel);
+		
 		// initialize project based on the current selection
 		setProject(project);
 
@@ -78,8 +87,8 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 	public void handleEvent(Event event) {
 		setPageComplete(validatePage());
 	}
-
-	private void createNameControl(Composite parent) {
+	
+	protected void createNameControl(Composite parent) {
 		Font font = parent.getFont();
 		// resource name group
 		Composite nameGroup = new Composite(parent, SWT.NONE);
@@ -134,6 +143,10 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 		resourceNameField.setFont(font);
 		// validateControls();
 
+	}
+
+	protected void createParamsControl(Composite parent) {
+		
 	}
 
 	private void setProject(IProject project) {

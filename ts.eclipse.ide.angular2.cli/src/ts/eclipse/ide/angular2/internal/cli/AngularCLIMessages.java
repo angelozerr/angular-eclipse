@@ -42,6 +42,20 @@ public class AngularCLIMessages extends NLS {
 	public static String AbstractProjectCommandInterpreter_anotherProjectWithSameNameExists_description;
 
 	// Wizard
+	public static String NewAngular2ProjectParamsWizardPage_title;
+	public static String NewAngular2ProjectParamsWizardPage_prefix;
+	public static String NewAngular2ProjectParamsWizardPage_sourceDir;
+	public static String NewAngular2ProjectParamsWizardPage_style;
+	public static String NewAngular2ProjectParamsWizardPage_skip;
+	public static String NewAngular2ProjectParamsWizardPage_npm;
+	public static String NewAngular2ProjectParamsWizardPage_git;
+	public static String NewAngular2ProjectParamsWizardPage_tests;
+	public static String NewAngular2ProjectParamsWizardPage_commit;
+	public static String NewAngular2ProjectParamsWizardPage_routing;
+	public static String NewAngular2ProjectParamsWizardPage_inline;
+	public static String NewAngular2ProjectParamsWizardPage_inlineStyle;
+	public static String NewAngular2ProjectParamsWizardPage_inlineTemplate;
+	
 	public static String NgGenerateBlueprintWizardPage_projectName;
 	public static String NgGenerateBlueprintWizardPage_bluePrintName;
 	public static String NgGenerateBlueprintWizardPage_select_ngProject_error;

@@ -210,7 +210,7 @@
         <repository>
           <id>textmate.java</id>
           <layout>p2</layout>
-          <url>http://oss.opensagres.fr/textmate/1.0.0-SNAPSHOT/</url>
+          <url>http://oss.opensagres.fr/textmate/0.1.0-SNAPSHOT/</url>
         </repository>    
 		<repository>
 			<id>typescript.java</id>

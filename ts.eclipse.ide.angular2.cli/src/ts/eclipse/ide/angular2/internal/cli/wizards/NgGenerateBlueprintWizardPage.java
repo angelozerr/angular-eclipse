@@ -69,8 +69,8 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 		// Separator
 		Label line = new Label(topLevel, SWT.SEPARATOR | SWT.HORIZONTAL);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-			gridData.horizontalSpan = 2;
-			line.setLayoutData(gridData);
+		gridData.horizontalSpan = 2;
+		line.setLayoutData(gridData);
 
 		createParamsControl(topLevel);
 		

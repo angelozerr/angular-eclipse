@@ -123,6 +123,7 @@ public class NewAngular2ProjectWizard extends BasicNewResourceWizard implements 
 	// "org.eclipse.ui.wizards.new.project"; //$NON-NLS-1$
 
 	private WizardNewProjectCreationPage mainPage;
+	private NewAngular2ProjectParamsWizardPage paramsPage;
 
 	private WizardNewProjectReferencePage referencePage;
 
@@ -182,6 +183,9 @@ public class NewAngular2ProjectWizard extends BasicNewResourceWizard implements 
 			referencePage.setDescription(ResourceMessages.NewProject_referenceDescription);
 			this.addPage(referencePage);
 		}
+		
+		paramsPage = new NewAngular2ProjectParamsWizardPage();
+		this.addPage(paramsPage);
 	}
 
 	private abstract class ErrorRunnable implements Runnable {
@@ -230,6 +234,8 @@ public class NewAngular2ProjectWizard extends BasicNewResourceWizard implements 
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		final IProjectDescription description = workspace.newProjectDescription(newProjectHandle.getName());
 		description.setLocationURI(location);
+		
+		final String operationParams = paramsPage.getParamsString();
 
 		// update the referenced project if provided
 		if (referencePage != null) {
@@ -271,6 +277,7 @@ public class NewAngular2ProjectWizard extends BasicNewResourceWizard implements 
 							newConfiguration.setAttribute(AngularCLILaunchConstants.WORKING_DIR,
 									AngularCLILaunchHelper.getWorkingDir(newProjectHandle));
 							newConfiguration.setAttribute(AngularCLILaunchConstants.OPERATION, NgCommand.INIT.name());
+							newConfiguration.setAttribute(AngularCLILaunchConstants.OPERATION_PARAMETERS, operationParams);
 							DebugUITools.launch(newConfiguration, ILaunchManager.RUN_MODE);
 						} catch (CoreException e) {
 							super.setError(e);

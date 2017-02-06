@@ -7,11 +7,11 @@
  *
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
- *  
+ *
  */
 package ts.eclipse.ide.angular2.internal.cli.wizards;
 
-import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IContainer;
 
 import ts.eclipse.ide.angular2.cli.NgBlueprint;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
@@ -24,8 +24,8 @@ public class NewNgComponentWizardPage extends NgGenerateBlueprintWizardPage {
 
 	private static final String PAGE_NAME = "ngComponent";
 
-	protected NewNgComponentWizardPage(IProject project) {
-		super(PAGE_NAME, AngularCLIMessages.NewNgComponentWizardPage_title, null, NgBlueprint.COMPONENT, project);
+	protected NewNgComponentWizardPage(IContainer folder) {
+		super(PAGE_NAME, AngularCLIMessages.NewNgComponentWizardPage_title, null, NgBlueprint.COMPONENT, folder);
 		super.setDescription(AngularCLIMessages.NewNgComponentWizardPage_description);
 	}
 

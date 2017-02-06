@@ -7,11 +7,11 @@
  *
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
- *  
+ *
  */
 package ts.eclipse.ide.angular2.internal.cli.wizards;
 
-import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbench;
 
@@ -27,10 +27,10 @@ public class NewNgClassWizard extends AbstractNewNgGenerateWizard {
 	}
 
 	@Override
-	protected NgGenerateBlueprintWizardPage createMainPage(IProject project) {
-		return new NewNgClassWizardPage(project);
+	protected NgGenerateBlueprintWizardPage createMainPage(IContainer folder) {
+		return new NewNgClassWizardPage(folder);
 	}
-	
+
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		super.init(workbench, selection);

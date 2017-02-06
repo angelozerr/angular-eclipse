@@ -13,6 +13,7 @@ package ts.eclipse.ide.angular2.internal.cli.launch;
 import java.io.File;
 
 import org.eclipse.core.externaltools.internal.launchConfigurations.ExternalToolsCoreUtil;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -55,7 +56,9 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 		NgCommand ngCommand = NgCommand.getCommand(operation);
 		boolean waitForTerminate = isWaitForTerminate(ngCommand);
 
-		IProject project = (IProject) ResourcesPlugin.getWorkspace().getRoot().getContainerForLocation(wd);
+		IContainer folder = ResourcesPlugin.getWorkspace().getRoot().getContainerForLocation(wd);
+		IProject project = folder instanceof IProject ? (IProject)folder : folder.getProject();
+
 		CLIStreamListener listener = createListener(ngCommand, project, options);
 		try {
 			new CLI(null, wd, command).execute(listener, waitForTerminate, monitor);

@@ -7,11 +7,11 @@
  *
  *  Contributors:
  *  Springrbua - initial implementation
- *  
+ *
  */
 package ts.eclipse.ide.angular2.internal.cli.wizards;
 
-import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbench;
 
@@ -27,8 +27,8 @@ public class NewNgModuleWizard extends AbstractNewNgGenerateWizard {
 	}
 
 	@Override
-	protected NgGenerateBlueprintWizardPage createMainPage(IProject project) {
-		return new NewNgModuleWizardPage(project);
+	protected NgGenerateBlueprintWizardPage createMainPage(IContainer folder) {
+		return new NewNgModuleWizardPage(folder);
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public class NewNgModuleWizard extends AbstractNewNgGenerateWizard {
 		super.init(workbench, selection);
 		super.setWindowTitle(AngularCLIMessages.NewNgModuleWizard_windowTitle);
 	}
-	
+
 	@Override
 	protected void appendOperationParameters(StringBuilder sb) {
 		super.appendOperationParameters(sb);

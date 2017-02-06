@@ -7,11 +7,11 @@
  *
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
- *  
+ *
  */
 package ts.eclipse.ide.angular2.internal.cli.wizards;
 
-import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IContainer;
 
 import ts.eclipse.ide.angular2.cli.NgBlueprint;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
@@ -24,8 +24,8 @@ public class NewNgDirectiveWizardPage extends NgGenerateBlueprintWizardPage {
 
 	private static final String PAGE_NAME = "ngDirective";
 
-	protected NewNgDirectiveWizardPage(IProject project) {
-		super(PAGE_NAME, AngularCLIMessages.NewNgDirectiveWizardPage_title, null, NgBlueprint.DIRECTIVE, project);
+	protected NewNgDirectiveWizardPage(IContainer folder) {
+		super(PAGE_NAME, AngularCLIMessages.NewNgDirectiveWizardPage_title, null, NgBlueprint.DIRECTIVE, folder);
 		super.setDescription(AngularCLIMessages.NewNgDirectiveWizardPage_description);
 	}
 

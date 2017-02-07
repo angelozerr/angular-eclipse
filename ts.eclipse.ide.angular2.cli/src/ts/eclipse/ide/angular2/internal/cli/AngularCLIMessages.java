@@ -24,7 +24,7 @@ public class AngularCLIMessages extends NLS {
 	private static final String BUNDLE_NAME = "ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages"; //$NON-NLS-1$
 
 	private static ResourceBundle fResourceBundle;
-	
+
 	// Preferences
 	public static String AngularCLIConfigurationBlock_cli_group_label;
 	public static String AngularCLIConfigurationBlock_ngUseGlobalInstallation_label;
@@ -55,11 +55,14 @@ public class AngularCLIMessages extends NLS {
 	public static String NewAngular2ProjectParamsWizardPage_inline;
 	public static String NewAngular2ProjectParamsWizardPage_inlineStyle;
 	public static String NewAngular2ProjectParamsWizardPage_inlineTemplate;
-	
-	public static String NgGenerateBlueprintWizardPage_projectName;
+
+	public static String NgGenerateBlueprintWizardPage_location;
+	public static String NgGenerateBlueprintWizardPage_browse_location;
+	public static String NgGenerateBlueprintWizardPage_browse_location_title;
+	public static String NgGenerateBlueprintWizardPage_browse_location_message;
 	public static String NgGenerateBlueprintWizardPage_bluePrintName;
-	public static String NgGenerateBlueprintWizardPage_select_ngProject_error;
 	public static String NgGenerateBlueprintWizardPage_select_name_required_error;
+	public static String NgGenerateBlueprintWizardPage_invalid_location_error;
 
 	public static String NewNgModuleWizard_windowTitle;
 	public static String NewNgModuleWizardPage_title;
@@ -93,7 +96,7 @@ public class AngularCLIMessages extends NLS {
 	public static String AngularCLIEditor_OverviewPage_GeneralInformationSection_desc;
 	public static String AngularCLIEditor_OverviewPage_projectName_label;
 	public static String AngularCLIEditor_OverviewPage_projectVersion_label;
-	
+
 	public static String AngularCLIEditor_NgServeAction_text;
 	public static String AngularCLIEditor_NgBuildAction_text;
 	public static String AngularCLIEditor_NgTestAction_text;

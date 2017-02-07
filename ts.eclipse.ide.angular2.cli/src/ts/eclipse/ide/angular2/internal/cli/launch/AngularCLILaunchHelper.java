@@ -12,6 +12,7 @@ package ts.eclipse.ide.angular2.internal.cli.launch;
 
 import java.io.File;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugPlugin;
@@ -32,6 +33,10 @@ import ts.utils.FileUtils;
  *
  */
 public class AngularCLILaunchHelper {
+
+	public static String getWorkingDir(IContainer folder) {
+		return new StringBuilder("${workspace_loc:/").append(folder.getFullPath()).append("}").toString();
+	}
 
 	public static String getWorkingDir(IProject project) {
 		return new StringBuilder("${workspace_loc:/").append(project.getName()).append("}").toString();

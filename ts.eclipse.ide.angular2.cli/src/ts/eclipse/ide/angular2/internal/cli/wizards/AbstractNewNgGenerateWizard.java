@@ -7,14 +7,14 @@
  *
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
- *  
+ *
  */
 package ts.eclipse.ide.angular2.internal.cli.wizards;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 
-import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -51,14 +51,14 @@ public abstract class AbstractNewNgGenerateWizard extends Wizard implements INew
 
 	public void addPages() {
 		super.addPages();
-		mainPage = createMainPage(getSelectedProject());
+		mainPage = createMainPage(getSelectedFolder());
 		addPage(mainPage);
 	}
 
 	protected NgGenerateBlueprintWizardPage getMainPage() {
 		return mainPage;
 	}
-	
+
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		this.selection = selection;
@@ -72,10 +72,10 @@ public abstract class AbstractNewNgGenerateWizard extends Wizard implements INew
 
 	@Override
 	public boolean performFinish() {
-		final IProject project = mainPage.getProject();
+		final IContainer folder = mainPage.getFolder();
 		final NgBlueprint blueprint = mainPage.getNgBluePrint();
 		final String name = mainPage.getBluepringName();
-		
+
 		StringBuilder sbOptionParameters = new StringBuilder();
 		appendOperationParameters(sbOptionParameters);
 		final String operationParams = sbOptionParameters.toString();
@@ -85,13 +85,13 @@ public abstract class AbstractNewNgGenerateWizard extends Wizard implements INew
 			public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 				try {
 					ILaunchConfigurationWorkingCopy newConfiguration = createEmptyLaunchConfiguration();
-					File ngFile = AngularCLIProject.getAngularCLIProject(project).getSettings().getNgFile();
+					File ngFile = AngularCLIProject.getAngularCLIProject(folder.getProject()).getSettings().getNgFile();
 					if (ngFile != null) {
 						newConfiguration.setAttribute(AngularCLILaunchConstants.NG_FILE_PATH,
 								FileUtils.getPath(ngFile));
 					}
 					newConfiguration.setAttribute(AngularCLILaunchConstants.WORKING_DIR,
-							AngularCLILaunchHelper.getWorkingDir(project));
+							AngularCLILaunchHelper.getWorkingDir(folder));
 					newConfiguration.setAttribute(AngularCLILaunchConstants.OPERATION,
 							NgCommand.GENERATE.name().toLowerCase());
 					newConfiguration.setAttribute(AngularCLILaunchConstants.OPERATION_PARAMETERS,
@@ -115,7 +115,7 @@ public abstract class AbstractNewNgGenerateWizard extends Wizard implements INew
 
 	protected void appendOperationParameters(StringBuilder sb) {
 	}
-	
+
 	private ILaunchConfigurationWorkingCopy createEmptyLaunchConfiguration() throws CoreException {
 		ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
 		ILaunchConfigurationType launchConfigurationType = launchManager
@@ -129,19 +129,18 @@ public abstract class AbstractNewNgGenerateWizard extends Wizard implements INew
 		return selection;
 	}
 
-	protected IProject getSelectedProject() {
-		if (selection == null) {
+	protected IContainer getSelectedFolder() {
+		if (selection == null)
 			return null;
-		}
-		Object element = selection.getFirstElement();
-		if (element instanceof IProject) {
-			return ((IProject) element);
-		} else if (element instanceof IResource) {
-			return ((IResource) element).getProject();
-		}
-		return null;
+		Object firstElement = selection.getFirstElement();
+		if (firstElement instanceof IContainer)
+			return (IContainer)firstElement;
+		else if (firstElement instanceof IResource)
+			return ((IResource)firstElement).getParent();
+		else
+			return null;
 	}
 
-	protected abstract NgGenerateBlueprintWizardPage createMainPage(IProject project);
+	protected abstract NgGenerateBlueprintWizardPage createMainPage(IContainer folder);
 
 }

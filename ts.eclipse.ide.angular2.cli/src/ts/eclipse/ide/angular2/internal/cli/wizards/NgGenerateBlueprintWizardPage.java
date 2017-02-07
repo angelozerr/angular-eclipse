@@ -7,30 +7,36 @@
  *
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
- *  
+ *
  */
 package ts.eclipse.ide.angular2.internal.cli.wizards;
 
-import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 
 import ts.eclipse.ide.angular2.cli.NgBlueprint;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
-import ts.eclipse.ide.angular2.internal.cli.AngularCLIProject;
 import ts.utils.StringUtils;
 
 /**
@@ -43,16 +49,17 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 	private static final int SIZING_TEXT_FIELD_WIDTH = 250;
 
 	private final NgBlueprint blueprint;
+	private Text location;
 	private Text resourceNameField;
-	private IProject project;
-	private Combo projectCombo;
+
+	private IContainer folder;
 
 	protected NgGenerateBlueprintWizardPage(String pageName, String title, ImageDescriptor titleImage,
-			NgBlueprint blueprint, IProject project) {
+			NgBlueprint blueprint, IContainer folder) {
 		super(pageName, title, titleImage);
 		setPageComplete(false);
 		this.blueprint = blueprint;
-		this.project = project;
+		this.folder = folder;
 	}
 
 	@Override
@@ -65,7 +72,7 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 		topLevel.setFont(parent.getFont());
 
 		createNameControl(topLevel);
-		
+
 		// Separator
 		Label line = new Label(topLevel, SWT.SEPARATOR | SWT.HORIZONTAL);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -73,9 +80,9 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 		line.setLayoutData(gridData);
 
 		createParamsControl(topLevel);
-		
+
 		// initialize project based on the current selection
-		setProject(project);
+		setFolder(folder, true);
 
 		validatePage();
 		// Show description on opening
@@ -87,42 +94,54 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 	public void handleEvent(Event event) {
 		setPageComplete(validatePage());
 	}
-	
+
 	protected void createNameControl(Composite parent) {
 		Font font = parent.getFont();
 		// resource name group
 		Composite nameGroup = new Composite(parent, SWT.NONE);
 		GridLayout layout = new GridLayout();
-		layout.numColumns = 2;
+		layout.numColumns = 3;
 		layout.marginWidth = 0;
 		nameGroup.setLayout(layout);
 		nameGroup.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
 		nameGroup.setFont(font);
 
-		// Project
+		// Location
 		Label label = new Label(nameGroup, SWT.NONE);
-		label.setText(AngularCLIMessages.NgGenerateBlueprintWizardPage_projectName);
+		label.setText(AngularCLIMessages.NgGenerateBlueprintWizardPage_location);
 		label.setFont(font);
 
-		// project selection combo
-		projectCombo = new Combo(nameGroup, SWT.BORDER | SWT.DROP_DOWN | SWT.READ_ONLY);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		projectCombo.setLayoutData(gd);
-		for (IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
-			if (AngularCLIProject.isAngularCLIProject(project)) {
-				projectCombo.add(project.getName());
-			}
-		}
-		projectCombo.addModifyListener(new ModifyListener() {
+		// Location entry field and "Browse"-button
+		location = new Text(nameGroup, SWT.BORDER);
+		location.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
-				if (!"".equals(projectCombo.getText())) {
-					setProject(ResourcesPlugin.getWorkspace().getRoot().getProject(projectCombo.getText()));
+				String location = getLocation();
+				if (!"".equals(location)) {
+					IResource res = ResourcesPlugin.getWorkspace().getRoot().findMember(location);
+					setFolder(res instanceof IContainer ? (IContainer)res : null);
 				} else {
-					setProject(null);
+					setFolder(null);
 				}
 			}
 		});
-		projectCombo.addListener(SWT.Modify, this);
+		location.addListener(SWT.Modify, this);
+		GridData data = new GridData(SWT.FILL, SWT.CENTER, true, false);
+		location.setLayoutData(data);
+		location.setFont(font);
+
+		Button browseButton = new Button(nameGroup, SWT.PUSH);
+		browseButton.setText(AngularCLIMessages.NgGenerateBlueprintWizardPage_browse_location);
+		browseButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent event) {
+				handleLocationBrowseButtonPressed();
+			}
+		});
+
+		data = new GridData(GridData.HORIZONTAL_ALIGN_END);
+		data.widthHint = IDialogConstants.BUTTON_WIDTH;
+		browseButton.setLayoutData(data);
+		browseButton.setFont(font);
 
 		// Blueprint name
 		label = new Label(nameGroup, SWT.NONE);
@@ -137,41 +156,57 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 		// handleResourceNameFocusLostEvent();
 		// }
 		// });
-		GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		data.widthHint = SIZING_TEXT_FIELD_WIDTH;
+		data.horizontalSpan = 2;
 		resourceNameField.setLayoutData(data);
 		resourceNameField.setFont(font);
+
 		// validateControls();
 
 	}
 
 	protected void createParamsControl(Composite parent) {
-		
 	}
 
-	private void setProject(IProject project) {
-		IProject previousProject = this.project;
-		this.project = project;
+	public void setFolder(IContainer folder) {
+		this.setFolder(folder, false);
+	}
 
-		// select correct project in the combo box
-		int index;
-		if (project != null) {
-			index = projectCombo.indexOf(project.getName());
-		} else {
-			index = -1;
+	public void setFolder(IContainer folder, boolean updateText) {
+		this.folder = folder;
+		if (updateText) {
+			if (updateText)
+				this.location.setText(folder.getFullPath().toString());
+			else
+				this.location.setText("");
 		}
-		if (index == -1) {
-			index = projectCombo.indexOf("");
-		}
-		// on Linux, Combo.select(int) always causes a ModifyEvent
-		if (index != projectCombo.getSelectionIndex()) {
-			projectCombo.select(index);
+	}
+
+	private String getLocation() {
+		return location.getText();
+	}
+
+	private void handleLocationBrowseButtonPressed() {
+		IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
+		ContainerSelectionDialog dialog = new ContainerSelectionDialog(getShell(), getFolder(), false, AngularCLIMessages.NgGenerateBlueprintWizardPage_browse_location_message);
+		dialog.setTitle(AngularCLIMessages.NgGenerateBlueprintWizardPage_browse_location_title);
+		if (dialog.open() == ContainerSelectionDialog.OK) {
+			Object[] result = dialog.getResult();
+			if (result.length == 1) {
+				Object path = result[0];
+				if (path instanceof IPath) {
+					IResource folder = workspaceRoot.findMember((IPath)path);
+					if (folder != null && folder instanceof IContainer)
+						setFolder((IContainer)folder, true);
+				}
+			}
 		}
 	}
 
 	protected boolean validatePage() {
-		if (StringUtils.isEmpty(projectCombo.getText())) {
-			setErrorMessage(AngularCLIMessages.NgGenerateBlueprintWizardPage_select_ngProject_error);
+		if (getFolder() == null) {
+			setErrorMessage(AngularCLIMessages.NgGenerateBlueprintWizardPage_invalid_location_error);
 			return false;
 		} else if (StringUtils.isEmpty(resourceNameField.getText())) {
 			setErrorMessage(AngularCLIMessages.NgGenerateBlueprintWizardPage_select_name_required_error);
@@ -181,8 +216,8 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 		return true;
 	}
 
-	public IProject getProject() {
-		return project;
+	public IContainer getFolder() {
+		return folder;
 	}
 
 	public NgBlueprint getNgBluePrint() {

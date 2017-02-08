@@ -36,6 +36,7 @@ public class AngularCLIImageResource {
 
 	private static final String URL_OBJ = "full/obj16/";
 	private static final String ELCL_OBJ = "full/elcl16/";
+	private static final String WIZBAN = "full/wizban/";
 
 	// General Object Images
 	public static final String IMG_ANGULAR2 = "angular2";
@@ -44,6 +45,9 @@ public class AngularCLIImageResource {
 	public static final String IMG_NG_BUILD = "ng-build";
 	public static final String IMG_NG_E2E = "ng-e2e";
 	public static final String IMG_NG_TEST = "ng-test";
+	
+	// Wizban
+	public static final String IMG_ANGULAR2_WIZBAN = "angular2_wizban";
 
 	static {
 		try {
@@ -131,6 +135,8 @@ public class AngularCLIImageResource {
 		registerImage(IMG_NG_BUILD, URL_OBJ + IMG_NG_BUILD + ".gif");
 		registerImage(IMG_NG_TEST, URL_OBJ + IMG_NG_TEST + ".png");
 		registerImage(IMG_NG_E2E, URL_OBJ + IMG_NG_E2E + ".png");
+		
+		registerImage(IMG_ANGULAR2_WIZBAN, WIZBAN+ IMG_ANGULAR2_WIZBAN+ ".png");
 
 	}
 

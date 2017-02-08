@@ -29,11 +29,11 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 
 import ts.eclipse.ide.angular2.cli.NgBlueprint;
 import ts.eclipse.ide.angular2.cli.NgCommand;
 import ts.eclipse.ide.angular2.cli.launch.AngularCLILaunchConstants;
+import ts.eclipse.ide.angular2.internal.cli.AngularCLIImageResource;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIProject;
 import ts.eclipse.ide.angular2.internal.cli.launch.AngularCLILaunchHelper;
 import ts.utils.FileUtils;
@@ -66,7 +66,7 @@ public abstract class AbstractNewNgGenerateWizard extends Wizard implements INew
 	}
 
 	protected void initializeDefaultPageImageDescriptor() {
-		ImageDescriptor desc = IDEWorkbenchPlugin.getIDEImageDescriptor("wizban/new_wiz.png");//$NON-NLS-1$
+		ImageDescriptor desc = AngularCLIImageResource.getImageDescriptor(AngularCLIImageResource.IMG_ANGULAR2_WIZBAN);
 		setDefaultPageImageDescriptor(desc);
 	}
 
@@ -134,9 +134,9 @@ public abstract class AbstractNewNgGenerateWizard extends Wizard implements INew
 			return null;
 		Object firstElement = selection.getFirstElement();
 		if (firstElement instanceof IContainer)
-			return (IContainer)firstElement;
+			return (IContainer) firstElement;
 		else if (firstElement instanceof IResource)
-			return ((IResource)firstElement).getParent();
+			return ((IResource) firstElement).getParent();
 		else
 			return null;
 	}

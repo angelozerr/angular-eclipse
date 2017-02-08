@@ -193,5 +193,51 @@
 	 <extension
 	       point="org.eclipse.ui.startup">	
 	       <startup class="ts.eclipse.ide.angular2.internal.ui.Angular2UIStartup" />       
-	 </extension>	
+	 </extension>
+	 
+   <!-- Perspective --> 
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            name="%ng.perspective.name"
+            icon="icons/full/obj16/angular2.png"
+            class="ts.eclipse.ide.angular2.internal.ui.perspectives.Angular2PerspectiveFactory"
+            id="ts.eclipse.ide.angular2.ui.perspectives.Angular2Perspective">
+		<description>
+            %ng.perspective.description
+         </description>            
+      </perspective>
+   	</extension>
+
+	<!-- Provide JS, CSS, HTML, etc wizards, Console, etc views for the Angular2 perspective  -->
+	<extension point="org.eclipse.ui.perspectiveExtensions"> 
+        <perspectiveExtension targetID="ts.eclipse.ide.angular2.ui.perspectives.Angular2Perspective">
+            
+            <newWizardShortcut id="org.eclipse.wst.xml.ui.internal.wizards.NewXMLWizard"/>            
+            <newWizardShortcut id="org.eclipse.wst.html.ui.internal.wizard.NewHTMLWizard"/>
+            <newWizardShortcut id="org.eclipse.wst.css.ui.internal.wizard.NewCSSWizard"/>
+            <newWizardShortcut id="org.eclipse.wst.jsdt.ui.NewJSWizard"/>
+            <newWizardShortcut id="org.eclipse.ui.wizards.new.file"/>
+            <newWizardShortcut id="org.eclipse.ui.wizards.new.folder"/>
+            
+            <viewShortcut id="org.eclipse.tm.terminal.view.ui.TerminalsView"/>
+            <viewShortcut id="org.eclipse.ui.views.ContentOutline"/> 
+            <viewShortcut id="org.eclipse.ui.console.ConsoleView"/>
+            <viewShortcut id="org.eclipse.ui.views.AllMarkersView"/>
+            <viewShortcut id="org.eclipse.ui.views.ProblemView"/> 
+            <viewShortcut id="org.eclipse.wst.common.snippets.internal.ui.SnippetsView"/>
+
+            <perspectiveShortcut id="org.eclipse.jdt.ui.JavaPerspective"/>
+            
+            <showInPart id="org.eclipse.ui.views.ResourceNavigator"/>
+         	<showInPart id="org.eclipse.ui.navigator.ProjectExplorer"/>
+         			
+        	<actionSet id="org.eclipse.wst.web.ui.wizardsActionSet" />
+        	<actionSet id="org.eclipse.wst.server.ui.internal.webbrowser.actionSet"/>
+        	<actionSet id="org.eclipse.debug.ui.launchActionSet"/>
+        	<actionSet id="org.eclipse.debug.ui.breakpointActionSet"/>         
+         
+        </perspectiveExtension> 
+    </extension>
+   	 
 </plugin>        

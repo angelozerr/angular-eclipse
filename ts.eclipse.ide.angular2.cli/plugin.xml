@@ -78,7 +78,8 @@
 		   class="ts.eclipse.ide.angular2.internal.cli.wizards.NewAngular2ProjectWizard"
 		   project="true"
 		   category="ts.eclipse.ide.angular2.ui.new"
-		   icon="icons/full/obj16/angular2.png">
+		   icon="icons/full/obj16/angular2.png"
+		   finalPerspective="ts.eclipse.ide.angular2.ui.perspectives.Angular2Perspective" >
 	       <description>%NewAngular2ProjectWizard.desc</description>
 		</wizard>
 		<!-- ng generate -->
@@ -147,7 +148,118 @@
 	       <description>%NewNgEnumWizard.desc</description>
 		</wizard>		
 	</extension>
-		
+	
+	<!-- Provide AngularCLI wizards from the New contextual menu -->
+	<extension
+		point="org.eclipse.ui.navigator.navigatorContent">
+		<commonWizard
+			type="new"
+			menuGroupId="org.eclipse.jst.j2ee.ui.newProjects"
+			wizardId="ts.eclipse.ide.angular2.cli.wizards.new.project">
+			<enablement>
+				<adapt type="org.eclipse.core.resources.IResource">
+					
+				</adapt>
+			</enablement>
+		</commonWizard>
+		<commonWizard
+			type="new"
+			menuGroupId="ts.eclipse.ide.angular2.cli.menu"
+			wizardId="ts.eclipse.ide.angular2.cli.wizards.generate.class">
+			<enablement>
+				<adapt type="org.eclipse.core.resources.IResource">
+					<test
+		            	forcePluginActivation="true"
+		            	property="ts.eclipse.ide.angular2.cli.isAngularCLIProject"/>
+				</adapt>
+			</enablement>
+		</commonWizard>
+		<commonWizard
+			type="new"
+			menuGroupId="ts.eclipse.ide.angular2.cli.menu"
+			wizardId="ts.eclipse.ide.angular2.cli.wizards.generate.component">
+			<enablement>
+				<adapt type="org.eclipse.core.resources.IResource">
+					<test
+		            	forcePluginActivation="true"
+		            	property="ts.eclipse.ide.angular2.cli.isAngularCLIProject"/>
+				</adapt>
+			</enablement>
+		</commonWizard>
+		<commonWizard
+			type="new"
+			menuGroupId="ts.eclipse.ide.angular2.cli.menu"
+			wizardId="ts.eclipse.ide.angular2.cli.wizards.generate.directive">
+			<enablement>
+				<adapt type="org.eclipse.core.resources.IResource">
+					<test
+		            	forcePluginActivation="true"
+		            	property="ts.eclipse.ide.angular2.cli.isAngularCLIProject"/>
+				</adapt>
+			</enablement>
+		</commonWizard>
+		<commonWizard
+			type="new"
+			menuGroupId="ts.eclipse.ide.angular2.cli.menu"
+			wizardId="ts.eclipse.ide.angular2.cli.wizards.generate.enum">
+			<enablement>
+				<adapt type="org.eclipse.core.resources.IResource">
+					<test
+		            	forcePluginActivation="true"
+		            	property="ts.eclipse.ide.angular2.cli.isAngularCLIProject"/>
+				</adapt>
+			</enablement>
+		</commonWizard>
+		<commonWizard
+			type="new"
+			menuGroupId="ts.eclipse.ide.angular2.cli.menu"
+			wizardId="ts.eclipse.ide.angular2.cli.wizards.generate.interface">
+			<enablement>
+				<adapt type="org.eclipse.core.resources.IResource">
+					<test
+		            	forcePluginActivation="true"
+		            	property="ts.eclipse.ide.angular2.cli.isAngularCLIProject"/>
+				</adapt>
+			</enablement>
+		</commonWizard>
+		<commonWizard
+			type="new"
+			menuGroupId="ts.eclipse.ide.angular2.cli.menu"
+			wizardId="ts.eclipse.ide.angular2.cli.wizards.generate.module">
+			<enablement>
+				<adapt type="org.eclipse.core.resources.IResource">
+					<test
+		            	forcePluginActivation="true"
+		            	property="ts.eclipse.ide.angular2.cli.isAngularCLIProject"/>
+				</adapt>
+			</enablement>
+		</commonWizard>		
+		<commonWizard
+			type="new"
+			menuGroupId="ts.eclipse.ide.angular2.cli.menu"
+			wizardId="ts.eclipse.ide.angular2.cli.wizards.generate.pipe">
+			<enablement>
+				<adapt type="org.eclipse.core.resources.IResource">
+					<test
+		            	forcePluginActivation="true"
+		            	property="ts.eclipse.ide.angular2.cli.isAngularCLIProject"/>
+				</adapt>
+			</enablement>
+		</commonWizard>
+		<commonWizard
+			type="new"
+			menuGroupId="ts.eclipse.ide.angular2.cli.menu"
+			wizardId="ts.eclipse.ide.angular2.cli.wizards.generate.service">
+			<enablement>
+				<adapt type="org.eclipse.core.resources.IResource">
+					<test
+		            	forcePluginActivation="true"
+		            	property="ts.eclipse.ide.angular2.cli.isAngularCLIProject"/>
+				</adapt>
+			</enablement>
+		</commonWizard>
+	</extension>
+	
  	<!-- Preference Pages -->          		
  	<extension
          point="org.eclipse.ui.preferencePages">		      
@@ -355,5 +467,23 @@
         id="ts.eclipse.ide.angular2.cli.tabgroup">
     </launchConfigurationTabGroup>
   </extension>
-  
+   
+	<!-- Provide AngularCLI wizards for the Angular2 perspective  -->
+	<extension point="org.eclipse.ui.perspectiveExtensions"> 
+        <perspectiveExtension targetID="ts.eclipse.ide.angular2.ui.perspectives.Angular2Perspective">
+        
+            <newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.new.project"/>
+            <newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.class"/>
+            <newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.component"/>
+            <newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.directive"/>
+            <newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.enum"/>
+            <newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.interface"/>            
+            <newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.module"/>
+         	<newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.interface"/>         	
+            <newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.pipe"/>
+            <newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.service"/>
+        
+        </perspectiveExtension> 
+    </extension>
+   
 </plugin>        

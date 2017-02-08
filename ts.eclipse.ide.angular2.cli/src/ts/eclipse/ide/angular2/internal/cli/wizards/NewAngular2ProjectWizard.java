@@ -177,12 +177,12 @@ public class NewAngular2ProjectWizard extends BasicNewResourceWizard implements 
 		this.addPage(mainPage);
 
 		// only add page if there are already projects in the workspace
-		if (ResourcesPlugin.getWorkspace().getRoot().getProjects().length > 0) {
+		/*if (ResourcesPlugin.getWorkspace().getRoot().getProjects().length > 0) {
 			referencePage = new WizardNewProjectReferencePage("basicReferenceProjectPage");//$NON-NLS-1$
 			referencePage.setTitle(ResourceMessages.NewProject_referenceTitle);
 			referencePage.setDescription(ResourceMessages.NewProject_referenceDescription);
 			this.addPage(referencePage);
-		}
+		}*/
 		
 		paramsPage = new NewAngular2ProjectParamsWizardPage();
 		this.addPage(paramsPage);

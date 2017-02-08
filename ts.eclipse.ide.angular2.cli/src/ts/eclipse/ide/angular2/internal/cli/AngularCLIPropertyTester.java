@@ -11,7 +11,7 @@
 package ts.eclipse.ide.angular2.internal.cli;
 
 import org.eclipse.core.expressions.PropertyTester;
-import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdaptable;
 
 /**
@@ -43,9 +43,9 @@ public class AngularCLIPropertyTester extends PropertyTester {
 
 	private boolean testIsAngularCLIProject(Object receiver) {
 		if (receiver instanceof IAdaptable) {
-			IProject project = (IProject) ((IAdaptable) receiver).getAdapter(IProject.class);
-			if (project != null) {
-				return AngularCLIProject.isAngularCLIProject(project);
+			IResource resource = (IResource) ((IAdaptable) receiver).getAdapter(IResource.class);
+			if (resource != null) {
+				return AngularCLIProject.isAngularCLIProject(resource.getProject());
 			}
 		}
 		return false;

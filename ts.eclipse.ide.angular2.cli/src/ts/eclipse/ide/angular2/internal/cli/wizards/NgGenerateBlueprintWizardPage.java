@@ -16,7 +16,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -139,7 +138,7 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 		});
 
 		data = new GridData(GridData.HORIZONTAL_ALIGN_END);
-		data.widthHint = IDialogConstants.BUTTON_WIDTH;
+		//data.widthHint = IDialogConstants.BUTTON_WIDTH;
 		browseButton.setLayoutData(data);
 		browseButton.setFont(font);
 

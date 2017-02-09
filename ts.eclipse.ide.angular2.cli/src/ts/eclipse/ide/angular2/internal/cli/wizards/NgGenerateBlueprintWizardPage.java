@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2015-2016 Angelo ZERR.
+ *  Copyright (c) 2015-2017 Angelo ZERR.
  *  All rights reserved. This program and the accompanying materials
  *  are made available under the terms of the Eclipse Public License v1.0
  *  which accompanies this distribution, and is available at
@@ -11,13 +11,21 @@
  */
 package ts.eclipse.ide.angular2.internal.cli.wizards;
 
+import java.util.List;
+
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
+import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -32,10 +40,15 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.dialogs.ContainerSelectionDialog;
+import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 
 import ts.eclipse.ide.angular2.cli.NgBlueprint;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
+import ts.eclipse.ide.angular2.internal.cli.AngularCLIProject;
+import ts.eclipse.ide.angular2.internal.cli.Trace;
+import ts.eclipse.ide.angular2.internal.cli.json.AngularCLIJson;
+import ts.eclipse.ide.angular2.internal.cli.json.App;
+import ts.eclipse.ide.ui.utils.DialogUtils;
 import ts.utils.StringUtils;
 
 /**
@@ -51,7 +64,9 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 	private Text location;
 	private Text resourceNameField;
 
+	private final IContainer initialFolder;
 	private IContainer folder;
+	private IPath rootPath;
 
 	protected NgGenerateBlueprintWizardPage(String pageName, String title, ImageDescriptor titleImage,
 			NgBlueprint blueprint, IContainer folder) {
@@ -59,6 +74,7 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 		setPageComplete(false);
 		this.blueprint = blueprint;
 		this.folder = folder;
+		this.initialFolder = folder;
 	}
 
 	@Override
@@ -80,8 +96,8 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 
 		createParamsControl(topLevel);
 
-		// initialize project based on the current selection
-		setFolder(folder, true);
+		// Initialize fields.
+		initializePage();
 
 		validatePage();
 		// Show description on opening
@@ -90,11 +106,33 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 		setControl(topLevel);
 	}
 
+	private void initializePage() {
+		// Compute root path
+		List<App> apps = getAngularCLIJson().getApps();
+		if (apps != null && apps.size() > 0) {
+			// use angular-cli.json apps[0].root
+			this.rootPath = apps.get(0).getRootPath(folder.getProject());
+		}
+		if (this.rootPath == null) {
+			this.rootPath = App.getDefaultRootPath(folder.getProject());
+		}
+		IPath folderPath = new Path(folder.getProject().getName()).append(folder.getProjectRelativePath());
+		if (rootPath.isPrefixOf(folderPath)) {
+			// Initialize location with selected folder which is included in the
+			// /$project/$src/app folder
+			location.setText(folderPath.toString());
+		} else {
+			// Initialize location with root path /$project/$src/app
+			location.setText(rootPath.toString());
+		}
+	}
+
 	public void handleEvent(Event event) {
 		setPageComplete(validatePage());
 	}
 
 	protected void createNameControl(Composite parent) {
+
 		Font font = parent.getFont();
 		// resource name group
 		Composite nameGroup = new Composite(parent, SWT.NONE);
@@ -117,7 +155,7 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 				String location = getLocation();
 				if (!"".equals(location)) {
 					IResource res = ResourcesPlugin.getWorkspace().getRoot().findMember(location);
-					setFolder(res instanceof IContainer ? (IContainer)res : null);
+					setFolder(res instanceof IContainer ? (IContainer) res : null);
 				} else {
 					setFolder(null);
 				}
@@ -138,7 +176,7 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 		});
 
 		data = new GridData(GridData.HORIZONTAL_ALIGN_END);
-		//data.widthHint = IDialogConstants.BUTTON_WIDTH;
+		// data.widthHint = IDialogConstants.BUTTON_WIDTH;
 		browseButton.setLayoutData(data);
 		browseButton.setFont(font);
 
@@ -168,11 +206,11 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 	protected void createParamsControl(Composite parent) {
 	}
 
-	public void setFolder(IContainer folder) {
+	private void setFolder(IContainer folder) {
 		this.setFolder(folder, false);
 	}
 
-	public void setFolder(IContainer folder, boolean updateText) {
+	private void setFolder(IContainer folder, boolean updateText) {
 		this.folder = folder;
 		if (updateText) {
 			if (updateText)
@@ -187,17 +225,33 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 	}
 
 	private void handleLocationBrowseButtonPressed() {
-		IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
-		ContainerSelectionDialog dialog = new ContainerSelectionDialog(getShell(), getFolder(), false, AngularCLIMessages.NgGenerateBlueprintWizardPage_browse_location_message);
+		IContainer folder = getFolder() != null ? getFolder() : initialFolder;
+		ElementTreeSelectionDialog dialog = DialogUtils.createFolderDialog(folder.getProjectRelativePath().toString(),
+				folder.getProject(), false, true, getShell());
+		dialog.addFilter(new ViewerFilter() {
+
+			@Override
+			public boolean select(Viewer viewer, Object parentElement, Object element) {
+				if (element instanceof IProject) {
+					// Show only project which are angular-cli project
+					IProject p = (IProject) element;
+					return AngularCLIProject.isAngularCLIProject(p);
+				} else if (element instanceof IContainer) {
+					// Check if the given container is included in the
+					// angular-cli root-path
+					IContainer container = (IContainer) element;
+					return isValidAppsLocation(container, true);
+				}
+				return false;
+			}
+		});
 		dialog.setTitle(AngularCLIMessages.NgGenerateBlueprintWizardPage_browse_location_title);
-		if (dialog.open() == ContainerSelectionDialog.OK) {
+		if (dialog.open() == Window.OK) {
 			Object[] result = dialog.getResult();
 			if (result.length == 1) {
-				Object path = result[0];
-				if (path instanceof IPath) {
-					IResource folder = workspaceRoot.findMember((IPath)path);
-					if (folder != null && folder instanceof IContainer)
-						setFolder((IContainer)folder, true);
+				Object selectedFolder = result[0];
+				if (selectedFolder instanceof IContainer) {
+					setFolder((IContainer) selectedFolder, true);
 				}
 			}
 		}
@@ -206,6 +260,10 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 	protected boolean validatePage() {
 		if (getFolder() == null) {
 			setErrorMessage(AngularCLIMessages.NgGenerateBlueprintWizardPage_invalid_location_error);
+			return false;
+		} else if (!isValidAppsLocation(getFolder(), false)) {
+			setErrorMessage(NLS.bind(AngularCLIMessages.NgGenerateBlueprintWizardPage_invalid_apps_location_error,
+					rootPath.toString()));
 			return false;
 		} else if (StringUtils.isEmpty(resourceNameField.getText())) {
 			setErrorMessage(AngularCLIMessages.NgGenerateBlueprintWizardPage_select_name_required_error);
@@ -242,5 +300,42 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 		// select the whole resource name.
 		resourceNameField.setSelection(0, resourceNameField.getText().length());
 		resourceNameField.setFocus();
+	}
+
+	/**
+	 * Returns the Pojo of the angular-cli.json from the selected project.
+	 * 
+	 * @return
+	 */
+	protected AngularCLIJson getAngularCLIJson() {
+		try {
+			return AngularCLIProject.getAngularCLIProject(folder.getProject()).getAngularCLIJson();
+		} catch (CoreException e) {
+			Trace.trace(Trace.SEVERE, "Error while loading angular-cli.json", e);
+			return null;
+		}
+	}
+
+	/**
+	 * Returns true if the given folder is a valid "apps" location and false
+	 * otherwise.
+	 * 
+	 * @param container
+	 *            the container to validate
+	 * @param acceptParent
+	 *            true if it accept parent and false otherwise.
+	 * @return true if the given folder is a valid "apps" location and false
+	 *         otherwise.
+	 */
+	private boolean isValidAppsLocation(IContainer container, boolean acceptParent) {
+		IProject project = container.getProject();
+		if (project == null) {
+			return false;
+		}
+		IPath folderPath = new Path(project.getName()).append(container.getProjectRelativePath());
+		if (acceptParent && folderPath.isPrefixOf(rootPath)) {
+			return true;
+		}
+		return (rootPath.isPrefixOf(folderPath));
 	}
 }

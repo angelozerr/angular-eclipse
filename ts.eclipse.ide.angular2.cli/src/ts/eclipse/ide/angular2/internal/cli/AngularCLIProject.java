@@ -13,12 +13,15 @@ package ts.eclipse.ide.angular2.internal.cli;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
+import ts.eclipse.ide.angular2.internal.cli.json.AngularCLIJson;
 import ts.eclipse.ide.core.TypeScriptCorePlugin;
+import ts.eclipse.ide.core.resources.watcher.FileWatcherListenerAdapter;
 import ts.eclipse.ide.core.resources.watcher.ProjectWatcherListenerAdapter;
 
 /**
@@ -32,6 +35,8 @@ public class AngularCLIProject {
 	private final static Map<IProject, AngularCLIProject> ngProjects = new HashMap<IProject, AngularCLIProject>();
 
 	private final AngularCLIProjectSettings settings;
+
+	private AngularCLIJson angularCLIJson;
 
 	AngularCLIProject(IProject project) {
 		this.settings = new AngularCLIProjectSettings(project);
@@ -58,6 +63,23 @@ public class AngularCLIProject {
 						}
 					}
 
+				});
+		TypeScriptCorePlugin.getResourcesWatcher().addFileWatcherListener(project, ANGULAR_CLI_JSON_PATH.toString(),
+				new FileWatcherListenerAdapter() {
+					@Override
+					public void onAdded(IFile file) {
+						AngularCLIProject.this.angularCLIJson = null;
+					}
+
+					@Override
+					public void onChanged(IFile file) {
+						AngularCLIProject.this.angularCLIJson = null;
+					}
+
+					@Override
+					public void onDeleted(IFile file) {
+						AngularCLIProject.this.angularCLIJson = null;
+					}
 				});
 	}
 
@@ -92,4 +114,20 @@ public class AngularCLIProject {
 	public static boolean isAngularCLIProject(IProject project) {
 		return project.exists(ANGULAR_CLI_JSON_PATH);
 	}
+
+	/**
+	 * Returns the Pojo for angular-cli.json
+	 * 
+	 * @return the Pojo for angular-cli.json
+	 * @throws CoreException
+	 */
+	public AngularCLIJson getAngularCLIJson() throws CoreException {
+		if (angularCLIJson != null) {
+			return angularCLIJson;
+		}
+		IProject project = settings.getProject();
+		angularCLIJson = AngularCLIJson.load(project.getFile(ANGULAR_CLI_JSON_PATH));
+		return angularCLIJson;
+	}
+
 }

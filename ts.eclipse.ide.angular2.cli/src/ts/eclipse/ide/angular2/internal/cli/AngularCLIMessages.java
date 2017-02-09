@@ -63,7 +63,8 @@ public class AngularCLIMessages extends NLS {
 	public static String NgGenerateBlueprintWizardPage_bluePrintName;
 	public static String NgGenerateBlueprintWizardPage_select_name_required_error;
 	public static String NgGenerateBlueprintWizardPage_invalid_location_error;
-
+	public static String NgGenerateBlueprintWizardPage_invalid_apps_location_error;
+	
 	public static String NewNgModuleWizard_windowTitle;
 	public static String NewNgModuleWizardPage_title;
 	public static String NewNgModuleWizardPage_description;

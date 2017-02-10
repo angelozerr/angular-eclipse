@@ -11,18 +11,11 @@
  */
 package ts.eclipse.ide.angular2.internal.cli.json;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
-
 /**
  * Pojo for "app" of angular-cli.json
  *
  */
 public class App {
-
-	private static final String DEFAULT_ROOT = "src";
-	private static final String APP = "app";
 
 	private String root;
 
@@ -36,15 +29,4 @@ public class App {
 		return prefix;
 	}
 
-	public IPath getRootPath(IProject project) {
-		return getRootPath(project, root);
-	}
-
-	public static IPath getDefaultRootPath(IProject project) {
-		return getRootPath(project, DEFAULT_ROOT);
-	}
-
-	private static IPath getRootPath(IProject project, String root) {
-		return new Path(project.getName()).append(root).append(APP);
-	}
 }

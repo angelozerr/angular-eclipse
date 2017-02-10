@@ -11,8 +11,6 @@
  */
 package ts.eclipse.ide.angular2.internal.cli.wizards;
 
-import java.util.List;
-
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -47,7 +45,6 @@ import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIProject;
 import ts.eclipse.ide.angular2.internal.cli.Trace;
 import ts.eclipse.ide.angular2.internal.cli.json.AngularCLIJson;
-import ts.eclipse.ide.angular2.internal.cli.json.App;
 import ts.eclipse.ide.ui.utils.DialogUtils;
 import ts.utils.StringUtils;
 
@@ -64,9 +61,7 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 	private Text location;
 	private Text resourceNameField;
 
-	private final IContainer initialFolder;
 	private IContainer folder;
-	private IPath rootPath;
 
 	protected NgGenerateBlueprintWizardPage(String pageName, String title, ImageDescriptor titleImage,
 			NgBlueprint blueprint, IContainer folder) {
@@ -74,7 +69,6 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 		setPageComplete(false);
 		this.blueprint = blueprint;
 		this.folder = folder;
-		this.initialFolder = folder;
 	}
 
 	@Override
@@ -107,20 +101,21 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 	}
 
 	private void initializePage() {
+		if (folder == null) {
+			return;
+		}
+		IProject project = folder.getProject();
+		IPath folderPath = new Path(project.getName()).append(folder.getProjectRelativePath());
+		if (!isBelongToAngularClIProject(folder)) {
+			location.setText(folder.getFullPath().toString());
+			return;
+		}
 		// Compute root path
-		List<App> apps = getAngularCLIJson().getApps();
-		if (apps != null && apps.size() > 0) {
-			// use angular-cli.json apps[0].root
-			this.rootPath = apps.get(0).getRootPath(folder.getProject());
-		}
-		if (this.rootPath == null) {
-			this.rootPath = App.getDefaultRootPath(folder.getProject());
-		}
-		IPath folderPath = new Path(folder.getProject().getName()).append(folder.getProjectRelativePath());
+		IPath rootPath = getAngularCLIJson().getRootPath(project);
 		if (rootPath.isPrefixOf(folderPath)) {
 			// Initialize location with selected folder which is included in the
 			// /$project/$src/app folder
-			location.setText(folderPath.toString());
+			location.setText(folder.getFullPath().toString());
 		} else {
 			// Initialize location with root path /$project/$src/app
 			location.setText(rootPath.toString());
@@ -213,10 +208,7 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 	private void setFolder(IContainer folder, boolean updateText) {
 		this.folder = folder;
 		if (updateText) {
-			if (updateText)
-				this.location.setText(folder.getFullPath().toString());
-			else
-				this.location.setText("");
+			this.location.setText(folder.getFullPath().toString());
 		}
 	}
 
@@ -225,9 +217,11 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 	}
 
 	private void handleLocationBrowseButtonPressed() {
-		IContainer folder = getFolder() != null ? getFolder() : initialFolder;
-		ElementTreeSelectionDialog dialog = DialogUtils.createFolderDialog(folder.getProjectRelativePath().toString(),
-				folder.getProject(), false, true, getShell());
+		IContainer folder = getFolder();
+		String initialFolder = folder != null ? folder.getProjectRelativePath().toString() : null;
+		final IProject project = folder != null ? folder.getProject() : null;
+		ElementTreeSelectionDialog dialog = DialogUtils.createFolderDialog(initialFolder, project, project == null,
+				true, getShell());
 		dialog.addFilter(new ViewerFilter() {
 
 			@Override
@@ -258,10 +252,15 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 	}
 
 	protected boolean validatePage() {
-		if (getFolder() == null) {
+		IContainer folder = getFolder();
+		if (folder == null) {
 			setErrorMessage(AngularCLIMessages.NgGenerateBlueprintWizardPage_invalid_location_error);
 			return false;
-		} else if (!isValidAppsLocation(getFolder(), false)) {
+		} else if (!isBelongToAngularClIProject(folder)) {
+			setErrorMessage(AngularCLIMessages.NgGenerateBlueprintWizardPage_invalid_project_location_error);
+			return false;
+		} else if (!isValidAppsLocation(folder, false)) {
+			IPath rootPath = getAngularCLIJson().getRootPath(folder.getProject());
 			setErrorMessage(NLS.bind(AngularCLIMessages.NgGenerateBlueprintWizardPage_invalid_apps_location_error,
 					rootPath.toString()));
 			return false;
@@ -320,22 +319,39 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 	 * Returns true if the given folder is a valid "apps" location and false
 	 * otherwise.
 	 * 
-	 * @param container
+	 * @param folder
 	 *            the container to validate
 	 * @param acceptParent
 	 *            true if it accept parent and false otherwise.
 	 * @return true if the given folder is a valid "apps" location and false
 	 *         otherwise.
 	 */
-	private boolean isValidAppsLocation(IContainer container, boolean acceptParent) {
-		IProject project = container.getProject();
+	private boolean isValidAppsLocation(IContainer folder, boolean acceptParent) {
+		IProject project = folder.getProject();
 		if (project == null) {
 			return false;
 		}
-		IPath folderPath = new Path(project.getName()).append(container.getProjectRelativePath());
+		IPath rootPath = getAngularCLIJson().getRootPath(folder.getProject());
+		IPath folderPath = new Path(project.getName()).append(folder.getProjectRelativePath());
 		if (acceptParent && folderPath.isPrefixOf(rootPath)) {
 			return true;
 		}
 		return (rootPath.isPrefixOf(folderPath));
 	}
+
+	/**
+	 * Returns true if the given folder belongs to an angular cli project and
+	 * false otherwise.
+	 * 
+	 * @param folder
+	 * @return true if the given folder belongs to an angular cli project and
+	 *         false otherwise.
+	 */
+	private boolean isBelongToAngularClIProject(IContainer folder) {
+		if (folder == null) {
+			return false;
+		}
+		return AngularCLIProject.isAngularCLIProject(folder.getProject());
+	}
+
 }

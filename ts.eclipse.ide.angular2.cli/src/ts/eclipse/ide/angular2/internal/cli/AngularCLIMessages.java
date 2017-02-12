@@ -47,7 +47,7 @@ public class AngularCLIMessages extends NLS {
 	public static String NewAngular2ProjectParamsWizardPage_sourceDir;
 	public static String NewAngular2ProjectParamsWizardPage_style;
 	public static String NewAngular2ProjectParamsWizardPage_skip;
-	public static String NewAngular2ProjectParamsWizardPage_npm;
+	public static String NewAngular2ProjectParamsWizardPage_install;
 	public static String NewAngular2ProjectParamsWizardPage_git;
 	public static String NewAngular2ProjectParamsWizardPage_tests;
 	public static String NewAngular2ProjectParamsWizardPage_commit;

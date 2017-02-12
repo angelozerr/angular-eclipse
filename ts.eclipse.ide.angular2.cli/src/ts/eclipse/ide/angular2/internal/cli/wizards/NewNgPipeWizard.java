@@ -36,4 +36,16 @@ public class NewNgPipeWizard extends AbstractNewNgGenerateWizard {
 		super.init(workbench, selection);
 		super.setWindowTitle(AngularCLIMessages.NewNgPipeWizard_windowTitle);
 	}
+
+	@Override
+	protected void appendOperationParameters(StringBuilder sb) {
+		super.appendOperationParameters(sb);
+		NewNgPipeWizardPage mainPage = (NewNgPipeWizardPage)getMainPage();
+		if (mainPage.isSkipImport())
+			sb.append(' ').append("--skip-import");
+		if (mainPage.isExport())
+			sb.append(' ').append("--export");
+		sb.append(' ').append("--spec ").append(mainPage.isSpec());
+		sb.append(' ').append("--flat ").append(mainPage.isFlat());
+	}
 }

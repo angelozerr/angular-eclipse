@@ -37,4 +37,11 @@ public class NewNgClassWizard extends AbstractNewNgGenerateWizard {
 		super.setWindowTitle(AngularCLIMessages.NewNgClassWizard_windowTitle);
 	}
 
+	@Override
+	protected void appendOperationParameters(StringBuilder sb) {
+		super.appendOperationParameters(sb);
+		NewNgClassWizardPage mainPage = (NewNgClassWizardPage)getMainPage();
+		sb.append(' ').append("--spec ").append(mainPage.isSpec());
+	}
+
 }

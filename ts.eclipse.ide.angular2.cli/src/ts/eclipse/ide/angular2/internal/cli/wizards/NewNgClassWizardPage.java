@@ -12,6 +12,12 @@
 package ts.eclipse.ide.angular2.internal.cli.wizards;
 
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
 
 import ts.eclipse.ide.angular2.cli.NgBlueprint;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
@@ -24,9 +30,43 @@ public class NewNgClassWizardPage extends NgGenerateBlueprintWizardPage {
 
 	private static final String PAGE_NAME = "ngClass";
 
+	private Button chkSpec;
+
 	protected NewNgClassWizardPage(IContainer folder) {
 		super(PAGE_NAME, AngularCLIMessages.NewNgClassWizardPage_title, null, NgBlueprint.CLASS, folder);
 		super.setDescription(AngularCLIMessages.NewNgClassWizardPage_description);
+	}
+
+	@Override
+	public void createParamsControl(Composite parent) {
+		super.createParamsControl(parent);
+		Font font = parent.getFont();
+
+		// params group
+		Composite paramsGroup = new Composite(parent, SWT.NONE);
+		GridLayout layout = new GridLayout();
+		layout.numColumns = 2;
+		layout.marginWidth = 0;
+		paramsGroup.setLayout(layout);
+		paramsGroup.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
+		paramsGroup.setFont(font);
+
+		// Checkbox for spec
+		chkSpec = new Button(paramsGroup, SWT.CHECK);
+		chkSpec.addListener(SWT.Modify, this);
+		chkSpec.setText(AngularCLIMessages.NgGenerateBlueprintWizardPage_generate_spec);
+		GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		chkSpec.setLayoutData(data);
+	}
+
+	@Override
+	protected void initializePage() {
+		super.initializePage();
+		chkSpec.setSelection(getAngularCLIJson().isSpec(NgBlueprint.CLASS));
+	}
+
+	public boolean isSpec() {
+		return chkSpec.getSelection();
 	}
 
 }

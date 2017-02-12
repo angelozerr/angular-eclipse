@@ -12,6 +12,14 @@
 package ts.eclipse.ide.angular2.internal.cli.wizards;
 
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 
 import ts.eclipse.ide.angular2.cli.NgBlueprint;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
@@ -24,9 +32,109 @@ public class NewNgDirectiveWizardPage extends NgGenerateBlueprintWizardPage {
 
 	private static final String PAGE_NAME = "ngDirective";
 
+	private Text txtPrefix;
+	private Button chkFlat;
+	private Button chkSpec;
+	private Button chkSkipImport;
+	private Button chkExport;
+
 	protected NewNgDirectiveWizardPage(IContainer folder) {
 		super(PAGE_NAME, AngularCLIMessages.NewNgDirectiveWizardPage_title, null, NgBlueprint.DIRECTIVE, folder);
 		super.setDescription(AngularCLIMessages.NewNgDirectiveWizardPage_description);
+	}
+
+	@Override
+	public void createParamsControl(Composite parent) {
+		super.createParamsControl(parent);
+		Font font = parent.getFont();
+
+		// params group
+		Composite paramsGroup = new Composite(parent, SWT.NONE);
+		GridLayout layout = new GridLayout();
+		layout.numColumns = 2;
+		layout.marginWidth = 0;
+		paramsGroup.setLayout(layout);
+		paramsGroup.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
+		paramsGroup.setFont(font);
+
+		// Container
+		Composite prefixGroup = new Composite(paramsGroup, SWT.NONE);
+		layout = new GridLayout();
+		layout.numColumns = 2;
+		layout.marginWidth = 0;
+		prefixGroup.setLayout(layout);
+		GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		data.horizontalSpan = 2;
+		prefixGroup.setLayoutData(data);
+		prefixGroup.setFont(font);
+
+		// Label for prefix
+		Label label = new Label(prefixGroup, SWT.NONE);
+		label.setText(AngularCLIMessages.NgGenerateBlueprintWizardPage_location);
+		label.setFont(font);
+
+		// Textfield for prefix
+		txtPrefix = new Text(prefixGroup, SWT.BORDER);
+		txtPrefix.addListener(SWT.Modify, this);
+		data = new GridData(GridData.FILL_HORIZONTAL);
+		txtPrefix.setLayoutData(data);
+		txtPrefix.setFont(font);
+
+		// Checkbox for flat
+		chkFlat = new Button(paramsGroup, SWT.CHECK);
+		chkFlat.addListener(SWT.Modify, this);
+		chkFlat.setText(AngularCLIMessages.NgGenerateBlueprintWizardPage_flat);
+		data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		chkFlat.setLayoutData(data);
+
+		// Checkbox for spec
+		chkSpec = new Button(paramsGroup, SWT.CHECK);
+		chkSpec.addListener(SWT.Modify, this);
+		chkSpec.setText(AngularCLIMessages.NgGenerateBlueprintWizardPage_generate_spec);
+		data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		chkSpec.setLayoutData(data);
+
+		// Checkbox for skip-import
+		chkSkipImport = new Button(paramsGroup, SWT.CHECK);
+		chkSkipImport.addListener(SWT.Modify, this);
+		chkSkipImport.setText(AngularCLIMessages.NgGenerateBlueprintWizardPage_skipImport);
+		data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		chkSkipImport.setLayoutData(data);
+
+		// Checkbox for export
+		chkExport = new Button(paramsGroup, SWT.CHECK);
+		chkExport.addListener(SWT.Modify, this);
+		chkExport.setText(AngularCLIMessages.NgGenerateBlueprintWizardPage_export);
+		data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		chkExport.setLayoutData(data);
+	}
+
+	@Override
+	protected void initializePage() {
+		super.initializePage();
+		txtPrefix.setText(getAngularCLIJson().getPrefix());
+		chkSpec.setSelection(getAngularCLIJson().isSpec(NgBlueprint.DIRECTIVE));
+		chkFlat.setSelection(true);
+	}
+
+	public String getPrefix() {
+		return txtPrefix.getText();
+	}
+
+	public boolean isFlat() {
+		return chkFlat.getSelection();
+	}
+
+	public boolean isSpec() {
+		return chkSpec.getSelection();
+	}
+
+	public boolean isSkipImport() {
+		return chkSkipImport.getSelection();
+	}
+
+	public boolean isExport() {
+		return chkExport.getSelection();
 	}
 
 }

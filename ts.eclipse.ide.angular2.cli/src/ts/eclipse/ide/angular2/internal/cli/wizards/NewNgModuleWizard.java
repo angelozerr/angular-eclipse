@@ -43,5 +43,6 @@ public class NewNgModuleWizard extends AbstractNewNgGenerateWizard {
 		NewNgModuleWizardPage mainPage = (NewNgModuleWizardPage)getMainPage();
 		if (mainPage.isRouting())
 			sb.append(' ').append("--routing");
+		sb.append(' ').append("--spec ").append(mainPage.isSpec());
 	}
 }

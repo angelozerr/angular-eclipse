@@ -65,29 +65,46 @@ public class AngularCLIMessages extends NLS {
 	public static String NgGenerateBlueprintWizardPage_invalid_location_error;
 	public static String NgGenerateBlueprintWizardPage_invalid_project_location_error;
 	public static String NgGenerateBlueprintWizardPage_invalid_apps_location_error;
-	
+
+	public static String NgGenerateBlueprintWizardPage_generate_spec;
+	public static String NgGenerateBlueprintWizardPage_prefix;
+	public static String NgGenerateBlueprintWizardPage_flat;
+	public static String NgGenerateBlueprintWizardPage_skipImport;
+	public static String NgGenerateBlueprintWizardPage_export;
+
 	public static String NewNgModuleWizard_windowTitle;
 	public static String NewNgModuleWizardPage_title;
 	public static String NewNgModuleWizardPage_description;
 	public static String NewNgModuleWizardPage_routing;
+
 	public static String NewNgComponentWizard_windowTitle;
 	public static String NewNgComponentWizardPage_title;
 	public static String NewNgComponentWizardPage_description;
+	public static String NewNgComponentWizardPage_inlineTemplate;
+	public static String NewNgComponentWizardPage_inlineStyle;
+	public static String NewNgComponentWizardPage_viewEncapsulation;
+	public static String NewNgComponentWizardPage_changeDetection;
+
 	public static String NewNgDirectiveWizard_windowTitle;
 	public static String NewNgDirectiveWizardPage_title;
 	public static String NewNgDirectiveWizardPage_description;
+
 	public static String NewNgPipeWizard_windowTitle;
 	public static String NewNgPipeWizardPage_title;
 	public static String NewNgPipeWizardPage_description;
+
 	public static String NewNgServiceWizard_windowTitle;
 	public static String NewNgServiceWizardPage_title;
 	public static String NewNgServiceWizardPage_description;
+
 	public static String NewNgClassWizard_windowTitle;
 	public static String NewNgClassWizardPage_title;
 	public static String NewNgClassWizardPage_description;
+
 	public static String NewNgInterfaceWizard_windowTitle;
 	public static String NewNgInterfaceWizardPage_title;
 	public static String NewNgInterfaceWizardPage_description;
+
 	public static String NewNgEnumWizard_windowTitle;
 	public static String NewNgEnumWizardPage_title;
 	public static String NewNgEnumWizardPage_description;

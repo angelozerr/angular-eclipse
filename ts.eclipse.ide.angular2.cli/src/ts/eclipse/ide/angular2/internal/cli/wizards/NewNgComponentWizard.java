@@ -36,4 +36,27 @@ public class NewNgComponentWizard extends AbstractNewNgGenerateWizard {
 		super.init(workbench, selection);
 		super.setWindowTitle(AngularCLIMessages.NewNgComponentWizard_windowTitle);
 	}
+
+	@Override
+	protected void appendOperationParameters(StringBuilder sb) {
+		super.appendOperationParameters(sb);
+		NewNgComponentWizardPage mainPage = (NewNgComponentWizardPage)getMainPage();
+		sb.append(' ').append("--prefix ").append(mainPage.getPrefix());
+		if (mainPage.isInlineTempalte())
+			sb.append(' ').append("--inline-template");
+		if (mainPage.isInlineStyle())
+			sb.append(' ').append("--inline-style");
+		if (mainPage.isSkipImport())
+			sb.append(' ').append("--skip-import");
+		if (mainPage.isExport())
+			sb.append(' ').append("--export");
+		sb.append(' ').append("--spec ").append(mainPage.isSpec());
+		sb.append(' ').append("--flat ").append(mainPage.isFlat());
+		String viewEncapsulation = mainPage.getViewEncapsulation();
+		if (!NewNgComponentWizardPage.VE_EMULATED.equals(viewEncapsulation))
+			sb.append(' ').append("--view-encapsulation ").append(viewEncapsulation);
+		String changeDetection = mainPage.getChangeDetection();
+		if (!NewNgComponentWizardPage.CD_DEFAULT.equals(changeDetection))
+			sb.append(' ').append("--change-detection ").append(changeDetection);
+	}
 }

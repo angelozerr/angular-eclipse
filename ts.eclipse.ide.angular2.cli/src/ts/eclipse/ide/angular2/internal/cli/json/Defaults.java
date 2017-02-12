@@ -27,6 +27,10 @@ public class Defaults {
 
 	private String lazyRoutePrefix;
 
+	private Spec spec;
+
+	private Inline inline;
+
 	public String getPrefix() {
 		return prefix;
 	}
@@ -45,5 +49,13 @@ public class Defaults {
 
 	public String getLazyRoutePrefix() {
 		return lazyRoutePrefix;
+	}
+
+	public Spec getSpec() {
+		return spec;
+	}
+
+	public Inline getInline() {
+		return inline;
 	}
 }

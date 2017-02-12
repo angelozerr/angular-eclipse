@@ -100,7 +100,7 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 		setControl(topLevel);
 	}
 
-	private void initializePage() {
+	protected void initializePage() {
 		if (folder == null) {
 			return;
 		}
@@ -303,7 +303,7 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 
 	/**
 	 * Returns the Pojo of the angular-cli.json from the selected project.
-	 * 
+	 *
 	 * @return
 	 */
 	protected AngularCLIJson getAngularCLIJson() {
@@ -318,7 +318,7 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 	/**
 	 * Returns true if the given folder is a valid "apps" location and false
 	 * otherwise.
-	 * 
+	 *
 	 * @param folder
 	 *            the container to validate
 	 * @param acceptParent
@@ -342,7 +342,7 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 	/**
 	 * Returns true if the given folder belongs to an angular cli project and
 	 * false otherwise.
-	 * 
+	 *
 	 * @param folder
 	 * @return true if the given folder belongs to an angular cli project and
 	 *         false otherwise.

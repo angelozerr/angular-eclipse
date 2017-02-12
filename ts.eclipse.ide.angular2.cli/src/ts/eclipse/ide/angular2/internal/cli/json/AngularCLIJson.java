@@ -25,6 +25,7 @@ import org.eclipse.core.runtime.Path;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import ts.eclipse.ide.angular2.cli.NgBlueprint;
 import ts.utils.StringUtils;
 
 /**
@@ -92,5 +93,81 @@ public class AngularCLIJson {
 			return null;
 		}
 		return defaults.getSourceDir();
+	}
+
+	public String getPrefix() {
+		// Search prefix from the angular-cli.json apps[0].prefix
+		String prefix = getPrefixFromApps();
+		if (StringUtils.isEmpty(prefix)) {
+			// Not found, search prefix from the angular-cli.json
+			// defaults.prefix
+			prefix = getPrefixFromDefaults();
+			if (StringUtils.isEmpty(prefix)) {
+				// Not found, use default "app" value
+				prefix = APP;
+			}
+		}
+		return prefix;
+	}
+
+	private String getPrefixFromApps() {
+		List<App> apps = getApps();
+		if (apps == null || apps.size() < 1) {
+			return null;
+		}
+		return apps.get(0).getPrefix();
+	}
+
+	public String getPrefixFromDefaults() {
+		Defaults defaults = getDefaults();
+		if (defaults == null)
+			return null;
+		else
+			return defaults.getPrefix();
+	}
+
+	public boolean isInlineTempalte() {
+		Defaults defaults = getDefaults();
+		Inline inline = defaults != null ? defaults.getInline() : null;
+		if (inline == null)
+			return false;
+		else
+			return inline.isTemplate();
+	}
+
+	public boolean isInlineStyle() {
+		Defaults defaults = getDefaults();
+		Inline inline = defaults != null ? defaults.getInline() : null;
+		if (inline == null)
+			return false;
+		else
+			return inline.isStyle();
+	}
+
+	public boolean isSpec(NgBlueprint blueprint) {
+		Defaults defaults = getDefaults();
+		Spec spec = defaults != null ? defaults.getSpec() : null;
+		if (spec == null)
+			return false;
+		else {
+			switch (blueprint) {
+			case MODULE:
+				return spec.isModule();
+			case COMPONENT:
+				return spec.isComponent();
+			case DIRECTIVE:
+				return spec.isDirective();
+			case PIPE:
+				return spec.isPipe();
+			case SERVICE:
+				return spec.isService();
+			case CLASS:
+				return spec.isClass();
+			//case INTERFACE:
+			//case ENUM:
+			default:
+				return false;
+			}
+		}
 	}
 }

@@ -213,6 +213,7 @@
 	<extension point="org.eclipse.ui.perspectiveExtensions"> 
         <perspectiveExtension targetID="ts.eclipse.ide.angular2.ui.perspectives.Angular2Perspective">
             
+            <newWizardShortcut id="ts.eclipse.ide.ui.wizards.new.project"/>
             <newWizardShortcut id="org.eclipse.wst.xml.ui.internal.wizards.NewXMLWizard"/>            
             <newWizardShortcut id="org.eclipse.wst.html.ui.internal.wizard.NewHTMLWizard"/>
             <newWizardShortcut id="org.eclipse.wst.css.ui.internal.wizard.NewCSSWizard"/>

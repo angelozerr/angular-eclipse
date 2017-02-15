@@ -11,6 +11,8 @@
 package ts.eclipse.ide.angular2.internal.cli.launch;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.core.externaltools.internal.launchConfigurations.ExternalToolsCoreUtil;
 import org.eclipse.core.resources.IContainer;
@@ -19,9 +21,12 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
+import org.eclipse.tm.terminal.view.core.interfaces.ITerminalService;
+import org.eclipse.tm.terminal.view.core.interfaces.constants.ITerminalsConnectorConstants;
 import org.eclipse.ui.progress.UIJob;
 import org.eclipse.wst.jsdt.js.cli.core.CLICommand;
 import org.eclipse.wst.jsdt.js.cli.core.CLIStreamListener;
@@ -30,6 +35,8 @@ import ts.eclipse.ide.angular2.cli.NgCommand;
 import ts.eclipse.ide.angular2.cli.launch.AngularCLILaunchConstants;
 import ts.eclipse.ide.angular2.internal.cli.jobs.NgProjectJob;
 import ts.eclipse.ide.angular2.internal.cli.jsdt.CLI;
+import ts.eclipse.ide.core.utils.WorkbenchResourceUtil;
+import ts.eclipse.ide.terminal.interpreter.CommandTerminalService;
 
 /**
  * Launch configuration which consumes angular-cli to generate project,
@@ -50,6 +57,52 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 			return;
 		}
 
+		boolean withTerminal = true;
+
+		if (withTerminal) {
+			openWithTerminal(ngFilePath, nodeFilePath, workingDir, operation, options, monitor);
+		} else {
+			openWithConsole(ngFilePath, nodeFilePath, workingDir, operation, options, monitor);
+		}
+
+	}
+
+	private void openWithTerminal(String ngFilePath, String nodeFilePath, IPath workingDir, String operation,
+			String[] options, IProgressMonitor monitor) throws CoreException {
+		// Define the terminal properties
+		IContainer container = WorkbenchResourceUtil.findContainerFromWorkspace(workingDir);
+		
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(ITerminalsConnectorConstants.PROP_TITLE,
+				"angular-cli - [" + (container != null ? container.getProject().getName() : "") + "]");
+		properties.put(ITerminalsConnectorConstants.PROP_ENCODING, "UTF-8");
+		properties.put(ITerminalsConnectorConstants.PROP_PROCESS_WORKING_DIR, workingDir.toOSString());
+		properties.put(ITerminalsConnectorConstants.PROP_DELEGATE_ID,
+				"ts.eclipse.ide.terminal.interpreter.LocalInterpreterLauncherDelegate");
+		
+		StringBuilder command = new StringBuilder("ng");
+		command.append(" ");
+		command.append(operation);
+		for (int i = 0; i < options.length; i++) {
+			command.append(" ");
+			command.append(options[i]);
+		}
+		
+
+		// Create the done callback object
+		ITerminalService.Done done = new ITerminalService.Done() {
+			public void done(IStatus done) {
+				// Place any post processing here
+			}
+		};
+
+		String terminalId = "angular-cli - [" + (container != null ? container.getProject().getName() : "") + "]";
+		CommandTerminalService.getInstance().executeCommand(command.toString(), terminalId, properties, done);
+
+	}
+
+	private void openWithConsole(String ngFilePath, String nodeFilePath, IPath workingDir, String operation,
+			String[] options, IProgressMonitor monitor) throws CoreException {
 		CLICommand command = createCommand(ngFilePath, nodeFilePath, operation, options);
 		IPath wd = workingDir;
 
@@ -57,7 +110,7 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 		boolean waitForTerminate = isWaitForTerminate(ngCommand);
 
 		IContainer folder = ResourcesPlugin.getWorkspace().getRoot().getContainerForLocation(wd);
-		IProject project = folder instanceof IProject ? (IProject)folder : folder.getProject();
+		IProject project = folder instanceof IProject ? (IProject) folder : folder.getProject();
 
 		CLIStreamListener listener = createListener(ngCommand, project, options);
 		try {

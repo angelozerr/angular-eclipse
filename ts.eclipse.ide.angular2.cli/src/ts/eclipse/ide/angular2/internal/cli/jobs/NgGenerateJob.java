@@ -78,7 +78,7 @@ public class NgGenerateJob extends UIJob {
 			IPath path = new Path(filename);
 			// new version of angular-cli display in the console 
 			// create src\app\a.ts => search in the project
-			if (!addResource(parent.getParent(), path, resources, monitor)) {
+			if (!addResource(parent.getProject(), path, resources, monitor)) {
 				// old version of angular-cli display in the console
 				// create a.ts => search in the folder
 				addResource(parent, path, resources, monitor);

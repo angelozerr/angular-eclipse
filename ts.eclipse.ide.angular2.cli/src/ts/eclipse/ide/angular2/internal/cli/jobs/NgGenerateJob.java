@@ -76,13 +76,26 @@ public class NgGenerateJob extends UIJob {
 		List<IResource> resources = new ArrayList<IResource>();
 		for (String filename : fileNames) {
 			IPath path = new Path(filename);
-			IFile file = parent.getFile(path);
-			file.refreshLocal(IResource.DEPTH_INFINITE, monitor);
-			if (parent.exists(path)) {
-				resources.add(file);
+			// new version of angular-cli display in the console 
+			// create src\app\a.ts => search in the project
+			if (!addResource(parent.getParent(), path, resources, monitor)) {
+				// old version of angular-cli display in the console
+				// create a.ts => search in the folder
+				addResource(parent, path, resources, monitor);
 			}
 		}
 		return resources;
+	}
+
+	private boolean addResource(IContainer parent, IPath path, List<IResource> resources, IProgressMonitor monitor)
+			throws CoreException {
+		IFile file = parent.getFile(path);
+		file.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+		if (parent.exists(path)) {
+			resources.add(file);
+			return true;
+		}
+		return false;
 	}
 
 	private IFile getFileToOpen(List<IResource> resources) {

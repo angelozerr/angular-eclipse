@@ -11,6 +11,8 @@
  */
 package ts.eclipse.ide.angular2.internal.cli.wizards;
 
+import java.io.File;
+
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -59,6 +61,9 @@ import ts.utils.StringUtils;
 public class NgGenerateBlueprintWizardPage extends WizardPage implements Listener {
 
 	private static final int SIZING_TEXT_FIELD_WIDTH = 250;
+
+	// Default angular-cli.json used to avoid NPE.
+	private static final AngularCLIJson DEFAULT_CLI = new AngularCLIJson();
 
 	private final NgBlueprint blueprint;
 	private Text location;
@@ -232,7 +237,7 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 		label.setText(AngularCLIMessages.NgGenerateBlueprintWizardPage_generated_files);
 		label.setFont(font);
 
-		generatedFiles = new Text(filePreview, SWT.READ_ONLY | SWT.MULTI);
+		generatedFiles = new Text(filePreview, SWT.READ_ONLY | SWT.MULTI | SWT.H_SCROLL);
 		GridData data = new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL);
 		GC gc = new GC(generatedFiles);
 		gc.setFont(font);
@@ -250,6 +255,8 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 			for (int i = 0; i < cnt; i++) {
 				if (sb.length() > 0)
 					sb.append('\n');
+				sb.append(location.getText());
+				sb.append("/");
 				sb.append(files[i]);
 			}
 			generatedFiles.setText(sb.toString());
@@ -341,7 +348,7 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 		} else {
 			for (int i = 0, cnt = files != null ? files.length : 0; i < cnt; i++) {
 				String file = files[i];
-				if (folder.exists(new Path(file))) {
+				if (new File(folder.getLocation().toFile(), file).exists()) {
 					setMessage(NLS.bind(AngularCLIMessages.NgGenerateBlueprintWizardPage_file_already_exist, file),
 							IMessageProvider.WARNING);
 					return true; // Only warning
@@ -386,11 +393,14 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 	 * @return
 	 */
 	protected AngularCLIJson getAngularCLIJson() {
+		if (folder == null) {
+			return DEFAULT_CLI;
+		}
 		try {
 			return AngularCLIProject.getAngularCLIProject(folder.getProject()).getAngularCLIJson();
 		} catch (CoreException e) {
 			Trace.trace(Trace.SEVERE, "Error while loading angular-cli.json", e);
-			return null;
+			return DEFAULT_CLI;
 		}
 	}
 

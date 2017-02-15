@@ -126,6 +126,11 @@ public class AngularCLIJson {
 			return defaults.getPrefix();
 	}
 
+	public String getStylesExt() {
+		Defaults defaults = getDefaults();
+		return defaults != null ? defaults.getStyleExt() : null;
+	}
+
 	public boolean isInlineTempalte() {
 		Defaults defaults = getDefaults();
 		Inline inline = defaults != null ? defaults.getInline() : null;
@@ -169,5 +174,73 @@ public class AngularCLIJson {
 				return false;
 			}
 		}
+	}
+
+	public String getTsFileName(String name) {
+		return name.concat(".ts");
+	}
+
+	public String getSpecFileName(String name) {
+		return name.concat(".spec.ts");
+	}
+
+	public String getFolderName(String name) {
+		return name.concat("/");
+	}
+
+	public String getComponentTsFileName(String name) {
+		return name.concat(".component.ts");
+	}
+
+	public String getComponentSpecFileName(String name) {
+		return name.concat(".component.spec.ts");
+	}
+
+	public String getComponentTemplateFileName(String name) {
+		return name.concat(".component.html");
+	}
+
+	public String getComponentStyleFileName(String name) {
+		return name.concat(".component.").concat(getStylesExt());
+	}
+
+	public String getDirectiveFileName(String name) {
+		return name.concat(".directive.ts");
+	}
+
+	public String getDirectiveSpecFileName(String name) {
+		return name.concat(".directive.spec.ts");
+	}
+
+	public String getEnumFileName(String name) {
+		return name.concat(".enum.ts");
+	}
+
+	public String getModuleFileName(String name) {
+		return name.concat(".module.ts");
+	}
+
+	public String getModuleSpecFileName(String name) {
+		return name.concat(".module.spec.ts");
+	}
+
+	public String getRoutingModuleFileName(String name) {
+		return name.concat("-routing.module.ts");
+	}
+
+	public String getPipeFileName(String name) {
+		return name.concat(".pipe.ts");
+	}
+
+	public String getPipeSpecFileName(String name) {
+		return name.concat(".pipe.spec.ts");
+	}
+
+	public String getServiceFileName(String name) {
+		return name.concat(".service.ts");
+	}
+
+	public String getServiceSpecFileName(String name) {
+		return name.concat(".service.spec.ts");
 	}
 }

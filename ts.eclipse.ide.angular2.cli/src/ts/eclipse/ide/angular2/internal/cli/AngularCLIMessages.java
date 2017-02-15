@@ -61,10 +61,12 @@ public class AngularCLIMessages extends NLS {
 	public static String NgGenerateBlueprintWizardPage_browse_location_title;
 	public static String NgGenerateBlueprintWizardPage_browse_location_message;
 	public static String NgGenerateBlueprintWizardPage_bluePrintName;
+	public static String NgGenerateBlueprintWizardPage_generated_files;
 	public static String NgGenerateBlueprintWizardPage_select_name_required_error;
 	public static String NgGenerateBlueprintWizardPage_invalid_location_error;
 	public static String NgGenerateBlueprintWizardPage_invalid_project_location_error;
 	public static String NgGenerateBlueprintWizardPage_invalid_apps_location_error;
+	public static String NgGenerateBlueprintWizardPage_file_already_exist;
 
 	public static String NgGenerateBlueprintWizardPage_generate_spec;
 	public static String NgGenerateBlueprintWizardPage_prefix;

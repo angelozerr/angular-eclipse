@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.Text;
 
 import ts.eclipse.ide.angular2.cli.NgBlueprint;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
+import ts.eclipse.ide.angular2.internal.cli.json.AngularCLIJson;
 
 /**
  * Wizard page for Angular2 Directive.
@@ -82,28 +83,28 @@ public class NewNgDirectiveWizardPage extends NgGenerateBlueprintWizardPage {
 
 		// Checkbox for flat
 		chkFlat = new Button(paramsGroup, SWT.CHECK);
-		chkFlat.addListener(SWT.Modify, this);
+		chkFlat.addListener(SWT.Selection, this);
 		chkFlat.setText(AngularCLIMessages.NgGenerateBlueprintWizardPage_flat);
 		data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		chkFlat.setLayoutData(data);
 
 		// Checkbox for spec
 		chkSpec = new Button(paramsGroup, SWT.CHECK);
-		chkSpec.addListener(SWT.Modify, this);
+		chkSpec.addListener(SWT.Selection, this);
 		chkSpec.setText(AngularCLIMessages.NgGenerateBlueprintWizardPage_generate_spec);
 		data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		chkSpec.setLayoutData(data);
 
 		// Checkbox for skip-import
 		chkSkipImport = new Button(paramsGroup, SWT.CHECK);
-		chkSkipImport.addListener(SWT.Modify, this);
+		chkSkipImport.addListener(SWT.Selection, this);
 		chkSkipImport.setText(AngularCLIMessages.NgGenerateBlueprintWizardPage_skipImport);
 		data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		chkSkipImport.setLayoutData(data);
 
 		// Checkbox for export
 		chkExport = new Button(paramsGroup, SWT.CHECK);
-		chkExport.addListener(SWT.Modify, this);
+		chkExport.addListener(SWT.Selection, this);
 		chkExport.setText(AngularCLIMessages.NgGenerateBlueprintWizardPage_export);
 		data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		chkExport.setLayoutData(data);
@@ -115,6 +116,19 @@ public class NewNgDirectiveWizardPage extends NgGenerateBlueprintWizardPage {
 		txtPrefix.setText(getAngularCLIJson().getPrefix());
 		chkSpec.setSelection(getAngularCLIJson().isSpec(NgBlueprint.DIRECTIVE));
 		chkFlat.setSelection(true);
+	}
+
+	@Override
+	protected String[] getGeneratedFilesImpl() {
+		AngularCLIJson cliJson = getAngularCLIJson();
+		String name = getBlueprintName();
+		int cnt = isSpec() ? 2 : 1;
+		String[] files = new String[cnt];
+		String folderName = isFlat() ? "" : cliJson.getFolderName(name);
+		files[0] = folderName.concat(cliJson.getDirectiveFileName(name));
+		if (isSpec())
+			files[1] = folderName.concat(cliJson.getDirectiveSpecFileName(name));
+		return files;
 	}
 
 	public String getPrefix() {

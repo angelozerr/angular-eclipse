@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import ts.eclipse.ide.angular2.cli.NgBlueprint;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
+import ts.eclipse.ide.angular2.internal.cli.json.AngularCLIJson;
 
 /**
  * Wizard page for Angular2 Service.
@@ -54,14 +55,14 @@ public class NewNgServiceWizardPage extends NgGenerateBlueprintWizardPage {
 
 		// Checkbox for flat
 		chkFlat = new Button(paramsGroup, SWT.CHECK);
-		chkFlat.addListener(SWT.Modify, this);
+		chkFlat.addListener(SWT.Selection, this);
 		chkFlat.setText(AngularCLIMessages.NgGenerateBlueprintWizardPage_flat);
 		GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		chkFlat.setLayoutData(data);
 
 		// Checkbox for spec
 		chkSpec = new Button(paramsGroup, SWT.CHECK);
-		chkSpec.addListener(SWT.Modify, this);
+		chkSpec.addListener(SWT.Selection, this);
 		chkSpec.setText(AngularCLIMessages.NgGenerateBlueprintWizardPage_generate_spec);
 		data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		chkSpec.setLayoutData(data);
@@ -72,6 +73,19 @@ public class NewNgServiceWizardPage extends NgGenerateBlueprintWizardPage {
 		super.initializePage();
 		chkSpec.setSelection(getAngularCLIJson().isSpec(NgBlueprint.SERVICE));
 		chkFlat.setSelection(true);
+	}
+
+	@Override
+	protected String[] getGeneratedFilesImpl() {
+		AngularCLIJson cliJson = getAngularCLIJson();
+		String name = getBlueprintName();
+		int cnt = isSpec() ? 2 : 1;
+		String[] files = new String[cnt];
+		String folderName = isFlat() ? "" : cliJson.getFolderName(name);
+		files[0] = folderName.concat(cliJson.getServiceFileName(name));
+		if (isSpec())
+			files[1] = folderName.concat(cliJson.getServiceSpecFileName(name));
+		return files;
 	}
 
 	public boolean isFlat() {

@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import ts.eclipse.ide.angular2.cli.NgBlueprint;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
+import ts.eclipse.ide.angular2.internal.cli.json.AngularCLIJson;
 
 /**
  * Wizard page for Angular2 Class.
@@ -53,7 +54,7 @@ public class NewNgClassWizardPage extends NgGenerateBlueprintWizardPage {
 
 		// Checkbox for spec
 		chkSpec = new Button(paramsGroup, SWT.CHECK);
-		chkSpec.addListener(SWT.Modify, this);
+		chkSpec.addListener(SWT.Selection, this);
 		chkSpec.setText(AngularCLIMessages.NgGenerateBlueprintWizardPage_generate_spec);
 		GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		chkSpec.setLayoutData(data);
@@ -63,6 +64,18 @@ public class NewNgClassWizardPage extends NgGenerateBlueprintWizardPage {
 	protected void initializePage() {
 		super.initializePage();
 		chkSpec.setSelection(getAngularCLIJson().isSpec(NgBlueprint.CLASS));
+	}
+
+	@Override
+	protected String[] getGeneratedFilesImpl() {
+		AngularCLIJson cliJson = getAngularCLIJson();
+		String name = getBlueprintName();
+		int cnt = isSpec() ? 2 : 1;
+		String[] files = new String[cnt];
+		files[0] = cliJson.getTsFileName(name);
+		if (isSpec())
+			files[1] = cliJson.getSpecFileName(name);
+		return files;
 	}
 
 	public boolean isSpec() {

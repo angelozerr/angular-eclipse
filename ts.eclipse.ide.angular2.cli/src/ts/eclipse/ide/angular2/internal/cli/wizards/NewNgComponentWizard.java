@@ -42,7 +42,7 @@ public class NewNgComponentWizard extends AbstractNewNgGenerateWizard {
 		super.appendOperationParameters(sb);
 		NewNgComponentWizardPage mainPage = (NewNgComponentWizardPage)getMainPage();
 		sb.append(' ').append("--prefix ").append(mainPage.getPrefix());
-		if (mainPage.isInlineTempalte())
+		if (mainPage.isInlineTemplate())
 			sb.append(' ').append("--inline-template");
 		if (mainPage.isInlineStyle())
 			sb.append(' ').append("--inline-style");

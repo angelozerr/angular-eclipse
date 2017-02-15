@@ -30,6 +30,8 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontMetrics;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -60,8 +62,10 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 	private final NgBlueprint blueprint;
 	private Text location;
 	private Text resourceNameField;
+	private Text generatedFiles;
 
 	private IContainer folder;
+	private String[] files;
 
 	protected NgGenerateBlueprintWizardPage(String pageName, String title, ImageDescriptor titleImage,
 			NgBlueprint blueprint, IContainer folder) {
@@ -89,6 +93,14 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 		line.setLayoutData(gridData);
 
 		createParamsControl(topLevel);
+
+		// Separator
+		line = new Label(topLevel, SWT.SEPARATOR | SWT.HORIZONTAL);
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 2;
+		line.setLayoutData(gridData);
+
+		createFilesPreviewControl(topLevel);
 
 		// Initialize fields.
 		initializePage();
@@ -123,6 +135,7 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 	}
 
 	public void handleEvent(Event event) {
+		updateGeneratedFiles();
 		setPageComplete(validatePage());
 	}
 
@@ -201,6 +214,60 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 	protected void createParamsControl(Composite parent) {
 	}
 
+	protected void createFilesPreviewControl(Composite parent) {
+
+		Font font = parent.getFont();
+		// file preview group
+		Composite filePreview = new Composite(parent, SWT.NONE);
+		GridLayout layout = new GridLayout();
+		layout.numColumns = 1;
+		layout.marginWidth = 0;
+		filePreview.setLayout(layout);
+		filePreview.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL));
+		filePreview.setFont(font);
+
+		// Generated files
+		Label label = new Label(filePreview, SWT.NONE);
+		label.setText(AngularCLIMessages.NgGenerateBlueprintWizardPage_generated_files);
+		label.setFont(font);
+
+		generatedFiles = new Text(filePreview, SWT.READ_ONLY | SWT.MULTI);
+		GridData data = new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL);
+		GC gc = new GC(generatedFiles);
+		gc.setFont(font);
+		FontMetrics fm = gc.getFontMetrics();
+		data.heightHint = 7 * fm.getHeight();
+		generatedFiles.setLayoutData(data);
+		gc.dispose();
+	}
+
+	private void updateGeneratedFiles() {
+		files = getGeneratedFiles();
+		if (files != null) {
+			int cnt = files.length;
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < cnt; i++) {
+				if (sb.length() > 0)
+					sb.append('\n');
+				sb.append(files[i]);
+			}
+			generatedFiles.setText(sb.toString());
+		}
+		else
+			generatedFiles.setText("");
+	}
+
+	private final String[] getGeneratedFiles() {
+		String name = getBlueprintName();
+		if (name != null && name.length() > 0)
+			return getGeneratedFilesImpl();
+		return null;
+	}
+
+	protected String[] getGeneratedFilesImpl() {
+		return null;
+	}
+
 	private void setFolder(IContainer folder) {
 		this.setFolder(folder, false);
 	}
@@ -268,6 +335,15 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 			setErrorMessage(AngularCLIMessages.NgGenerateBlueprintWizardPage_select_name_required_error);
 			return false;
 		}
+		else {
+			for (int i = 0, cnt = files != null ? files.length : 0; i < cnt; i++) {
+				String file = files[i];
+				if (folder.exists(new Path(file))) {
+					setErrorMessage(NLS.bind(AngularCLIMessages.NgGenerateBlueprintWizardPage_file_already_exist, file));
+					return true;			// Only warning
+				}
+			}
+		}
 		setErrorMessage(null);
 		return true;
 	}
@@ -280,7 +356,7 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 		return blueprint;
 	}
 
-	public String getBluepringName() {
+	public String getBlueprintName() {
 		return resourceNameField.getText();
 	}
 

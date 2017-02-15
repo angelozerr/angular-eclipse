@@ -15,6 +15,7 @@ import org.eclipse.core.resources.IContainer;
 
 import ts.eclipse.ide.angular2.cli.NgBlueprint;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
+import ts.eclipse.ide.angular2.internal.cli.json.AngularCLIJson;
 
 /**
  * Wizard page for Angular2 Interface.
@@ -27,6 +28,13 @@ public class NewNgInterfaceWizardPage extends NgGenerateBlueprintWizardPage {
 	protected NewNgInterfaceWizardPage(IContainer folder) {
 		super(PAGE_NAME, AngularCLIMessages.NewNgInterfaceWizardPage_title, null, NgBlueprint.INTERFACE, folder);
 		super.setDescription(AngularCLIMessages.NewNgInterfaceWizardPage_description);
+	}
+
+	@Override
+	protected String[] getGeneratedFilesImpl() {
+		AngularCLIJson cliJson = getAngularCLIJson();
+		String name = getBlueprintName();
+		return new String[] { cliJson.getTsFileName(name) };
 	}
 
 }

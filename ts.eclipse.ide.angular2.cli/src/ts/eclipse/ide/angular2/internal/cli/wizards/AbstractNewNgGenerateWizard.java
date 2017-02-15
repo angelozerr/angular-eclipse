@@ -74,7 +74,7 @@ public abstract class AbstractNewNgGenerateWizard extends Wizard implements INew
 	public boolean performFinish() {
 		final IContainer folder = mainPage.getFolder();
 		final NgBlueprint blueprint = mainPage.getNgBluePrint();
-		final String name = mainPage.getBluepringName();
+		final String name = mainPage.getBlueprintName();
 
 		StringBuilder sbOptionParameters = new StringBuilder();
 		appendOperationParameters(sbOptionParameters);

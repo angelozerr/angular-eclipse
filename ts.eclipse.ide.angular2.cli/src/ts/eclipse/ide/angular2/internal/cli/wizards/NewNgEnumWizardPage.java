@@ -15,6 +15,7 @@ import org.eclipse.core.resources.IContainer;
 
 import ts.eclipse.ide.angular2.cli.NgBlueprint;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
+import ts.eclipse.ide.angular2.internal.cli.json.AngularCLIJson;
 
 /**
  * Wizard page for Angular2 Enum.
@@ -27,6 +28,13 @@ public class NewNgEnumWizardPage extends NgGenerateBlueprintWizardPage {
 	protected NewNgEnumWizardPage(IContainer folder) {
 		super(PAGE_NAME, AngularCLIMessages.NewNgEnumWizardPage_title, null, NgBlueprint.ENUM, folder);
 		super.setDescription(AngularCLIMessages.NewNgEnumWizardPage_description);
+	}
+
+	@Override
+	protected String[] getGeneratedFilesImpl() {
+		AngularCLIJson cliJson = getAngularCLIJson();
+		String name = getBlueprintName();
+		return new String[] { cliJson.getEnumFileName(name) };
 	}
 
 }

@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.Text;
 
 import ts.eclipse.ide.angular2.cli.NgBlueprint;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
+import ts.eclipse.ide.angular2.internal.cli.json.AngularCLIJson;
 
 /**
  * Wizard page for Angular2 Component.
@@ -127,42 +128,42 @@ public class NewNgComponentWizardPage extends NgGenerateBlueprintWizardPage {
 
 		// Checkbox for flat
 		chkFlat = new Button(paramsGroup, SWT.CHECK);
-		chkFlat.addListener(SWT.Modify, this);
+		chkFlat.addListener(SWT.Selection, this);
 		chkFlat.setText(AngularCLIMessages.NgGenerateBlueprintWizardPage_flat);
 		data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		chkFlat.setLayoutData(data);
 
 		// Checkbox for inline template
 		chkInlineTemplate = new Button(paramsGroup, SWT.CHECK);
-		chkInlineTemplate.addListener(SWT.Modify, this);
+		chkInlineTemplate.addListener(SWT.Selection, this);
 		chkInlineTemplate.setText(AngularCLIMessages.NewNgComponentWizardPage_inlineTemplate);
 		data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		chkInlineTemplate.setLayoutData(data);
 
 		// Checkbox for inline Style
 		chkInlineStyle = new Button(paramsGroup, SWT.CHECK);
-		chkInlineStyle.addListener(SWT.Modify, this);
+		chkInlineStyle.addListener(SWT.Selection, this);
 		chkInlineStyle.setText(AngularCLIMessages.NewNgComponentWizardPage_inlineStyle);
 		data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		chkInlineStyle.setLayoutData(data);
 
 		// Checkbox for spec
 		chkSpec = new Button(paramsGroup, SWT.CHECK);
-		chkSpec.addListener(SWT.Modify, this);
+		chkSpec.addListener(SWT.Selection, this);
 		chkSpec.setText(AngularCLIMessages.NgGenerateBlueprintWizardPage_generate_spec);
 		data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		chkSpec.setLayoutData(data);
 
 		// Checkbox for skip-import
 		chkSkipImport = new Button(paramsGroup, SWT.CHECK);
-		chkSkipImport.addListener(SWT.Modify, this);
+		chkSkipImport.addListener(SWT.Selection, this);
 		chkSkipImport.setText(AngularCLIMessages.NgGenerateBlueprintWizardPage_skipImport);
 		data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		chkSkipImport.setLayoutData(data);
 
 		// Checkbox for export
 		chkExport = new Button(paramsGroup, SWT.CHECK);
-		chkExport.addListener(SWT.Modify, this);
+		chkExport.addListener(SWT.Selection, this);
 		chkExport.setText(AngularCLIMessages.NgGenerateBlueprintWizardPage_export);
 		data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		chkExport.setLayoutData(data);
@@ -181,11 +182,33 @@ public class NewNgComponentWizardPage extends NgGenerateBlueprintWizardPage {
 		cbChangeDetection.select(cbChangeDetection.indexOf(CD_DEFAULT));
 	}
 
+	@Override
+	protected String[] getGeneratedFilesImpl() {
+		AngularCLIJson cliJson = getAngularCLIJson();
+		String name = getBlueprintName();
+		int cnt = isSpec() ? 4 : 3;
+		if (isInlineTemplate())
+			cnt--;
+		if (isInlineStyle())
+			cnt--;
+		String[] files = new String[cnt];
+		String folderName = isFlat() ? "" : cliJson.getFolderName(name);
+		files[0] = folderName.concat(cliJson.getComponentTsFileName(name));
+		int i = 1;
+		if (isSpec())
+			files[i++] = folderName.concat(cliJson.getComponentSpecFileName(name));
+		if (!isInlineTemplate())
+			files[i++] = folderName.concat(cliJson.getComponentTemplateFileName(name));
+		if (!isInlineStyle())
+			files[i++] = folderName.concat(cliJson.getComponentStyleFileName(name));
+		return files;
+	}
+
 	public String getPrefix() {
 		return txtPrefix.getText();
 	}
 
-	public boolean isInlineTempalte() {
+	public boolean isInlineTemplate() {
 		return chkInlineTemplate.getSelection();
 	}
 

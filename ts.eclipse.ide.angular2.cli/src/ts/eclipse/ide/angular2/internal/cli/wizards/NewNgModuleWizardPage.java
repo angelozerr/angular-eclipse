@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import ts.eclipse.ide.angular2.cli.NgBlueprint;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
+import ts.eclipse.ide.angular2.internal.cli.json.AngularCLIJson;
 
 /**
  * Wizard page for Angular2 Module.
@@ -54,14 +55,14 @@ public class NewNgModuleWizardPage extends NgGenerateBlueprintWizardPage {
 
 		// Checkbox for routing
 		chkRouting = new Button(paramsGroup, SWT.CHECK);
-		chkRouting.addListener(SWT.Modify, this);
+		chkRouting.addListener(SWT.Selection, this);
 		chkRouting.setText(AngularCLIMessages.NewNgModuleWizardPage_routing);
 		GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		chkRouting.setLayoutData(data);
 
 		// Checkbox for spec
 		chkSpec = new Button(paramsGroup, SWT.CHECK);
-		chkSpec.addListener(SWT.Modify, this);
+		chkSpec.addListener(SWT.Selection, this);
 		chkSpec.setText(AngularCLIMessages.NgGenerateBlueprintWizardPage_generate_spec);
 		data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		chkSpec.setLayoutData(data);
@@ -71,6 +72,29 @@ public class NewNgModuleWizardPage extends NgGenerateBlueprintWizardPage {
 	protected void initializePage() {
 		super.initializePage();
 		chkSpec.setSelection(getAngularCLIJson().isSpec(NgBlueprint.MODULE));
+	}
+
+	@Override
+	protected String[] getGeneratedFilesImpl() {
+		AngularCLIJson cliJson = getAngularCLIJson();
+		String name = getBlueprintName();
+		int cnt = isSpec() ? 2 : 1;
+		if (isRouting())
+			cnt += 5;
+		String[] files = new String[cnt];
+		String folderName = cliJson.getFolderName(name);
+		int i = 0;
+		files[i++] = folderName.concat(cliJson.getModuleFileName(name));
+		if (isSpec())
+			files[i++] = folderName.concat(cliJson.getModuleSpecFileName(name));
+		if (isRouting()) {
+			files[i++] = folderName.concat(cliJson.getRoutingModuleFileName(name));
+			files[i++] = folderName.concat(cliJson.getComponentTsFileName(name));
+			files[i++] = folderName.concat(cliJson.getComponentSpecFileName(name));			// default spec setting seems to be ignored
+			files[i++] = folderName.concat(cliJson.getComponentTemplateFileName(name));		// default "inline-template" seems to be ignored
+			files[i++] = folderName.concat(cliJson.getComponentStyleFileName(name));		// default "inline-style" seems to be ignored
+		}
+		return files;
 	}
 
 	public boolean isRouting() {

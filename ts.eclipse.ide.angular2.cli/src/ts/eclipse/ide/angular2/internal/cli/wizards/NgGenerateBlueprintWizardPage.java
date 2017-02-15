@@ -18,6 +18,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
@@ -252,8 +253,7 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 				sb.append(files[i]);
 			}
 			generatedFiles.setText(sb.toString());
-		}
-		else
+		} else
 			generatedFiles.setText("");
 	}
 
@@ -319,6 +319,10 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 	}
 
 	protected boolean validatePage() {
+		// Clean error, warning
+		setMessage(null, IMessageProvider.WARNING);
+		setErrorMessage(null);
+		// Validate
 		IContainer folder = getFolder();
 		if (folder == null) {
 			setErrorMessage(AngularCLIMessages.NgGenerateBlueprintWizardPage_invalid_location_error);
@@ -334,17 +338,16 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 		} else if (StringUtils.isEmpty(resourceNameField.getText())) {
 			setErrorMessage(AngularCLIMessages.NgGenerateBlueprintWizardPage_select_name_required_error);
 			return false;
-		}
-		else {
+		} else {
 			for (int i = 0, cnt = files != null ? files.length : 0; i < cnt; i++) {
 				String file = files[i];
 				if (folder.exists(new Path(file))) {
-					setErrorMessage(NLS.bind(AngularCLIMessages.NgGenerateBlueprintWizardPage_file_already_exist, file));
-					return true;			// Only warning
+					setMessage(NLS.bind(AngularCLIMessages.NgGenerateBlueprintWizardPage_file_already_exist, file),
+							IMessageProvider.WARNING);
+					return true; // Only warning
 				}
 			}
 		}
-		setErrorMessage(null);
 		return true;
 	}
 

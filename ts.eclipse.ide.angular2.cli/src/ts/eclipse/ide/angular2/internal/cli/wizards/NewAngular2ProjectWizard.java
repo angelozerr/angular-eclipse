@@ -139,7 +139,7 @@ public class NewAngular2ProjectWizard extends AbstractNewProjectWizard {
 							}
 							newConfiguration.setAttribute(AngularCLILaunchConstants.WORKING_DIR,
 									AngularCLILaunchHelper.getWorkingDir(newProjectHandle));
-							newConfiguration.setAttribute(AngularCLILaunchConstants.OPERATION, NgCommand.INIT.name());
+							newConfiguration.setAttribute(AngularCLILaunchConstants.OPERATION, NgCommand.INIT.name().toLowerCase());
 							newConfiguration.setAttribute(AngularCLILaunchConstants.OPERATION_PARAMETERS,
 									operationParams);
 							DebugUITools.launch(newConfiguration, ILaunchManager.RUN_MODE);

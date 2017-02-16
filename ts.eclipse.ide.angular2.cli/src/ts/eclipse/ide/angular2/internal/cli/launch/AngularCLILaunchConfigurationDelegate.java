@@ -71,7 +71,7 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 			String[] options, IProgressMonitor monitor) throws CoreException {
 		// Define the terminal properties
 		IContainer container = WorkbenchResourceUtil.findContainerFromWorkspace(workingDir);
-		
+
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(ITerminalsConnectorConstants.PROP_TITLE,
 				"angular-cli - [" + (container != null ? container.getProject().getName() : "") + "]");
@@ -79,7 +79,7 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 		properties.put(ITerminalsConnectorConstants.PROP_PROCESS_WORKING_DIR, workingDir.toOSString());
 		properties.put(ITerminalsConnectorConstants.PROP_DELEGATE_ID,
 				"ts.eclipse.ide.terminal.interpreter.LocalInterpreterLauncherDelegate");
-		
+
 		StringBuilder command = new StringBuilder("ng");
 		command.append(" ");
 		command.append(operation);
@@ -87,7 +87,6 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 			command.append(" ");
 			command.append(options[i]);
 		}
-		
 
 		// Create the done callback object
 		ITerminalService.Done done = new ITerminalService.Done() {

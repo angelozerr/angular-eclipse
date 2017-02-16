@@ -34,6 +34,9 @@ import ts.utils.StringUtils;
  */
 public class AngularCLIJson {
 
+	private static final String STRING_DASHERIZE_REGEXP = "[ _]";
+	private static final String STRING_DECAMELIZE_REGEXP = "([a-z\\d])([A-Z])";
+
 	private static final String DEFAULT_ROOT = "src";
 	private static final String APP = "app";
 
@@ -176,71 +179,79 @@ public class AngularCLIJson {
 		}
 	}
 
+	public static String decamelize(String str) {
+		return str.replaceAll(STRING_DECAMELIZE_REGEXP, "$1_$2").toLowerCase();
+	}
+
+	public static String normalize(String name) {
+		return decamelize(name).replaceAll(STRING_DASHERIZE_REGEXP, "-");
+	}
+
 	public String getTsFileName(String name) {
-		return name.concat(".ts");
+		return normalize(name).concat(".ts");
 	}
 
 	public String getSpecFileName(String name) {
-		return name.concat(".spec.ts");
+		return normalize(name).concat(".spec.ts");
 	}
 
 	public String getFolderName(String name) {
-		return name.concat("/");
+		return normalize(name).concat("/");
 	}
 
 	public String getComponentTsFileName(String name) {
-		return name.concat(".component.ts");
+		return normalize(name).concat(".component.ts");
 	}
 
 	public String getComponentSpecFileName(String name) {
-		return name.concat(".component.spec.ts");
+		return normalize(name).concat(".component.spec.ts");
 	}
 
 	public String getComponentTemplateFileName(String name) {
-		return name.concat(".component.html");
+		return normalize(name).concat(".component.html");
 	}
 
 	public String getComponentStyleFileName(String name) {
-		return name.concat(".component.").concat(getStylesExt());
+		return normalize(name).concat(".component.").concat(getStylesExt());
 	}
 
 	public String getDirectiveFileName(String name) {
-		return name.concat(".directive.ts");
+		return normalize(name).concat(".directive.ts");
 	}
 
 	public String getDirectiveSpecFileName(String name) {
-		return name.concat(".directive.spec.ts");
+		return normalize(name).concat(".directive.spec.ts");
 	}
 
 	public String getEnumFileName(String name) {
-		return name.concat(".enum.ts");
+		return normalize(name).concat(".enum.ts");
 	}
 
 	public String getModuleFileName(String name) {
-		return name.concat(".module.ts");
+		return normalize(name).concat(".module.ts");
 	}
 
 	public String getModuleSpecFileName(String name) {
-		return name.concat(".module.spec.ts");
+		return normalize(name).concat(".module.spec.ts");
 	}
 
 	public String getRoutingModuleFileName(String name) {
-		return name.concat("-routing.module.ts");
+		return normalize(name).concat("-routing.module.ts");
 	}
 
 	public String getPipeFileName(String name) {
-		return name.concat(".pipe.ts");
+		return normalize(name).concat(".pipe.ts");
 	}
 
 	public String getPipeSpecFileName(String name) {
-		return name.concat(".pipe.spec.ts");
+		return normalize(name).concat(".pipe.spec.ts");
 	}
 
 	public String getServiceFileName(String name) {
-		return name.concat(".service.ts");
+		return normalize(name).concat(".service.ts");
 	}
 
 	public String getServiceSpecFileName(String name) {
-		return name.concat(".service.spec.ts");
+		return normalize(name).concat(".service.spec.ts");
 	}
 }

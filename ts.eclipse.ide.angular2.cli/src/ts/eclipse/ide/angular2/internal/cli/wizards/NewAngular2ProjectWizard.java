@@ -131,12 +131,8 @@ public class NewAngular2ProjectWizard extends AbstractNewProjectWizard {
 						try {
 							final String operationParams = paramsPage.getParamsString();
 							ILaunchConfigurationWorkingCopy newConfiguration = createEmptyLaunchConfiguration();
-							File ngFile = AngularCLIProject.getAngularCLIProject(newProjectHandle).getSettings()
-									.getNgFile();
-							if (ngFile != null) {
-								newConfiguration.setAttribute(AngularCLILaunchConstants.NG_FILE_PATH,
-										FileUtils.getPath(ngFile));
-							}
+							AngularCLILaunchHelper.updateNodeFilePath(newProjectHandle, newConfiguration);
+							AngularCLILaunchHelper.updateNgFilePath(newProjectHandle, newConfiguration);
 							newConfiguration.setAttribute(AngularCLILaunchConstants.WORKING_DIR,
 									AngularCLILaunchHelper.getWorkingDir(newProjectHandle));
 							newConfiguration.setAttribute(AngularCLILaunchConstants.OPERATION, NgCommand.INIT.name().toLowerCase());

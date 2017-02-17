@@ -15,7 +15,7 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 
 import ts.eclipse.ide.angular2.cli.AngularCLIPlugin;
 import ts.eclipse.ide.angular2.cli.preferences.AngularCLIPreferenceConstants;
-import ts.eclipse.ide.core.resources.WorkspaceTypeScriptSettingsHelper;
+import ts.eclipse.ide.core.utils.PreferencesHelper;
 
 /**
  * Angular cli preferences initializer.
@@ -25,7 +25,7 @@ public class AngularCLIPreferenceInitializer extends AbstractPreferenceInitializ
 
 	@Override
 	public void initializeDefaultPreferences() {
-		IEclipsePreferences node = WorkspaceTypeScriptSettingsHelper
+		IEclipsePreferences node = PreferencesHelper
 				.getWorkspaceDefaultPreferences(AngularCLIPlugin.PLUGIN_ID);
 
 		// initialize properties for direct access of node.js server (start an

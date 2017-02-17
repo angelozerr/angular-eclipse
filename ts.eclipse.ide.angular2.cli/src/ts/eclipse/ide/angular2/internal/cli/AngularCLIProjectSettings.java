@@ -25,7 +25,7 @@ public class AngularCLIProjectSettings extends AbstractTypeScriptSettings {
 		String path = super.getStringPreferencesValue(AngularCLIPreferenceConstants.NG_CUSTOM_FILE_PATH, null);
 		if (!StringUtils.isEmpty(path)) {
 			File resolvedPath = resolvePath(path);
-			return resolvedPath != null ? getNgFile(resolvedPath) : null;
+			return resolvedPath; // != null ? getNgFile(resolvedPath) : null;
 		}
 		return null;
 	}

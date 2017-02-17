@@ -11,6 +11,7 @@
 package ts.eclipse.ide.angular2.internal.cli.launch;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,6 +38,8 @@ import ts.eclipse.ide.angular2.internal.cli.jobs.NgProjectJob;
 import ts.eclipse.ide.angular2.internal.cli.jsdt.CLI;
 import ts.eclipse.ide.core.utils.WorkbenchResourceUtil;
 import ts.eclipse.ide.terminal.interpreter.CommandTerminalService;
+import ts.eclipse.ide.terminal.interpreter.EnvPath;
+import ts.utils.FileUtils;
 
 /**
  * Launch configuration which consumes angular-cli to generate project,
@@ -58,7 +61,6 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 		}
 
 		boolean withTerminal = true;
-
 		if (withTerminal) {
 			openWithTerminal(ngFilePath, nodeFilePath, workingDir, operation, options, monitor);
 		} else {
@@ -72,14 +74,16 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 		// Define the terminal properties
 		IContainer container = WorkbenchResourceUtil.findContainerFromWorkspace(workingDir);
 
+		// Prepare terminal properties
+		String terminalId = getTerminalId(container, operation);
 		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(ITerminalsConnectorConstants.PROP_TITLE,
-				"angular-cli - [" + (container != null ? container.getProject().getName() : "") + "]");
-		properties.put(ITerminalsConnectorConstants.PROP_ENCODING, "UTF-8");
+		properties.put(ITerminalsConnectorConstants.PROP_TITLE, terminalId);
+		properties.put(ITerminalsConnectorConstants.PROP_ENCODING, StandardCharsets.UTF_8.name());
 		properties.put(ITerminalsConnectorConstants.PROP_PROCESS_WORKING_DIR, workingDir.toOSString());
 		properties.put(ITerminalsConnectorConstants.PROP_DELEGATE_ID,
 				"ts.eclipse.ide.terminal.interpreter.LocalInterpreterLauncherDelegate");
 
+		// Create ng command
 		StringBuilder command = new StringBuilder("ng");
 		command.append(" ");
 		command.append(operation);
@@ -88,6 +92,12 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 			command.append(options[i]);
 		}
 
+		// Prepare environnement Path:
+		// - add nodejs directory
+		// - add ng directories in the env PATH.
+		nodeFilePath = getDirPath(nodeFilePath);
+		EnvPath.insertToEnvPath(properties, nodeFilePath, ngFilePath);
+
 		// Create the done callback object
 		ITerminalService.Done done = new ITerminalService.Done() {
 			public void done(IStatus done) {
@@ -95,9 +105,47 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 			}
 		};
 
-		String terminalId = "angular-cli - [" + (container != null ? container.getProject().getName() : "") + "]";
+		// Open terminal and execute ng command.
 		CommandTerminalService.getInstance().executeCommand(command.toString(), terminalId, properties, done);
+	}
 
+	private String getTerminalId(IContainer container, String operation) {
+		StringBuilder id = new StringBuilder("@angular/cli - [");
+		if (container != null) {
+			id.append(container.getProject().getName());
+		}
+		if (isOpenNewTerminal(operation)) {
+			id.append(" - (");
+			id.append(operation);
+			id.append(")");
+		}
+		id.append("]");
+		return id.toString();
+	}
+
+	private boolean isOpenNewTerminal(String operation) {
+		NgCommand ngCommand = NgCommand.getCommand(operation);
+		if (ngCommand == null) {
+			return false;
+		}
+		return NgCommand.SERVE.equals(ngCommand);
+	}
+
+	/**
+	 * The env Path works with directory and not file.
+	 * 
+	 * @param fileOrDir
+	 * @return
+	 */
+	private String getDirPath(String fileOrDir) {
+		if (fileOrDir == null) {
+			return fileOrDir;
+		}
+		File file = new File(fileOrDir);
+		if (file.exists() && file.isFile()) {
+			return FileUtils.getPath(file.getParentFile());
+		}
+		return fileOrDir;
 	}
 
 	private void openWithConsole(String ngFilePath, String nodeFilePath, IPath workingDir, String operation,

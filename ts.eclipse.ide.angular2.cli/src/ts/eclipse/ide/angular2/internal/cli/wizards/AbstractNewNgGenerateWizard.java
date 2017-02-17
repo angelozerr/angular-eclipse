@@ -15,6 +15,7 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -84,12 +85,10 @@ public abstract class AbstractNewNgGenerateWizard extends Wizard implements INew
 			@Override
 			public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 				try {
+					IProject project = folder.getProject();
 					ILaunchConfigurationWorkingCopy newConfiguration = createEmptyLaunchConfiguration();
-					File ngFile = AngularCLIProject.getAngularCLIProject(folder.getProject()).getSettings().getNgFile();
-					if (ngFile != null) {
-						newConfiguration.setAttribute(AngularCLILaunchConstants.NG_FILE_PATH,
-								FileUtils.getPath(ngFile));
-					}
+					AngularCLILaunchHelper.updateNodeFilePath(project, newConfiguration);
+					AngularCLILaunchHelper.updateNgFilePath(project, newConfiguration);
 					newConfiguration.setAttribute(AngularCLILaunchConstants.WORKING_DIR,
 							AngularCLILaunchHelper.getWorkingDir(folder));
 					newConfiguration.setAttribute(AngularCLILaunchConstants.OPERATION,

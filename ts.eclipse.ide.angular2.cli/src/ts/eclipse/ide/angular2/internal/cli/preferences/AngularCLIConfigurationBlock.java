@@ -43,7 +43,7 @@ public class AngularCLIConfigurationBlock extends OptionsConfigurationBlock {
 	private Combo ngCustomFilePath;
 	private BrowseButtonsComposite browseButtons;
 
-	private static final String[] DEFAULT_PATHS = new String[] { "${project_loc:node_modules/angular-cli}" };
+	private static final String[] DEFAULT_PATHS = new String[] { "${project_loc:node_modules/.bin}" };
 
 	private static final Key PREF_NG_USE_GLOBAL_INSTALLATION = getAngularCliKey(
 			AngularCLIPreferenceConstants.NG_USE_GLOBAL_INSTALLATION);

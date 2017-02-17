@@ -87,6 +87,9 @@ public class DirectiveSemanticHighlighting extends AbstractAngularSemanticHighli
 	}
 
 	private boolean isDirectiveElement(IDOMNode node, IFile file) {
+		if (file == null) {
+			return false;
+		}
 		if (node.getNodeType() != Node.ELEMENT_NODE) {
 			return false;
 		}

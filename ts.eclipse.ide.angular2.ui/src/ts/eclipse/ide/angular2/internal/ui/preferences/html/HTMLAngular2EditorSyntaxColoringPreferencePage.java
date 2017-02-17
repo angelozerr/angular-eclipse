@@ -1077,6 +1077,12 @@ public final class HTMLAngular2EditorSyntaxColoringPreferencePage extends Abstra
 		// XMLUIMessages.CDATA_Delimiters_UI_);
 		// fStyleToDescriptionMap.put(IStyleConstantsXML.CDATA_TEXT,
 		// XMLUIMessages.CDATA_Content_UI_);
+		fStyleToDescriptionMap.put(IStyleConstantsForAngular.ANGULAR2_EXPRESSION_BORDER,
+				Angular2UIMessages.Angular2_expression_border);
+		fStyleToDescriptionMap.put(IStyleConstantsForAngular.ANGULAR2_EXPRESSION,
+				Angular2UIMessages.Angular2_expression);
+		fStyleToDescriptionMap.put(IStyleConstantsForAngular.ANGULAR2_DIRECTIVE_NAME,
+				Angular2UIMessages.Angular2_directive_name);
 	}
 
 	protected void performDefaults() {

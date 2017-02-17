@@ -35,6 +35,11 @@ public class Angular2UIMessages extends NLS {
 
 	public static String Sample_HTMLAngular2_doc;
 
+	// Tags
+	public static String Angular2_expression_border;
+	public static String Angular2_expression;
+	public static String Angular2_directive_name;
+
 	public static ResourceBundle getResourceBundle() {
 		try {
 			if (fResourceBundle == null)

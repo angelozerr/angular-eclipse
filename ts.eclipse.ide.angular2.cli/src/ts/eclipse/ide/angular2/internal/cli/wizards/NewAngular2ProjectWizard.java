@@ -13,13 +13,12 @@
  *******************************************************************************/
 package ts.eclipse.ide.angular2.internal.cli.wizards;
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 
-import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfigurationType;
@@ -27,16 +26,11 @@ import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.ui.ide.undo.CreateProjectOperation;
-import org.eclipse.ui.ide.undo.WorkspaceUndoUtil;
-import org.eclipse.ui.internal.wizards.newresource.ResourceMessages;
 
 import ts.eclipse.ide.angular2.cli.NgCommand;
 import ts.eclipse.ide.angular2.cli.launch.AngularCLILaunchConstants;
-import ts.eclipse.ide.angular2.internal.cli.AngularCLIProject;
 import ts.eclipse.ide.angular2.internal.cli.launch.AngularCLILaunchHelper;
 import ts.eclipse.ide.ui.wizards.AbstractNewProjectWizard;
-import ts.utils.FileUtils;
 
 /**
  * Standard workbench wizard that creates a new angular-cli project resource in
@@ -107,24 +101,13 @@ public class NewAngular2ProjectWizard extends AbstractNewProjectWizard {
 	}
 
 	@Override
-	protected IRunnableWithProgress getRunnable(IProject newProjectHandle, IProjectDescription description) {
+	protected IRunnableWithProgress getRunnable(final IProject newProjectHandle, final IProjectDescription description,
+			final IPath projectLocation) {
 		return new IRunnableWithProgress() {
 
 			@Override
 			public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-				final CreateProjectOperation op1 = new CreateProjectOperation(description,
-						ResourceMessages.NewProject_windowTitle);
-				try {
-					// see bug
-					// https://bugs.eclipse.org/bugs/show_bug.cgi?id=219901
-					// directly execute the operation so that the undo state is
-					// not preserved. Making this undoable resulted in too many
-					// accidental file deletions.
-					op1.execute(monitor, WorkspaceUndoUtil.getUIInfoAdapter(getShell()));
-				} catch (ExecutionException e) {
-					throw new InvocationTargetException(e);
-				}
-
+				// Execute @angular/cli "ng new $project-name"
 				ErrorRunnable runnable = new ErrorRunnable() {
 					@Override
 					public void run() {
@@ -134,24 +117,19 @@ public class NewAngular2ProjectWizard extends AbstractNewProjectWizard {
 							AngularCLILaunchHelper.updateNodeFilePath(newProjectHandle, newConfiguration);
 							AngularCLILaunchHelper.updateNgFilePath(newProjectHandle, newConfiguration);
 							newConfiguration.setAttribute(AngularCLILaunchConstants.WORKING_DIR,
-									AngularCLILaunchHelper.getWorkingDir(newProjectHandle));
-							newConfiguration.setAttribute(AngularCLILaunchConstants.OPERATION, NgCommand.INIT.name().toLowerCase());
+									projectLocation.toString());
+							newConfiguration.setAttribute(AngularCLILaunchConstants.OPERATION,
+									NgCommand.NEW.name().toLowerCase());
 							newConfiguration.setAttribute(AngularCLILaunchConstants.OPERATION_PARAMETERS,
-									operationParams);
+									newProjectHandle.getName() + " " + operationParams);
 							DebugUITools.launch(newConfiguration, ILaunchManager.RUN_MODE);
 						} catch (CoreException e) {
 							super.setError(e);
 						}
 					}
-
 				};
 				getShell().getDisplay().syncExec(runnable);
 				if (runnable.getError() != null) {
-					try {
-						op1.undo(monitor, WorkspaceUndoUtil.getUIInfoAdapter(getShell()));
-					} catch (ExecutionException e) {
-						throw new InvocationTargetException(e);
-					}
 					throw new InvocationTargetException(runnable.getError());
 				}
 			}

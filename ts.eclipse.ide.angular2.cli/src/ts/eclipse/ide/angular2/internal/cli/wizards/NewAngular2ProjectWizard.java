@@ -13,7 +13,6 @@
  *******************************************************************************/
 package ts.eclipse.ide.angular2.internal.cli.wizards;
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.commands.ExecutionException;
@@ -21,6 +20,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
@@ -33,10 +33,8 @@ import org.eclipse.ui.internal.wizards.newresource.ResourceMessages;
 
 import ts.eclipse.ide.angular2.cli.NgCommand;
 import ts.eclipse.ide.angular2.cli.launch.AngularCLILaunchConstants;
-import ts.eclipse.ide.angular2.internal.cli.AngularCLIProject;
 import ts.eclipse.ide.angular2.internal.cli.launch.AngularCLILaunchHelper;
 import ts.eclipse.ide.ui.wizards.AbstractNewProjectWizard;
-import ts.utils.FileUtils;
 
 /**
  * Standard workbench wizard that creates a new angular-cli project resource in
@@ -107,7 +105,7 @@ public class NewAngular2ProjectWizard extends AbstractNewProjectWizard {
 	}
 
 	@Override
-	protected IRunnableWithProgress getRunnable(IProject newProjectHandle, IProjectDescription description) {
+	protected IRunnableWithProgress getRunnable(final IProject newProjectHandle, final IProjectDescription description) {
 		return new IRunnableWithProgress() {
 
 			@Override
@@ -134,10 +132,10 @@ public class NewAngular2ProjectWizard extends AbstractNewProjectWizard {
 							AngularCLILaunchHelper.updateNodeFilePath(newProjectHandle, newConfiguration);
 							AngularCLILaunchHelper.updateNgFilePath(newProjectHandle, newConfiguration);
 							newConfiguration.setAttribute(AngularCLILaunchConstants.WORKING_DIR,
-									AngularCLILaunchHelper.getWorkingDir(newProjectHandle));
-							newConfiguration.setAttribute(AngularCLILaunchConstants.OPERATION, NgCommand.INIT.name().toLowerCase());
+									newProjectHandle.getLocationURI().getPath());
+							newConfiguration.setAttribute(AngularCLILaunchConstants.OPERATION, NgCommand.NEW.name().toLowerCase());
 							newConfiguration.setAttribute(AngularCLILaunchConstants.OPERATION_PARAMETERS,
-									operationParams);
+									newProjectHandle.getName() + " " + operationParams);
 							DebugUITools.launch(newConfiguration, ILaunchManager.RUN_MODE);
 						} catch (CoreException e) {
 							super.setError(e);

@@ -30,6 +30,7 @@ import org.eclipse.ui.progress.UIJob;
 
 import ts.eclipse.ide.angular2.cli.AngularCLIPlugin;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
+import ts.eclipse.ide.angular2.internal.cli.AngularCLIProject;
 import ts.eclipse.ide.terminal.interpreter.UIInterpreterHelper;
 
 /**
@@ -37,8 +38,6 @@ import ts.eclipse.ide.terminal.interpreter.UIInterpreterHelper;
  *
  */
 public class NgProjectJob extends UIJob {
-
-	private static final String ANGULAR_CLI_JSON = "angular-cli.json";
 
 	private final File projectDir;
 
@@ -73,7 +72,7 @@ public class NgProjectJob extends UIJob {
 			project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 
 			// Open angular-cli.json in an Editor
-			IFile angularCliJsonFile = project.getFile(ANGULAR_CLI_JSON);
+			IFile angularCliJsonFile = AngularCLIProject.getAngularCliJsonFile(project);
 			if (!angularCliJsonFile.exists()) {
 				angularCliJsonFile.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 			}

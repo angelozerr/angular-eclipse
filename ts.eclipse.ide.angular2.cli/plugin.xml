@@ -17,7 +17,7 @@
 	<!-- JSON Schema for angular-cli.json, .ember-cli -->
 	<extension point="org.eclipse.core.contenttype.contentTypes">
 		<content-type
-		    file-names="angular-cli.json"
+		    file-names="angular-cli.json,.angular-cli.json"
 			priority="high"
 			name="%angular_cli_Content_Type_Extension_Element"
 			id="ts.eclipse.ide.angular2.cli.angularclisource"
@@ -40,7 +40,12 @@
          			fileMatch="angular-cli.json"
          			url="https://raw.githubusercontent.com/angular/angular-cli/master/lib/config/schema.json"
          			uri="jsonschema/angular-cli.json" />
-			<schema name="angular-cli.json"
+			<schema name=".angular-cli.json"
+         			description="JSON schema for Angular CLI configuration file"
+         			fileMatch=".angular-cli.json"
+         			url="https://raw.githubusercontent.com/angular/angular-cli/master/lib/config/schema.json"
+         			uri="jsonschema/angular-cli.json" />         			
+			<schema name="ember-cli.json"
          			description="JSON schema for Ember CLI configuration file"
          			fileMatch=".ember-cli"
          			uri="jsonschema/ember-cli.json" />         			        			

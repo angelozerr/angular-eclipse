@@ -30,13 +30,31 @@ import ts.eclipse.ide.core.resources.watcher.ProjectWatcherListenerAdapter;
  */
 public class AngularCLIProject {
 
-	private static final IPath ANGULAR_CLI_JSON_PATH = new Path("angular-cli.json");
+	public static final IPath ANGULAR_CLI_JSON_PATH = new Path("angular-cli.json");
+	public static final IPath DOT_ANGULAR_CLI_JSON_PATH = new Path(".angular-cli.json");
 
 	private final static Map<IProject, AngularCLIProject> ngProjects = new HashMap<IProject, AngularCLIProject>();
 
 	private final AngularCLIProjectSettings settings;
 
 	private AngularCLIJson angularCLIJson;
+
+	private final FileWatcherListenerAdapter refreshAngularCliJson = new FileWatcherListenerAdapter() {
+		@Override
+		public void onAdded(IFile file) {
+			AngularCLIProject.this.angularCLIJson = null;
+		}
+
+		@Override
+		public void onChanged(IFile file) {
+			AngularCLIProject.this.angularCLIJson = null;
+		}
+
+		@Override
+		public void onDeleted(IFile file) {
+			AngularCLIProject.this.angularCLIJson = null;
+		}
+	};
 
 	AngularCLIProject(IProject project) {
 		this.settings = new AngularCLIProjectSettings(project);
@@ -65,22 +83,9 @@ public class AngularCLIProject {
 
 				});
 		TypeScriptCorePlugin.getResourcesWatcher().addFileWatcherListener(project, ANGULAR_CLI_JSON_PATH.toString(),
-				new FileWatcherListenerAdapter() {
-					@Override
-					public void onAdded(IFile file) {
-						AngularCLIProject.this.angularCLIJson = null;
-					}
-
-					@Override
-					public void onChanged(IFile file) {
-						AngularCLIProject.this.angularCLIJson = null;
-					}
-
-					@Override
-					public void onDeleted(IFile file) {
-						AngularCLIProject.this.angularCLIJson = null;
-					}
-				});
+				refreshAngularCliJson);
+		TypeScriptCorePlugin.getResourcesWatcher().addFileWatcherListener(project, DOT_ANGULAR_CLI_JSON_PATH.toString(),
+				refreshAngularCliJson);
 	}
 
 	public static AngularCLIProject getAngularCLIProject(IProject project) throws CoreException {
@@ -104,15 +109,16 @@ public class AngularCLIProject {
 
 	/**
 	 * Returns true if the given project is an angular CLI project (contains
-	 * "angular-cli.json" file in the root of the project) and false otherwise.
+	 * "angular-cli.json" or ".angular-cli.json" file in the root of the
+	 * project) and false otherwise.
 	 * 
 	 * @param project
 	 * @return true if the given project is an angular CLI project (contains
-	 *         "angular-cli.json" file in the root of the project) and false
-	 *         otherwise.
+	 *         "angular-cli.json" or ".angular-cli.json" file in the root of the
+	 *         project) and false otherwise.
 	 */
 	public static boolean isAngularCLIProject(IProject project) {
-		return project.exists(ANGULAR_CLI_JSON_PATH);
+		return project.exists(DOT_ANGULAR_CLI_JSON_PATH) || project.exists(ANGULAR_CLI_JSON_PATH);
 	}
 
 	/**
@@ -126,8 +132,28 @@ public class AngularCLIProject {
 			return angularCLIJson;
 		}
 		IProject project = settings.getProject();
-		angularCLIJson = AngularCLIJson.load(project.getFile(ANGULAR_CLI_JSON_PATH));
+		IFile cliFile = getAngularCliJsonFile(project);
+		if (cliFile != null && cliFile.exists()) {
+			angularCLIJson = AngularCLIJson.load(cliFile);
+		}
 		return angularCLIJson;
+	}
+
+	/**
+	 * Returns the ".angular-cli.json" or "angular-cli.json" from the given
+	 * project.
+	 * 
+	 * @param project
+	 * @return the ".angular-cli.json" or "angular-cli.json" from the given
+	 *         project.
+	 */
+	public static IFile getAngularCliJsonFile(IProject project) {
+		if (project.exists(DOT_ANGULAR_CLI_JSON_PATH)) {
+			// since Angular-CLI beta 32, the file was renamed to
+			// .angular-cli.json
+			return project.getFile(DOT_ANGULAR_CLI_JSON_PATH);
+		}
+		return project.getFile(ANGULAR_CLI_JSON_PATH);
 	}
 
 }

@@ -59,6 +59,8 @@ import ts.eclipse.ide.ui.wizards.AbstractNewProjectWizard;
  */
 public class NewAngular2ProjectWizard extends AbstractNewProjectWizard {
 
+	private static final String ANGULAR_CLI_LAUNCH_NAME = "angular-cli";
+	
 	private NewAngular2ProjectParamsWizardPage paramsPage;
 
 	/**
@@ -141,7 +143,7 @@ public class NewAngular2ProjectWizard extends AbstractNewProjectWizard {
 		ILaunchConfigurationType launchConfigurationType = launchManager
 				.getLaunchConfigurationType(AngularCLILaunchConstants.LAUNCH_CONFIGURATION_ID);
 		ILaunchConfigurationWorkingCopy launchConfiguration = launchConfigurationType.newInstance(null,
-				launchManager.generateLaunchConfigurationName("angular-cli"));
+				launchManager.generateLaunchConfigurationName(ANGULAR_CLI_LAUNCH_NAME));
 		return launchConfiguration;
 	}
 

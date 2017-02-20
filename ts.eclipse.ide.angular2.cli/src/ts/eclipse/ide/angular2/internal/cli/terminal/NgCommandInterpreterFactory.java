@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2015-2016 Angelo ZERR.
+ *  Copyright (c) 2015-2017 Angelo ZERR.
  *  All rights reserved. This program and the accompanying materials
  *  are made available under the terms of the Eclipse Public License v1.0
  *  which accompanies this distribution, and is available at
@@ -18,6 +18,10 @@ import ts.eclipse.ide.angular2.cli.NgCommand;
 import ts.eclipse.ide.terminal.interpreter.ICommandInterpreter;
 import ts.eclipse.ide.terminal.interpreter.ICommandInterpreterFactory;
 
+/**
+ * Angular command interpeter factory.
+ *
+ */
 public class NgCommandInterpreterFactory implements ICommandInterpreterFactory {
 
 	@Override

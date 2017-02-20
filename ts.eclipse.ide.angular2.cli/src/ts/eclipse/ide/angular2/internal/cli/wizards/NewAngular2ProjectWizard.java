@@ -15,21 +15,17 @@ package ts.eclipse.ide.angular2.internal.cli.wizards;
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.ui.ide.undo.CreateProjectOperation;
-import org.eclipse.ui.ide.undo.WorkspaceUndoUtil;
-import org.eclipse.ui.internal.wizards.newresource.ResourceMessages;
 
 import ts.eclipse.ide.angular2.cli.NgCommand;
 import ts.eclipse.ide.angular2.cli.launch.AngularCLILaunchConstants;
@@ -63,6 +59,8 @@ import ts.eclipse.ide.ui.wizards.AbstractNewProjectWizard;
  */
 public class NewAngular2ProjectWizard extends AbstractNewProjectWizard {
 
+	private static final String ANGULAR_CLI_LAUNCH_NAME = "angular-cli";
+	
 	private NewAngular2ProjectParamsWizardPage paramsPage;
 
 	/**
@@ -105,24 +103,13 @@ public class NewAngular2ProjectWizard extends AbstractNewProjectWizard {
 	}
 
 	@Override
-	protected IRunnableWithProgress getRunnable(final IProject newProjectHandle, final IProjectDescription description) {
+	protected IRunnableWithProgress getRunnable(final IProject newProjectHandle, final IProjectDescription description,
+			final IPath projectLocation) {
 		return new IRunnableWithProgress() {
 
 			@Override
 			public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-				final CreateProjectOperation op1 = new CreateProjectOperation(description,
-						ResourceMessages.NewProject_windowTitle);
-				try {
-					// see bug
-					// https://bugs.eclipse.org/bugs/show_bug.cgi?id=219901
-					// directly execute the operation so that the undo state is
-					// not preserved. Making this undoable resulted in too many
-					// accidental file deletions.
-					op1.execute(monitor, WorkspaceUndoUtil.getUIInfoAdapter(getShell()));
-				} catch (ExecutionException e) {
-					throw new InvocationTargetException(e);
-				}
-
+				// Execute @angular/cli "ng new $project-name"
 				ErrorRunnable runnable = new ErrorRunnable() {
 					@Override
 					public void run() {
@@ -132,8 +119,9 @@ public class NewAngular2ProjectWizard extends AbstractNewProjectWizard {
 							AngularCLILaunchHelper.updateNodeFilePath(newProjectHandle, newConfiguration);
 							AngularCLILaunchHelper.updateNgFilePath(newProjectHandle, newConfiguration);
 							newConfiguration.setAttribute(AngularCLILaunchConstants.WORKING_DIR,
-									newProjectHandle.getLocationURI().getPath());
-							newConfiguration.setAttribute(AngularCLILaunchConstants.OPERATION, NgCommand.NEW.name().toLowerCase());
+									projectLocation.toString());
+							newConfiguration.setAttribute(AngularCLILaunchConstants.OPERATION,
+									NgCommand.NEW.name().toLowerCase());
 							newConfiguration.setAttribute(AngularCLILaunchConstants.OPERATION_PARAMETERS,
 									newProjectHandle.getName() + " " + operationParams);
 							DebugUITools.launch(newConfiguration, ILaunchManager.RUN_MODE);
@@ -141,15 +129,9 @@ public class NewAngular2ProjectWizard extends AbstractNewProjectWizard {
 							super.setError(e);
 						}
 					}
-
 				};
 				getShell().getDisplay().syncExec(runnable);
 				if (runnable.getError() != null) {
-					try {
-						op1.undo(monitor, WorkspaceUndoUtil.getUIInfoAdapter(getShell()));
-					} catch (ExecutionException e) {
-						throw new InvocationTargetException(e);
-					}
 					throw new InvocationTargetException(runnable.getError());
 				}
 			}
@@ -161,7 +143,7 @@ public class NewAngular2ProjectWizard extends AbstractNewProjectWizard {
 		ILaunchConfigurationType launchConfigurationType = launchManager
 				.getLaunchConfigurationType(AngularCLILaunchConstants.LAUNCH_CONFIGURATION_ID);
 		ILaunchConfigurationWorkingCopy launchConfiguration = launchConfigurationType.newInstance(null,
-				launchManager.generateLaunchConfigurationName("angular-cli"));
+				launchManager.generateLaunchConfigurationName(ANGULAR_CLI_LAUNCH_NAME));
 		return launchConfiguration;
 	}
 

@@ -18,6 +18,7 @@ import java.util.Map;
 import org.eclipse.core.externaltools.internal.launchConfigurations.ExternalToolsCoreUtil;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -77,17 +78,17 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 
 	private void openWithTerminal(String ngFilePath, String nodeFilePath, IPath workingDir, IPath processWorkingDir, String operation,
 			String[] options, IProgressMonitor monitor) throws CoreException {
-		// Define the terminal properties
-		IContainer container = WorkbenchResourceUtil.findContainerFromWorkspace(workingDir);
 
 		// Prepare terminal properties
-		String terminalId = getTerminalId(container, operation);
+		String terminalId = getTerminalId(workingDir, operation);
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(ITerminalsConnectorConstants.PROP_TITLE, terminalId);
 		properties.put(ITerminalsConnectorConstants.PROP_ENCODING, StandardCharsets.UTF_8.name());
 		properties.put(ITerminalsConnectorConstants.PROP_PROCESS_WORKING_DIR, processWorkingDir.toOSString());
 		properties.put(ITerminalsConnectorConstants.PROP_DELEGATE_ID,
 				"ts.eclipse.ide.terminal.interpreter.LocalInterpreterLauncherDelegate");
+		properties.put(ITerminalsConnectorConstants.PROP_TERMINAL_CONNECTOR_ID,
+				"org.eclipse.tm.terminal.connector.local.LocalConnector");
 
 		// Create ng command
 		StringBuilder command = new StringBuilder("ng");
@@ -115,10 +116,14 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 		CommandTerminalService.getInstance().executeCommand(command.toString(), terminalId, properties, done);
 	}
 
-	private String getTerminalId(IContainer container, String operation) {
+	private String getTerminalId(IPath workingDir, String operation) {
+		IContainer container = WorkbenchResourceUtil.findContainerFromWorkspace(workingDir);
+
 		StringBuilder id = new StringBuilder("@angular/cli - [");
-		if (container != null) {
+		if (container != null && container.getType() != IResource.ROOT) {
 			id.append(container.getProject().getName());
+		} else {
+			id.append(workingDir.lastSegment());
 		}
 		if (isOpenNewTerminal(operation)) {
 			id.append(" - (");

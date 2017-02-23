@@ -396,6 +396,10 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 		if (folder == null) {
 			return DEFAULT_CLI;
 		}
+		IProject project = folder.getProject();
+		if (!AngularCLIProject.isAngularCLIProject(project)) {
+			return DEFAULT_CLI;
+		}
 		try {
 			return AngularCLIProject.getAngularCLIProject(folder.getProject()).getAngularCLIJson();
 		} catch (CoreException e) {

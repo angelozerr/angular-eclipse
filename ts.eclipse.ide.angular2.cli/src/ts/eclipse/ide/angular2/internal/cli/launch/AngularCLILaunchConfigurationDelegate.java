@@ -61,16 +61,22 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 			return;
 		}
 
+		IPath processWorkingDir = workingDir;
+		if (NgCommand.NEW.equals(NgCommand.getCommand(operation))) {
+			// In the case of "new new", get the parent of working dir because ng new generates a folder.
+			processWorkingDir = workingDir.removeLastSegments(1);
+		}
+		
 		boolean withTerminal = true;
 		if (withTerminal) {
-			openWithTerminal(ngFilePath, nodeFilePath, workingDir, operation, options, monitor);
+			openWithTerminal(ngFilePath, nodeFilePath, workingDir, processWorkingDir, operation, options, monitor);
 		} else {
-			openWithConsole(ngFilePath, nodeFilePath, workingDir, operation, options, monitor);
+			openWithConsole(ngFilePath, nodeFilePath, workingDir, processWorkingDir, operation, options, monitor);
 		}
 
 	}
 
-	private void openWithTerminal(String ngFilePath, String nodeFilePath, IPath workingDir, String operation,
+	private void openWithTerminal(String ngFilePath, String nodeFilePath, IPath workingDir, IPath processWorkingDir, String operation,
 			String[] options, IProgressMonitor monitor) throws CoreException {
 
 		// Prepare terminal properties
@@ -78,7 +84,7 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put(ITerminalsConnectorConstants.PROP_TITLE, terminalId);
 		properties.put(ITerminalsConnectorConstants.PROP_ENCODING, StandardCharsets.UTF_8.name());
-		properties.put(ITerminalsConnectorConstants.PROP_PROCESS_WORKING_DIR, workingDir.toOSString());
+		properties.put(ITerminalsConnectorConstants.PROP_PROCESS_WORKING_DIR, processWorkingDir.toOSString());
 		properties.put(ITerminalsConnectorConstants.PROP_DELEGATE_ID,
 				"ts.eclipse.ide.terminal.interpreter.LocalInterpreterLauncherDelegate");
 		properties.put(ITerminalsConnectorConstants.PROP_TERMINAL_CONNECTOR_ID,
@@ -153,7 +159,7 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 		return fileOrDir;
 	}
 
-	private void openWithConsole(String ngFilePath, String nodeFilePath, IPath workingDir, String operation,
+	private void openWithConsole(String ngFilePath, String nodeFilePath, IPath workingDir, IPath processWorkingDir, String operation,
 			String[] options, IProgressMonitor monitor) throws CoreException {
 		CLICommand command = createCommand(ngFilePath, nodeFilePath, operation, options);
 		IPath wd = workingDir;

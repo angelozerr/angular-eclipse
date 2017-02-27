@@ -80,20 +80,15 @@ public class NewNgModuleWizardPage extends NgGenerateBlueprintWizardPage {
 		String name = getBlueprintName();
 		int cnt = isSpec() ? 2 : 1;
 		if (isRouting())
-			cnt += 5;
+			cnt ++;
 		String[] files = new String[cnt];
 		String folderName = cliJson.getFolderName(name);
 		int i = 0;
 		files[i++] = folderName.concat(cliJson.getModuleFileName(name));
 		if (isSpec())
 			files[i++] = folderName.concat(cliJson.getModuleSpecFileName(name));
-		if (isRouting()) {
+		if (isRouting())
 			files[i++] = folderName.concat(cliJson.getRoutingModuleFileName(name));
-			files[i++] = folderName.concat(cliJson.getComponentTsFileName(name));
-			files[i++] = folderName.concat(cliJson.getComponentSpecFileName(name));			// default spec setting seems to be ignored
-			files[i++] = folderName.concat(cliJson.getComponentTemplateFileName(name));		// default "inline-template" seems to be ignored
-			files[i++] = folderName.concat(cliJson.getComponentStyleFileName(name));		// default "inline-style" seems to be ignored
-		}
 		return files;
 	}
 

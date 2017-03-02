@@ -27,7 +27,6 @@ import ts.eclipse.ide.angular2.cli.launch.AngularCLILaunchConstants;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIProject;
 import ts.eclipse.ide.angular2.internal.cli.Trace;
 import ts.eclipse.ide.core.TypeScriptCorePlugin;
-import ts.eclipse.ide.core.resources.IIDETypeScriptProject;
 import ts.eclipse.ide.core.utils.TypeScriptResourceUtil;
 import ts.utils.FileUtils;
 

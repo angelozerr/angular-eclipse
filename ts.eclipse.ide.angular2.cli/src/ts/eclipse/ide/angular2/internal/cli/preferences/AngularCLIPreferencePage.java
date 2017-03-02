@@ -34,7 +34,7 @@ public class AngularCLIPreferencePage extends PropertyAndPreferencePage {
 	@Override
 	public void createControl(Composite parent) {
 		IWorkbenchPreferenceContainer container = (IWorkbenchPreferenceContainer) getContainer();
-		configurationBlock = new AngularCLIConfigurationBlock(getProject(), container);
+		configurationBlock = new AngularCLIConfigurationBlock(getNewStatusChangedListener(), getProject(), container);
 		super.createControl(parent);
 	}
 

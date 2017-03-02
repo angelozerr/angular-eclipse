@@ -29,7 +29,14 @@ public class AngularCLIMessages extends NLS {
 	public static String AngularCLIConfigurationBlock_cli_group_label;
 	public static String AngularCLIConfigurationBlock_ngUseGlobalInstallation_label;
 	public static String AngularCLIConfigurationBlock_ngUseCustomFile_label;
-
+	public static String AngularCLIConfigurationBlock_cliPath_label;
+	public static String AngularCLIConfigurationBlock_cliVersion_label;
+	public static String AngularCLIConfigurationBlock_ngGlobal_notFound_error;
+	public static String AngularCLIConfigurationBlock_ngCustomFile_required_error;
+	public static String AngularCLIConfigurationBlock_ngCustomFile_exists_error;
+	public static String AngularCLIConfigurationBlock_ngCustomFile_invalid_error;
+	public static String AngularCLIConfigurationBlock_ngCustomFile_notDir_error;
+	
 	// Interpreter
 	public static String NgServeJob_jobName;
 	public static String NgServeJob_error;

@@ -10,8 +10,14 @@
  */
 package ts.eclipse.ide.angular2.internal.cli.preferences;
 
+import java.io.File;
+
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ControlEnableState;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -21,17 +27,26 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.preferences.IWorkbenchPreferenceContainer;
+import org.eclipse.ui.progress.UIJob;
 
 import ts.eclipse.ide.angular2.cli.AngularCLIPlugin;
 import ts.eclipse.ide.angular2.cli.preferences.AngularCLIPreferenceConstants;
+import ts.eclipse.ide.angular2.cli.utils.CLIProcessHelper;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
+import ts.eclipse.ide.core.utils.WorkbenchResourceUtil;
 import ts.eclipse.ide.ui.preferences.BrowseButtonsComposite;
+import ts.eclipse.ide.ui.preferences.IStatusChangeListener;
 import ts.eclipse.ide.ui.preferences.OptionsConfigurationBlock;
 import ts.eclipse.ide.ui.preferences.ScrolledPageContent;
+import ts.eclipse.ide.ui.preferences.StatusInfo;
+import ts.utils.FileUtils;
+import ts.utils.StringUtils;
 
 /**
- * angular-cli configuration block.
+ * @angular/cli configuration block.
  *
  */
 public class AngularCLIConfigurationBlock extends OptionsConfigurationBlock {
@@ -50,8 +65,35 @@ public class AngularCLIConfigurationBlock extends OptionsConfigurationBlock {
 	private static final Key PREF_NG_CUSTOM_FILE_PATH = getAngularCliKey(
 			AngularCLIPreferenceConstants.NG_CUSTOM_FILE_PATH);
 
-	public AngularCLIConfigurationBlock(IProject project, IWorkbenchPreferenceContainer container) {
-		super(project, getKeys(), container);
+	private Text cliPath;
+	private Text cliVersion;
+	private final UIJob ngVersionJob;
+	private File ngFile;
+
+	public AngularCLIConfigurationBlock(IStatusChangeListener context, IProject project,
+			IWorkbenchPreferenceContainer container) {
+		super(context, project, getKeys(), container);
+		ngVersionJob = new UIJob("") {
+
+			@Override
+			public IStatus runInUIThread(IProgressMonitor monitor) {
+				String version = CLIProcessHelper.getNgVersion(ngFile);
+				CLIStatus status = null;
+				if (StringUtils.isEmpty(version)) {
+					// ERROR: the file path is not a ng
+					status = new CLIStatus(null,
+							NLS.bind(AngularCLIMessages.AngularCLIConfigurationBlock_ngCustomFile_invalid_error,
+									FileUtils.getPath(ngFile)));
+					cliPath.setText("");
+					cliVersion.setText("");
+				} else {
+					status = new CLIStatus(ngFile, null);
+					cliVersion.setText(version);
+				}
+				fContext.statusChanged(status);
+				return Status.OK_STATUS;
+			}
+		};
 		blockEnableState = null;
 	}
 
@@ -83,6 +125,7 @@ public class AngularCLIConfigurationBlock extends OptionsConfigurationBlock {
 		controlsComposite.setLayout(layout);
 
 		createBody(controlsComposite);
+		createCLIInfo(composite);
 		return pageContent;
 
 	}
@@ -100,6 +143,7 @@ public class AngularCLIConfigurationBlock extends OptionsConfigurationBlock {
 
 		createNgUseGlobalInstallation(group);
 		createNgUseCustomFile(group);
+
 		updateComboBoxes();
 	}
 
@@ -140,13 +184,119 @@ public class AngularCLIConfigurationBlock extends OptionsConfigurationBlock {
 		browseButtons = new BrowseButtonsComposite(parent, ngCustomFilePath, getProject(), SWT.NONE);
 	}
 
+	private void createCLIInfo(Composite parent) {
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayout(new GridLayout());
+		GridData gridData = new GridData(GridData.FILL_BOTH);
+		composite.setLayoutData(gridData);
+
+		// CLI version
+		Label cliVersionTitle = new Label(composite, SWT.NONE);
+		cliVersionTitle.setText(AngularCLIMessages.AngularCLIConfigurationBlock_cliVersion_label);
+		gridData = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
+		cliVersionTitle.setLayoutData(gridData);
+
+		cliVersion = new Text(composite, SWT.WRAP | SWT.READ_ONLY);
+		cliVersion.setText(""); //$NON-NLS-1$
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 2;
+		gridData.widthHint = 200;
+		cliVersion.setLayoutData(gridData);
+
+		// CLI path
+		Label cliPathTitle = new Label(composite, SWT.NONE);
+		cliPathTitle.setText(AngularCLIMessages.AngularCLIConfigurationBlock_cliPath_label);
+		gridData = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
+		cliPathTitle.setLayoutData(gridData);
+
+		cliPath = new Text(composite, SWT.WRAP | SWT.READ_ONLY);
+		cliPath.setText(""); //$NON-NLS-1$
+		gridData = new GridData(GridData.FILL_BOTH);
+		gridData.horizontalSpan = 2;
+		gridData.widthHint = 200;
+		cliPath.setLayoutData(gridData);
+	}
+
 	private String[] getDefaultPaths() {
 		return DEFAULT_PATHS;
 	}
 
 	@Override
 	protected void validateSettings(Key changedKey, String oldValue, String newValue) {
+		cliVersion.setText("");
+		cliPath.setText("");
+		CLIStatus status = validateCLIPath();
+		if (status.isOK()) {
+			cliPath.setText(FileUtils.getPath(status.getNgFile()));
+			cliVersion.setText("Executing 'ng --version'...");
+			ngFile = status.getNgFile();
+			ngVersionJob.cancel();
+			ngVersionJob.schedule();
+		} else {
+			fContext.statusChanged(status);
+		}
+	}
 
+	private class CLIStatus extends StatusInfo {
+
+		private final File ngFile;
+
+		public CLIStatus(File ngFile, String errorMessage) {
+			if (errorMessage != null) {
+				setError(errorMessage);
+			}
+			this.ngFile = ngFile;
+		}
+
+		public File getNgFile() {
+			return ngFile;
+		}
+
+	}
+
+	/**
+	 * Returns the status of the ng path.
+	 * 
+	 * @return the status of the ng path.
+	 */
+	private CLIStatus validateCLIPath() {
+		File ngFile = null;
+		boolean useGlobal = ngUseGlobalInstallation.getSelection();
+		if (useGlobal) {
+			ngFile = CLIProcessHelper.findNg();
+			if (ngFile == null) {
+				// ERROR: ng was not installed with "npm install @angular/cli
+				// -g"
+				return new CLIStatus(null, AngularCLIMessages.AngularCLIConfigurationBlock_ngGlobal_notFound_error);
+			}
+		} else {
+			String ngPath = ngCustomFilePath.getText();
+			if (StringUtils.isEmpty(ngPath)) {
+				// ERROR: the installed path is empty
+				return new CLIStatus(null, AngularCLIMessages.AngularCLIConfigurationBlock_ngCustomFile_required_error);
+			} else {
+				ngFile = WorkbenchResourceUtil.resolvePath(ngPath, getProject());
+				if (!ngFile.isDirectory()) {
+					// ERROR: the ng path must be a directory which contains the
+					// ng/ng.cmd
+					return new CLIStatus(null,
+							NLS.bind(AngularCLIMessages.AngularCLIConfigurationBlock_ngCustomFile_notDir_error,
+									FileUtils.getPath(ngFile)));
+				}
+				ngFile = new File(ngFile, CLIProcessHelper.getNgFileName());
+			}
+		}
+
+		if (!ngFile.exists()) {
+			// ERROR: ng file doesn't exists
+			return new CLIStatus(null,
+					NLS.bind(AngularCLIMessages.AngularCLIConfigurationBlock_ngCustomFile_exists_error,
+							FileUtils.getPath(ngFile)));
+		} else {
+
+		}
+		// ng path is valid
+		return new CLIStatus(ngFile, null);
 	}
 
 	@Override

@@ -502,9 +502,10 @@
 						<newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.component"/>
 						<newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.directive"/>
 						<newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.enum"/>
+						<newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.guard"/>
 						<newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.interface"/>
 						<newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.module"/>
-					<newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.interface"/>
+						<newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.interface"/>
 						<newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.pipe"/>
 						<newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.service"/>
 

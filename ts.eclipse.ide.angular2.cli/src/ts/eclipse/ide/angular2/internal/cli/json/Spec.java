@@ -33,6 +33,8 @@ public class Spec {
 
 	private boolean service;
 
+	private boolean guard;
+
 	public boolean isClass() {
 		return cls;
 	}
@@ -57,5 +59,8 @@ public class Spec {
 		return service;
 	}
 
+	public boolean isGuard() {
+		return guard;
+	}
 
 }

@@ -36,7 +36,7 @@ public class AngularCLIMessages extends NLS {
 	public static String AngularCLIConfigurationBlock_ngCustomFile_exists_error;
 	public static String AngularCLIConfigurationBlock_ngCustomFile_invalid_error;
 	public static String AngularCLIConfigurationBlock_ngCustomFile_notDir_error;
-	
+
 	// Interpreter
 	public static String NgServeJob_jobName;
 	public static String NgServeJob_error;
@@ -105,6 +105,10 @@ public class AngularCLIMessages extends NLS {
 	public static String NewNgServiceWizard_windowTitle;
 	public static String NewNgServiceWizardPage_title;
 	public static String NewNgServiceWizardPage_description;
+
+	public static String NewNgGuardWizard_windowTitle;
+	public static String NewNgGuardWizardPage_title;
+	public static String NewNgGuardWizardPage_description;
 
 	public static String NewNgClassWizard_windowTitle;
 	public static String NewNgClassWizardPage_title;

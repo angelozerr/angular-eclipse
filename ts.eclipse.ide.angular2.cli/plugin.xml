@@ -9,49 +9,49 @@
 # http://www.eclipse.org/legal/epl-v10.html
 #
 # Contributors:
-#     Angelo Zerr <angelo.zerr@gmail.com> - Initial API and implementation 
+#     Angelo Zerr <angelo.zerr@gmail.com> - Initial API and implementation
 ###############################################################################
- -->
+-->
 <plugin>
 
 	<!-- JSON Schema for angular-cli.json, .ember-cli -->
 	<extension point="org.eclipse.core.contenttype.contentTypes">
 		<content-type
-		    file-names="angular-cli.json,.angular-cli.json"
+				file-names="angular-cli.json,.angular-cli.json"
 			priority="high"
 			name="%angular_cli_Content_Type_Extension_Element"
 			id="ts.eclipse.ide.angular2.cli.angularclisource"
 			base-type="org.eclipse.wst.json.core.jsonsource">
 		</content-type>
 		<content-type
-		    file-names=".ember-cli"
+				file-names=".ember-cli"
 			priority="high"
 			name="%ember_cli_Content_Type_Extension_Element"
 			id="ts.eclipse.ide.angular2.cli.emberclisource"
 			base-type="org.eclipse.wst.json.core.jsonsource">
-		</content-type>		
+		</content-type>
 	</extension>
-			
-   <extension
-         point="org.eclipse.wst.json.core.schemaCatalogContributions">
-         <schemaCatalogContribution id="http://schemastore.org/ng">
-         	<schema name="angular-cli.json"
-         			description="JSON schema for Angular CLI configuration file"
-         			fileMatch="angular-cli.json"
-         			url="https://raw.githubusercontent.com/angular/angular-cli/master/lib/config/schema.json"
-         			uri="jsonschema/angular-cli.json" />
+
+	<extension
+				point="org.eclipse.wst.json.core.schemaCatalogContributions">
+				<schemaCatalogContribution id="http://schemastore.org/ng">
+					<schema name="angular-cli.json"
+							description="JSON schema for Angular CLI configuration file"
+							fileMatch="angular-cli.json"
+							url="https://raw.githubusercontent.com/angular/angular-cli/master/lib/config/schema.json"
+							uri="jsonschema/angular-cli.json" />
 			<schema name=".angular-cli.json"
-         			description="JSON schema for Angular CLI configuration file"
-         			fileMatch=".angular-cli.json"
-         			url="https://raw.githubusercontent.com/angular/angular-cli/master/lib/config/schema.json"
-         			uri="jsonschema/angular-cli.json" />         			
+							description="JSON schema for Angular CLI configuration file"
+							fileMatch=".angular-cli.json"
+							url="https://raw.githubusercontent.com/angular/angular-cli/master/lib/config/schema.json"
+							uri="jsonschema/angular-cli.json" />
 			<schema name="ember-cli.json"
-         			description="JSON schema for Ember CLI configuration file"
-         			fileMatch=".ember-cli"
-         			uri="jsonschema/ember-cli.json" />         			        			
-         </schemaCatalogContribution>
+							description="JSON schema for Ember CLI configuration file"
+							fileMatch=".ember-cli"
+							uri="jsonschema/ember-cli.json" />
+				</schemaCatalogContribution>
 	</extension>
-	
+
 	<extension point="org.eclipse.ui.editors">
 		<editor
 			name="%angular_cli_Editor.name"
@@ -70,90 +70,98 @@
 			id="ts.eclipse.ide.angular2.cli.EmberCLIEditor">
 			<contentTypeBinding
 				contentTypeId="ts.eclipse.ide.angular2.cli.editor.emberclisource" />
-		</editor>		
+		</editor>
 	</extension>
-		
+
 	<!-- Wizards -->
 	<extension
-	      point="org.eclipse.ui.newWizards">
-	    <!-- ng init -->
-	 	<wizard
-		   id="ts.eclipse.ide.angular2.cli.wizards.new.project"
-	       name="%NewAngular2ProjectWizard.name"
-		   class="ts.eclipse.ide.angular2.internal.cli.wizards.NewAngular2ProjectWizard"
-		   project="true"
-		   category="ts.eclipse.ide.angular2.ui.new"
-		   icon="icons/full/obj16/angular2.png"
-		   finalPerspective="ts.eclipse.ide.angular2.ui.perspectives.Angular2Perspective" >
-	       <description>%NewAngular2ProjectWizard.desc</description>
+				point="org.eclipse.ui.newWizards">
+			<!-- ng init -->
+		<wizard
+			id="ts.eclipse.ide.angular2.cli.wizards.new.project"
+				name="%NewAngular2ProjectWizard.name"
+			class="ts.eclipse.ide.angular2.internal.cli.wizards.NewAngular2ProjectWizard"
+			project="true"
+			category="ts.eclipse.ide.angular2.ui.new"
+			icon="icons/full/obj16/angular2.png"
+			finalPerspective="ts.eclipse.ide.angular2.ui.perspectives.Angular2Perspective" >
+				<description>%NewAngular2ProjectWizard.desc</description>
 		</wizard>
 		<!-- ng generate -->
 		<wizard
-		   id="ts.eclipse.ide.angular2.cli.wizards.generate.module"
-	       name="%NewNgModuleWizard.name"
-		   class="ts.eclipse.ide.angular2.internal.cli.wizards.NewNgModuleWizard"
-		   category="ts.eclipse.ide.angular2.ui.new"
-		   icon="icons/full/obj16/module.png">
-	       <description>%NewNgModuleWizard.desc</description>
+			id="ts.eclipse.ide.angular2.cli.wizards.generate.module"
+				name="%NewNgModuleWizard.name"
+			class="ts.eclipse.ide.angular2.internal.cli.wizards.NewNgModuleWizard"
+			category="ts.eclipse.ide.angular2.ui.new"
+			icon="icons/full/obj16/module.png">
+				<description>%NewNgModuleWizard.desc</description>
 		</wizard>
 		<wizard
-		   id="ts.eclipse.ide.angular2.cli.wizards.generate.component"
-	       name="%NewNgComponentWizard.name"
-		   class="ts.eclipse.ide.angular2.internal.cli.wizards.NewNgComponentWizard"
-		   category="ts.eclipse.ide.angular2.ui.new"
-		   icon="icons/full/obj16/component.png">
-	       <description>%NewNgComponentWizard.desc</description>
+			id="ts.eclipse.ide.angular2.cli.wizards.generate.component"
+				name="%NewNgComponentWizard.name"
+			class="ts.eclipse.ide.angular2.internal.cli.wizards.NewNgComponentWizard"
+			category="ts.eclipse.ide.angular2.ui.new"
+			icon="icons/full/obj16/component.png">
+				<description>%NewNgComponentWizard.desc</description>
 		</wizard>
 		<wizard
-		   id="ts.eclipse.ide.angular2.cli.wizards.generate.directive"
-	       name="%NewNgDirectiveWizard.name"
-		   class="ts.eclipse.ide.angular2.internal.cli.wizards.NewNgDirectiveWizard"
-		   category="ts.eclipse.ide.angular2.ui.new"
-		   icon="icons/full/obj16/directive.png">
-	       <description>%NewNgDirectiveWizard.desc</description>
+			id="ts.eclipse.ide.angular2.cli.wizards.generate.directive"
+				name="%NewNgDirectiveWizard.name"
+			class="ts.eclipse.ide.angular2.internal.cli.wizards.NewNgDirectiveWizard"
+			category="ts.eclipse.ide.angular2.ui.new"
+			icon="icons/full/obj16/directive.png">
+				<description>%NewNgDirectiveWizard.desc</description>
 		</wizard>
 		<wizard
-		   id="ts.eclipse.ide.angular2.cli.wizards.generate.pipe"
-	       name="%NewNgPipeWizard.name"
-		   class="ts.eclipse.ide.angular2.internal.cli.wizards.NewNgPipeWizard"
-		   category="ts.eclipse.ide.angular2.ui.new"
-		   icon="icons/full/obj16/pipe.png">
-	       <description>%NewNgPipeWizard.desc</description>
+			id="ts.eclipse.ide.angular2.cli.wizards.generate.pipe"
+				name="%NewNgPipeWizard.name"
+			class="ts.eclipse.ide.angular2.internal.cli.wizards.NewNgPipeWizard"
+			category="ts.eclipse.ide.angular2.ui.new"
+			icon="icons/full/obj16/pipe.png">
+				<description>%NewNgPipeWizard.desc</description>
 		</wizard>
 		<wizard
-		   id="ts.eclipse.ide.angular2.cli.wizards.generate.service"
-	       name="%NewNgServiceWizard.name"
-		   class="ts.eclipse.ide.angular2.internal.cli.wizards.NewNgServiceWizard"
-		   category="ts.eclipse.ide.angular2.ui.new"
-		   icon="icons/full/obj16/service.png">
-	       <description>%NewNgServiceWizard.desc</description>
+			id="ts.eclipse.ide.angular2.cli.wizards.generate.service"
+				name="%NewNgServiceWizard.name"
+			class="ts.eclipse.ide.angular2.internal.cli.wizards.NewNgServiceWizard"
+			category="ts.eclipse.ide.angular2.ui.new"
+			icon="icons/full/obj16/service.png">
+				<description>%NewNgServiceWizard.desc</description>
 		</wizard>
 		<wizard
-		   id="ts.eclipse.ide.angular2.cli.wizards.generate.class"
-	       name="%NewNgClassWizard.name"
-		   class="ts.eclipse.ide.angular2.internal.cli.wizards.NewNgClassWizard"
-		   category="ts.eclipse.ide.angular2.ui.new"
-		   icon="icons/full/obj16/class.gif">
-	       <description>%NewNgClassWizard.desc</description>
+			id="ts.eclipse.ide.angular2.cli.wizards.generate.guard"
+				name="%NewNgGuardWizard.name"
+			class="ts.eclipse.ide.angular2.internal.cli.wizards.NewNgGuardWizard"
+			category="ts.eclipse.ide.angular2.ui.new"
+			icon="icons/full/obj16/guard.png">
+				<description>%NewNgGuardWizard.desc</description>
 		</wizard>
 		<wizard
-		   id="ts.eclipse.ide.angular2.cli.wizards.generate.interface"
-	       name="%NewNgInterfaceWizard.name"
-		   class="ts.eclipse.ide.angular2.internal.cli.wizards.NewNgInterfaceWizard"
-		   category="ts.eclipse.ide.angular2.ui.new"
-		   icon="icons/full/obj16/interface.png">
-	       <description>%NewNgInterfaceWizard.desc</description>
+			id="ts.eclipse.ide.angular2.cli.wizards.generate.class"
+				name="%NewNgClassWizard.name"
+			class="ts.eclipse.ide.angular2.internal.cli.wizards.NewNgClassWizard"
+			category="ts.eclipse.ide.angular2.ui.new"
+			icon="icons/full/obj16/class.gif">
+				<description>%NewNgClassWizard.desc</description>
 		</wizard>
 		<wizard
-		   id="ts.eclipse.ide.angular2.cli.wizards.generate.enum"
-	       name="%NewNgEnumWizard.name"
-		   class="ts.eclipse.ide.angular2.internal.cli.wizards.NewNgEnumWizard"
-		   category="ts.eclipse.ide.angular2.ui.new"
-		   icon="icons/full/obj16/enum.gif">
-	       <description>%NewNgEnumWizard.desc</description>
-		</wizard>		
+			id="ts.eclipse.ide.angular2.cli.wizards.generate.interface"
+				name="%NewNgInterfaceWizard.name"
+			class="ts.eclipse.ide.angular2.internal.cli.wizards.NewNgInterfaceWizard"
+			category="ts.eclipse.ide.angular2.ui.new"
+			icon="icons/full/obj16/interface.png">
+				<description>%NewNgInterfaceWizard.desc</description>
+		</wizard>
+		<wizard
+			id="ts.eclipse.ide.angular2.cli.wizards.generate.enum"
+				name="%NewNgEnumWizard.name"
+			class="ts.eclipse.ide.angular2.internal.cli.wizards.NewNgEnumWizard"
+			category="ts.eclipse.ide.angular2.ui.new"
+			icon="icons/full/obj16/enum.gif">
+				<description>%NewNgEnumWizard.desc</description>
+		</wizard>
 	</extension>
-	
+
 	<!-- Provide AngularCLI wizards from the New contextual menu -->
 	<extension
 		point="org.eclipse.ui.navigator.navigatorContent">
@@ -163,7 +171,7 @@
 			wizardId="ts.eclipse.ide.angular2.cli.wizards.new.project">
 			<enablement>
 				<adapt type="org.eclipse.core.resources.IResource">
-					
+
 				</adapt>
 			</enablement>
 		</commonWizard>
@@ -174,8 +182,8 @@
 			<enablement>
 				<adapt type="org.eclipse.core.resources.IResource">
 					<test
-		            	forcePluginActivation="true"
-		            	property="ts.eclipse.ide.angular2.cli.isAngularCLIProject"/>
+									forcePluginActivation="true"
+									property="ts.eclipse.ide.angular2.cli.isAngularCLIProject"/>
 				</adapt>
 			</enablement>
 		</commonWizard>
@@ -186,8 +194,8 @@
 			<enablement>
 				<adapt type="org.eclipse.core.resources.IResource">
 					<test
-		            	forcePluginActivation="true"
-		            	property="ts.eclipse.ide.angular2.cli.isAngularCLIProject"/>
+									forcePluginActivation="true"
+									property="ts.eclipse.ide.angular2.cli.isAngularCLIProject"/>
 				</adapt>
 			</enablement>
 		</commonWizard>
@@ -198,8 +206,8 @@
 			<enablement>
 				<adapt type="org.eclipse.core.resources.IResource">
 					<test
-		            	forcePluginActivation="true"
-		            	property="ts.eclipse.ide.angular2.cli.isAngularCLIProject"/>
+									forcePluginActivation="true"
+									property="ts.eclipse.ide.angular2.cli.isAngularCLIProject"/>
 				</adapt>
 			</enablement>
 		</commonWizard>
@@ -210,8 +218,20 @@
 			<enablement>
 				<adapt type="org.eclipse.core.resources.IResource">
 					<test
-		            	forcePluginActivation="true"
-		            	property="ts.eclipse.ide.angular2.cli.isAngularCLIProject"/>
+									forcePluginActivation="true"
+									property="ts.eclipse.ide.angular2.cli.isAngularCLIProject"/>
+				</adapt>
+			</enablement>
+		</commonWizard>
+		<commonWizard
+			type="new"
+			menuGroupId="ts.eclipse.ide.angular2.cli.menu"
+			wizardId="ts.eclipse.ide.angular2.cli.wizards.generate.guard">
+			<enablement>
+				<adapt type="org.eclipse.core.resources.IResource">
+					<test
+									forcePluginActivation="true"
+									property="ts.eclipse.ide.angular2.cli.isAngularCLIProject"/>
 				</adapt>
 			</enablement>
 		</commonWizard>
@@ -222,8 +242,8 @@
 			<enablement>
 				<adapt type="org.eclipse.core.resources.IResource">
 					<test
-		            	forcePluginActivation="true"
-		            	property="ts.eclipse.ide.angular2.cli.isAngularCLIProject"/>
+									forcePluginActivation="true"
+									property="ts.eclipse.ide.angular2.cli.isAngularCLIProject"/>
 				</adapt>
 			</enablement>
 		</commonWizard>
@@ -234,11 +254,11 @@
 			<enablement>
 				<adapt type="org.eclipse.core.resources.IResource">
 					<test
-		            	forcePluginActivation="true"
-		            	property="ts.eclipse.ide.angular2.cli.isAngularCLIProject"/>
+									forcePluginActivation="true"
+									property="ts.eclipse.ide.angular2.cli.isAngularCLIProject"/>
 				</adapt>
 			</enablement>
-		</commonWizard>		
+		</commonWizard>
 		<commonWizard
 			type="new"
 			menuGroupId="ts.eclipse.ide.angular2.cli.menu"
@@ -246,8 +266,8 @@
 			<enablement>
 				<adapt type="org.eclipse.core.resources.IResource">
 					<test
-		            	forcePluginActivation="true"
-		            	property="ts.eclipse.ide.angular2.cli.isAngularCLIProject"/>
+									forcePluginActivation="true"
+									property="ts.eclipse.ide.angular2.cli.isAngularCLIProject"/>
 				</adapt>
 			</enablement>
 		</commonWizard>
@@ -258,237 +278,237 @@
 			<enablement>
 				<adapt type="org.eclipse.core.resources.IResource">
 					<test
-		            	forcePluginActivation="true"
-		            	property="ts.eclipse.ide.angular2.cli.isAngularCLIProject"/>
+									forcePluginActivation="true"
+									property="ts.eclipse.ide.angular2.cli.isAngularCLIProject"/>
 				</adapt>
 			</enablement>
 		</commonWizard>
 	</extension>
-	
- 	<!-- Preference Pages -->          		
- 	<extension
-         point="org.eclipse.ui.preferencePages">		      
-      <page
-            name="%AngularCLIPreferencePage.name"        
-            class="ts.eclipse.ide.angular2.internal.cli.preferences.AngularCLIPreferencePage"
-            id="ts.eclipse.ide.angular2.cli.preference.AngularCLIPreferencePage"
-            category="ts.eclipse.ide.angular2.preferences">
-      </page>
-   </extension>
-         		
-  <!-- Property Pages -->          		
-  <extension
-         point="org.eclipse.ui.propertyPages">		      
-      <page
-            name="%AngularCLIPreferencePage.name"        
-            class="ts.eclipse.ide.angular2.internal.cli.preferences.AngularCLIPreferencePage"
-            id="ts.eclipse.ide.angular2.cli.property.AngularCLIPreferencePage"
-            category="ts.eclipse.ide.angular2.preferences.Angular2MainPropertyPage" >
-         <enabledWhen>
-		     <adapt type="org.eclipse.core.resources.IProject">
-		     	  <test property="ts.eclipse.ide.angular2.core.isAngular2Project"
-		     	        forcePluginActivation="true" />
-		     </adapt>         
-         </enabledWhen>
-      </page>
-   </extension>
-   
-   <extension point="org.eclipse.core.runtime.preferences">
+
+	<!-- Preference Pages -->
+	<extension
+				point="org.eclipse.ui.preferencePages">
+			<page
+						name="%AngularCLIPreferencePage.name"
+						class="ts.eclipse.ide.angular2.internal.cli.preferences.AngularCLIPreferencePage"
+						id="ts.eclipse.ide.angular2.cli.preference.AngularCLIPreferencePage"
+						category="ts.eclipse.ide.angular2.preferences">
+			</page>
+	</extension>
+
+	<!-- Property Pages -->
+	<extension
+				point="org.eclipse.ui.propertyPages">
+			<page
+						name="%AngularCLIPreferencePage.name"
+						class="ts.eclipse.ide.angular2.internal.cli.preferences.AngularCLIPreferencePage"
+						id="ts.eclipse.ide.angular2.cli.property.AngularCLIPreferencePage"
+						category="ts.eclipse.ide.angular2.preferences.Angular2MainPropertyPage" >
+				<enabledWhen>
+				<adapt type="org.eclipse.core.resources.IProject">
+						<test property="ts.eclipse.ide.angular2.core.isAngular2Project"
+									forcePluginActivation="true" />
+				</adapt>
+				</enabledWhen>
+			</page>
+	</extension>
+
+	<extension point="org.eclipse.core.runtime.preferences">
 		<initializer
 			class="ts.eclipse.ide.angular2.internal.cli.preferences.AngularCLIPreferenceInitializer" />
 	</extension>
-	
+
 	<!-- Terminal Interpreter for angular-cli ng -->
-   <extension
-         point="ts.eclipse.ide.terminal.interpreter.commandInterpreterFactories">
-      <factory
-            id="ts.eclipse.ide.angular2.cli.terminal.NgCommandInterpreterFactory"
-            name="%interpreter.ng.name"
-            commands="ng"
-            class="ts.eclipse.ide.angular2.internal.cli.terminal.NgCommandInterpreterFactory">
-      </factory>
-   </extension>
-   	
-   	
-   <extension point="org.eclipse.core.expressions.propertyTesters">
-    	<propertyTester
-      		id="ts.eclipse.ide.angular2.cli"
-      		type="org.eclipse.core.resources.IResource"
-      		namespace="ts.eclipse.ide.angular2.cli"
-      		properties="isAngularCLIProject"
-      		class="ts.eclipse.ide.angular2.internal.cli.AngularCLIPropertyTester">
-    	</propertyTester>
-   </extension>
-   
+	<extension
+				point="ts.eclipse.ide.terminal.interpreter.commandInterpreterFactories">
+			<factory
+						id="ts.eclipse.ide.angular2.cli.terminal.NgCommandInterpreterFactory"
+						name="%interpreter.ng.name"
+						commands="ng"
+						class="ts.eclipse.ide.angular2.internal.cli.terminal.NgCommandInterpreterFactory">
+			</factory>
+	</extension>
+
+
+	<extension point="org.eclipse.core.expressions.propertyTesters">
+			<propertyTester
+					id="ts.eclipse.ide.angular2.cli"
+					type="org.eclipse.core.resources.IResource"
+					namespace="ts.eclipse.ide.angular2.cli"
+					properties="isAngularCLIProject"
+					class="ts.eclipse.ide.angular2.internal.cli.AngularCLIPropertyTester">
+			</propertyTester>
+	</extension>
+
 	<!-- Launch -->
 	<extension
-       point="org.eclipse.debug.core.launchConfigurationTypes">
-	    <launchConfigurationType
-	          id="ts.eclipse.ide.angular2.cli.angularCLILaunchConfigurationType"
-	          delegate="ts.eclipse.ide.angular2.internal.cli.launch.AngularCLILaunchConfigurationDelegate"
-	          modes="run"
-	          name="%AngularCLILaunchConfigurationDelegate.label">
-	    </launchConfigurationType>
-	</extension>	
-	
+			point="org.eclipse.debug.core.launchConfigurationTypes">
+			<launchConfigurationType
+						id="ts.eclipse.ide.angular2.cli.angularCLILaunchConfigurationType"
+						delegate="ts.eclipse.ide.angular2.internal.cli.launch.AngularCLILaunchConfigurationDelegate"
+						modes="run"
+						name="%AngularCLILaunchConfigurationDelegate.label">
+			</launchConfigurationType>
+	</extension>
+
 	<!-- Launch Shortcut -->
-   
-    <!-- "ng serve" launch shortcut-->
-	<extension
-         point="org.eclipse.debug.ui.launchShortcuts">
-     	 <shortcut
-            class="ts.eclipse.ide.angular2.internal.cli.launch.shortcut.NgServeLaunchShortcut"
-            description="%NgServeLaunchShortcut.description"
-            icon="icons/full/obj16/angular2.png"
-            id="ts.eclipse.ide.angular2.cli.launch.shortcut.NgServeLaunchShortcut"
-            label="%NgServeLaunchShortcut.label"
-            modes="run">
-           <contextualLaunch>   
-              <enablement>   
-                 <with   
-                       variable= "selection">   
-                    <count   
-                          value= "1" >   
-                    </count>   
-                    <iterate>
-                        <adapt type="org.eclipse.core.resources.IResource">
-                        	<or>
-	                          <test property="ts.eclipse.ide.angular2.cli.isAngularCLIProject" 
-	                           	  	  forcePluginActivation="true"/>
-	                           <test  forcePluginActivation="true"
-	                     			  property="org.eclipse.core.resources.name"
-	                     			  value="angular-cli.json"/>
-	                        </or>
-                        </adapt>
-                    </iterate>   
-                 </with>   
-              </enablement>   
-           </contextualLaunch> 
-    	</shortcut>
-    </extension>
 
-    <!-- "ng build" launch shortcut-->
+		<!-- "ng serve" launch shortcut-->
 	<extension
-         point="org.eclipse.debug.ui.launchShortcuts">
-     	 <shortcut
-            class="ts.eclipse.ide.angular2.internal.cli.launch.shortcut.NgBuildLaunchShortcut"
-            description="%NgBuildLaunchShortcut.description"
-            icon="icons/full/obj16/angular2.png"
-            id="ts.eclipse.ide.angular2.cli.launch.shortcut.NgBuildLaunchShortcut"
-            label="%NgBuildLaunchShortcut.label"
-            modes="run">
-           <contextualLaunch>   
-              <enablement>   
-                 <with   
-                       variable= "selection">   
-                    <count   
-                          value= "1" >   
-                    </count>   
-                    <iterate>
-                        <adapt  type="org.eclipse.core.resources.IResource">
-	                        <test property="ts.eclipse.ide.angular2.cli.isAngularCLIProject" 
-	                           	  forcePluginActivation="true"/>
-                        </adapt>
-                    </iterate>   
-                 </with>   
-              </enablement>   
-           </contextualLaunch> 
-    	</shortcut>
-    </extension>
+				point="org.eclipse.debug.ui.launchShortcuts">
+				<shortcut
+						class="ts.eclipse.ide.angular2.internal.cli.launch.shortcut.NgServeLaunchShortcut"
+						description="%NgServeLaunchShortcut.description"
+						icon="icons/full/obj16/angular2.png"
+						id="ts.eclipse.ide.angular2.cli.launch.shortcut.NgServeLaunchShortcut"
+						label="%NgServeLaunchShortcut.label"
+						modes="run">
+					<contextualLaunch>
+							<enablement>
+								<with
+											variable= "selection">
+										<count
+													value= "1" >
+										</count>
+										<iterate>
+												<adapt type="org.eclipse.core.resources.IResource">
+													<or>
+														<test property="ts.eclipse.ide.angular2.cli.isAngularCLIProject"
+																		forcePluginActivation="true"/>
+														<test  forcePluginActivation="true"
+															property="org.eclipse.core.resources.name"
+															value="angular-cli.json"/>
+													</or>
+												</adapt>
+										</iterate>
+								</with>
+							</enablement>
+					</contextualLaunch>
+			</shortcut>
+		</extension>
 
-    <!-- "ng test" launch shortcut-->
+		<!-- "ng build" launch shortcut-->
 	<extension
-         point="org.eclipse.debug.ui.launchShortcuts">
-     	 <shortcut
-            class="ts.eclipse.ide.angular2.internal.cli.launch.shortcut.NgTestLaunchShortcut"
-            description="%NgTestLaunchShortcut.description"
-            icon="icons/full/obj16/angular2.png"
-            id="ts.eclipse.ide.angular2.cli.launch.shortcut.NgTestLaunchShortcut"
-            label="%NgTestLaunchShortcut.label"
-            modes="run">
-           <contextualLaunch>   
-              <enablement>   
-                 <with   
-                       variable= "selection">   
-                    <count   
-                          value= "1" >   
-                    </count>   
-                    <iterate>
-                        <adapt  type="org.eclipse.core.resources.IResource">
-	                        <test property="ts.eclipse.ide.angular2.cli.isAngularCLIProject" 
-	                           	  forcePluginActivation="true"/>
-                        </adapt>
-                    </iterate>   
-                 </with>   
-              </enablement>   
-           </contextualLaunch> 
-    	</shortcut>
-    </extension>
+				point="org.eclipse.debug.ui.launchShortcuts">
+				<shortcut
+						class="ts.eclipse.ide.angular2.internal.cli.launch.shortcut.NgBuildLaunchShortcut"
+						description="%NgBuildLaunchShortcut.description"
+						icon="icons/full/obj16/angular2.png"
+						id="ts.eclipse.ide.angular2.cli.launch.shortcut.NgBuildLaunchShortcut"
+						label="%NgBuildLaunchShortcut.label"
+						modes="run">
+					<contextualLaunch>
+							<enablement>
+								<with
+											variable= "selection">
+										<count
+													value= "1" >
+										</count>
+										<iterate>
+												<adapt  type="org.eclipse.core.resources.IResource">
+													<test property="ts.eclipse.ide.angular2.cli.isAngularCLIProject"
+																forcePluginActivation="true"/>
+												</adapt>
+										</iterate>
+								</with>
+							</enablement>
+					</contextualLaunch>
+			</shortcut>
+		</extension>
 
-    <!-- "ng e2e" launch shortcut-->
+		<!-- "ng test" launch shortcut-->
 	<extension
-         point="org.eclipse.debug.ui.launchShortcuts">
-     	 <shortcut
-            class="ts.eclipse.ide.angular2.internal.cli.launch.shortcut.NgE2eLaunchShortcut"
-            description="%NgE2eLaunchShortcut.description"
-            icon="icons/full/obj16/angular2.png"
-            id="ts.eclipse.ide.angular2.cli.launch.shortcut.NgE2eLaunchShortcut"
-            label="%NgE2eLaunchShortcut.label"
-            modes="run">
-           <contextualLaunch>   
-              <enablement>   
-                 <with   
-                       variable= "selection">   
-                    <count   
-                          value= "1" >   
-                    </count>   
-                    <iterate>
-                        <adapt  type="org.eclipse.core.resources.IResource">
-	                        <test property="ts.eclipse.ide.angular2.cli.isAngularCLIProject" 
-	                           	  forcePluginActivation="true"/>
-                        </adapt>
-                    </iterate>   
-                 </with>   
-              </enablement>   
-           </contextualLaunch>
-           <configurationType
-              id="org.eclipse.angularjs.core.protractor">
-           </configurationType> 
-    	</shortcut>
-    </extension>
-    
-    <extension point="org.eclipse.debug.ui.launchConfigurationTypeImages">
-     <launchConfigurationTypeImage
-        icon="icons/full/obj16/angular2.png"
-        configTypeID="ts.eclipse.ide.angular2.cli.angularCLILaunchConfigurationType"
-        id="ts.eclipse.ide.angular2.cli.angularCLILaunchConfigurationTypeImage">
-     </launchConfigurationTypeImage>
-    </extension>
-  
-  <extension point="org.eclipse.debug.ui.launchConfigurationTabGroups">
-    <launchConfigurationTabGroup
-        type="ts.eclipse.ide.angular2.cli.angularCLILaunchConfigurationType"
-        class="ts.eclipse.ide.angular2.internal.cli.launch.ui.AngularCLILaunchTabGroup"
-        id="ts.eclipse.ide.angular2.cli.tabgroup">
-    </launchConfigurationTabGroup>
-  </extension>
-   
+				point="org.eclipse.debug.ui.launchShortcuts">
+				<shortcut
+						class="ts.eclipse.ide.angular2.internal.cli.launch.shortcut.NgTestLaunchShortcut"
+						description="%NgTestLaunchShortcut.description"
+						icon="icons/full/obj16/angular2.png"
+						id="ts.eclipse.ide.angular2.cli.launch.shortcut.NgTestLaunchShortcut"
+						label="%NgTestLaunchShortcut.label"
+						modes="run">
+					<contextualLaunch>
+							<enablement>
+								<with
+											variable= "selection">
+										<count
+													value= "1" >
+										</count>
+										<iterate>
+												<adapt  type="org.eclipse.core.resources.IResource">
+													<test property="ts.eclipse.ide.angular2.cli.isAngularCLIProject"
+																forcePluginActivation="true"/>
+												</adapt>
+										</iterate>
+								</with>
+							</enablement>
+					</contextualLaunch>
+			</shortcut>
+		</extension>
+
+		<!-- "ng e2e" launch shortcut-->
+	<extension
+				point="org.eclipse.debug.ui.launchShortcuts">
+				<shortcut
+						class="ts.eclipse.ide.angular2.internal.cli.launch.shortcut.NgE2eLaunchShortcut"
+						description="%NgE2eLaunchShortcut.description"
+						icon="icons/full/obj16/angular2.png"
+						id="ts.eclipse.ide.angular2.cli.launch.shortcut.NgE2eLaunchShortcut"
+						label="%NgE2eLaunchShortcut.label"
+						modes="run">
+					<contextualLaunch>
+							<enablement>
+								<with
+											variable= "selection">
+										<count
+													value= "1" >
+										</count>
+										<iterate>
+												<adapt  type="org.eclipse.core.resources.IResource">
+													<test property="ts.eclipse.ide.angular2.cli.isAngularCLIProject"
+																forcePluginActivation="true"/>
+												</adapt>
+										</iterate>
+								</with>
+							</enablement>
+					</contextualLaunch>
+					<configurationType
+							id="org.eclipse.angularjs.core.protractor">
+					</configurationType>
+			</shortcut>
+		</extension>
+
+		<extension point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+		<launchConfigurationTypeImage
+				icon="icons/full/obj16/angular2.png"
+				configTypeID="ts.eclipse.ide.angular2.cli.angularCLILaunchConfigurationType"
+				id="ts.eclipse.ide.angular2.cli.angularCLILaunchConfigurationTypeImage">
+		</launchConfigurationTypeImage>
+		</extension>
+
+	<extension point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+		<launchConfigurationTabGroup
+				type="ts.eclipse.ide.angular2.cli.angularCLILaunchConfigurationType"
+				class="ts.eclipse.ide.angular2.internal.cli.launch.ui.AngularCLILaunchTabGroup"
+				id="ts.eclipse.ide.angular2.cli.tabgroup">
+		</launchConfigurationTabGroup>
+	</extension>
+
 	<!-- Provide AngularCLI wizards for the Angular2 perspective  -->
-	<extension point="org.eclipse.ui.perspectiveExtensions"> 
-        <perspectiveExtension targetID="ts.eclipse.ide.angular2.ui.perspectives.Angular2Perspective">
-        
-            <newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.new.project"/>
-            <newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.class"/>
-            <newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.component"/>
-            <newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.directive"/>
-            <newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.enum"/>
-            <newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.interface"/>            
-            <newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.module"/>
-         	<newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.interface"/>         	
-            <newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.pipe"/>
-            <newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.service"/>
-        
-        </perspectiveExtension> 
-    </extension>
-   
-</plugin>        
+	<extension point="org.eclipse.ui.perspectiveExtensions">
+				<perspectiveExtension targetID="ts.eclipse.ide.angular2.ui.perspectives.Angular2Perspective">
+
+						<newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.new.project"/>
+						<newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.class"/>
+						<newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.component"/>
+						<newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.directive"/>
+						<newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.enum"/>
+						<newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.interface"/>
+						<newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.module"/>
+					<newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.interface"/>
+						<newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.pipe"/>
+						<newWizardShortcut id="ts.eclipse.ide.angular2.cli.wizards.generate.service"/>
+
+				</perspectiveExtension>
+		</extension>
+
+</plugin>

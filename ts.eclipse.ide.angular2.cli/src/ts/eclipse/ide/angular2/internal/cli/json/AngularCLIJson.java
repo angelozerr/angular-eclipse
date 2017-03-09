@@ -169,6 +169,8 @@ public class AngularCLIJson {
 				return spec.isPipe();
 			case SERVICE:
 				return spec.isService();
+			case GUARD:
+				return spec.isGuard();
 			case CLASS:
 				return spec.isClass();
 			//case INTERFACE:
@@ -253,5 +255,13 @@ public class AngularCLIJson {
 
 	public String getServiceSpecFileName(String name) {
 		return normalize(name).concat(".service.spec.ts");
+	}
+
+	public String getGuardFileName(String name) {
+		return normalize(name).concat(".guard.ts");
+	}
+
+	public String getGuardSpecFileName(String name) {
+		return normalize(name).concat(".guard.spec.ts");
 	}
 }

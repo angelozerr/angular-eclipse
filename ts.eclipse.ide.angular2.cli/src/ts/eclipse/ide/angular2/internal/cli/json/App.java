@@ -18,8 +18,8 @@ package ts.eclipse.ide.angular2.internal.cli.json;
 public class App {
 
 	private String root;
-
 	private String prefix;
+	private String outDir;
 
 	public String getRoot() {
 		return root;
@@ -29,4 +29,7 @@ public class App {
 		return prefix;
 	}
 
+	public String getOutDir() {
+		return outDir;
+	}
 }

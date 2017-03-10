@@ -39,6 +39,7 @@ public class AngularCLIJson {
 
 	private static final String DEFAULT_ROOT = "src";
 	private static final String APP = "app";
+	private static final String DEFAULT_OUT_DIR = "dist";
 
 	private Defaults defaults;
 	private List<App> apps;
@@ -173,8 +174,8 @@ public class AngularCLIJson {
 				return spec.isGuard();
 			case CLASS:
 				return spec.isClass();
-			//case INTERFACE:
-			//case ENUM:
+			// case INTERFACE:
+			// case ENUM:
 			default:
 				return false;
 			}
@@ -263,5 +264,23 @@ public class AngularCLIJson {
 
 	public String getGuardSpecFileName(String name) {
 		return normalize(name).concat(".guard.spec.ts");
+	}
+
+	public String getOutDir() {
+		// Search root from the angular-cli.json apps[0].outDir
+		String outDir = getOutDirFromApps();
+		if (StringUtils.isEmpty(outDir)) {
+			// Not found, use default "dist" value
+			outDir = DEFAULT_OUT_DIR;
+		}
+		return outDir;
+	}
+
+	private String getOutDirFromApps() {
+		List<App> apps = getApps();
+		if (apps == null || apps.size() < 1) {
+			return null;
+		}
+		return apps.get(0).getOutDir();
 	}
 }

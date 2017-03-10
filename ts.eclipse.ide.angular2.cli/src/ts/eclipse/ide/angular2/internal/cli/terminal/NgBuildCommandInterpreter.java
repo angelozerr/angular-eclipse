@@ -15,17 +15,19 @@ import java.util.List;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.progress.UIJob;
 
 import ts.eclipse.ide.angular2.cli.AngularCLIPlugin;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
+import ts.eclipse.ide.angular2.internal.cli.AngularCLIProject;
+import ts.eclipse.ide.angular2.internal.cli.json.AngularCLIJson;
+import ts.eclipse.ide.core.utils.WorkbenchResourceUtil;
 import ts.eclipse.ide.terminal.interpreter.AbstractCommandInterpreter;
 import ts.eclipse.ide.terminal.interpreter.UIInterpreterHelper;
 
@@ -35,22 +37,21 @@ import ts.eclipse.ide.terminal.interpreter.UIInterpreterHelper;
  */
 public class NgBuildCommandInterpreter extends AbstractCommandInterpreter {
 
-	private static final String BUILT_PROJECT_SUCCESSFULLY_STORED_IN = "Built project successfully. Stored in \"";
-	private String distDir;
-
 	public NgBuildCommandInterpreter(List<String> parameters, String workingDir) {
 		super(workingDir);
 	}
 
 	@Override
 	public void execute(String newWorkingDir) {
-		final IContainer[] c = ResourcesPlugin.getWorkspace().getRoot().findContainersForLocation(getWorkingDirPath());
-		if (c != null && c.length > 0) {
+		IContainer container = WorkbenchResourceUtil.findContainerFromWorkspace(getWorkingDir());
+		if (container != null) {
+			IProject project = container.getProject();
 			new UIJob(AngularCLIMessages.NgBuildCommandInterpreter_jobName) {
 				@Override
 				public IStatus runInUIThread(IProgressMonitor monitor) {
 					try {
-						IFolder distFolder = c[0].getFolder(new Path(distDir));
+						AngularCLIJson cliJson = AngularCLIProject.getAngularCLIProject(project).getAngularCLIJson();
+						IFolder distFolder = project.getFolder(cliJson.getOutDir());
 						distFolder.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 						if (distFolder.exists()) {
 							// Select dist folder in the Project Explorer.
@@ -68,10 +69,6 @@ public class NgBuildCommandInterpreter extends AbstractCommandInterpreter {
 
 	@Override
 	public void onTrace(String trace) {
-		if (trace.startsWith(BUILT_PROJECT_SUCCESSFULLY_STORED_IN)) {
-			distDir = trace.substring(BUILT_PROJECT_SUCCESSFULLY_STORED_IN.length(), trace.length());
-			distDir = distDir.substring(0, distDir.indexOf("\""));
-		}
 	}
 
 }

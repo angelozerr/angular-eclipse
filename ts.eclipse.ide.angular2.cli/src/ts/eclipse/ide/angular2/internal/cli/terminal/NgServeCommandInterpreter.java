@@ -38,8 +38,13 @@ public class NgServeCommandInterpreter extends AbstractCommandInterpreter {
 	public void onTrace(String line) {
 		int startIndex = line.indexOf(SERVING_ON);
 		if (startIndex != -1) {
+			// ** NG Live Development Server is running on http://localhost:4200. **
+			startIndex += SERVING_ON.length();
 			int endIndex = line.indexOf(".", startIndex);
-			final String serverURL = line.substring(startIndex + SERVING_ON.length(), endIndex != -1 ? endIndex : line.length())
+			if (endIndex == -1) {
+				endIndex = line.indexOf(" ", startIndex);
+			}
+			final String serverURL = line.substring(startIndex, endIndex != -1 ? endIndex : line.length())
 					.trim();
 			// Open a Web Browser with the given server URL
 			new NgServeJob(serverURL).schedule();

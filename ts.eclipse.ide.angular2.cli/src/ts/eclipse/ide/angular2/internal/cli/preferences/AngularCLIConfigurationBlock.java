@@ -65,6 +65,9 @@ public class AngularCLIConfigurationBlock extends OptionsConfigurationBlock {
 	private static final Key PREF_NG_CUSTOM_FILE_PATH = getAngularCliKey(
 			AngularCLIPreferenceConstants.NG_CUSTOM_FILE_PATH);
 
+	private static final Key PREF_EXECUTE_NG_WITH_FILE = getAngularCliKey(
+			AngularCLIPreferenceConstants.EXECUTE_NG_WITH_FILE);
+
 	private Text cliPath;
 	private Text cliVersion;
 	private final UIJob ngVersionJob;
@@ -98,7 +101,7 @@ public class AngularCLIConfigurationBlock extends OptionsConfigurationBlock {
 	}
 
 	private static Key[] getKeys() {
-		return new Key[] { PREF_NG_USE_GLOBAL_INSTALLATION, PREF_NG_CUSTOM_FILE_PATH };
+		return new Key[] { PREF_NG_USE_GLOBAL_INSTALLATION, PREF_NG_CUSTOM_FILE_PATH, PREF_EXECUTE_NG_WITH_FILE };
 	}
 
 	protected final static Key getAngularCliKey(String key) {
@@ -143,7 +146,8 @@ public class AngularCLIConfigurationBlock extends OptionsConfigurationBlock {
 
 		createNgUseGlobalInstallation(group);
 		createNgUseCustomFile(group);
-
+		createExecuteNgWithFile(group);
+		
 		updateComboBoxes();
 	}
 
@@ -165,7 +169,7 @@ public class AngularCLIConfigurationBlock extends OptionsConfigurationBlock {
 	}
 
 	private void createNgUseCustomFile(Composite parent) {
-		// Create "Installed TypeScript" checkbox
+		// Create "Use ng custom file" field
 		Button ngUseCustomFile = addRadioBox(parent,
 				AngularCLIMessages.AngularCLIConfigurationBlock_ngUseCustomFile_label, PREF_NG_USE_GLOBAL_INSTALLATION,
 				new String[] { "false", "false" }, 0);
@@ -182,6 +186,13 @@ public class AngularCLIConfigurationBlock extends OptionsConfigurationBlock {
 
 		// Create Browse buttons.
 		browseButtons = new BrowseButtonsComposite(parent, ngCustomFilePath, getProject(), SWT.NONE);
+	}
+
+	private void createExecuteNgWithFile(Composite parent) {
+		// Create "Execute Ng With File" checkbox
+		addCheckBox(parent,
+				AngularCLIMessages.AngularCLIConfigurationBlock_executeNgWithFile_label, PREF_EXECUTE_NG_WITH_FILE,
+				new String[] { "true", "true" }, 0);
 	}
 
 	private void createCLIInfo(Composite parent) {

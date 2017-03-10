@@ -55,21 +55,23 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 	public void launch(ILaunchConfiguration configuration, String arg1, ILaunch launch, IProgressMonitor monitor)
 			throws CoreException {
 		String ngFilePath = configuration.getAttribute(AngularCLILaunchConstants.NG_FILE_PATH, (String) null);
+		boolean executeNgWithFile = configuration.getAttribute(AngularCLILaunchConstants.EXECUTE_NG_WITH_FILE,
+				(Boolean) false);
 		String nodeFilePath = configuration.getAttribute(AngularCLILaunchConstants.NODE_FILE_PATH, (String) null);
 		IPath workingDir = ExternalToolsCoreUtil.getWorkingDirectory(configuration);
 		String operation = configuration.getAttribute(AngularCLILaunchConstants.OPERATION, (String) null);
-		String[] options = getOptions(configuration.getAttribute(AngularCLILaunchConstants.OPERATION_PARAMETERS, (String) null));
+		String[] options = getOptions(
+				configuration.getAttribute(AngularCLILaunchConstants.OPERATION_PARAMETERS, (String) null));
 		if (monitor.isCanceled()) {
 			return;
 		}
 
 		boolean withTerminal = true;
 		if (withTerminal) {
-			openWithTerminal(ngFilePath, nodeFilePath, workingDir, operation, options, monitor);
+			openWithTerminal(ngFilePath, executeNgWithFile, nodeFilePath, workingDir, operation, options, monitor);
 		} else {
-			openWithConsole(ngFilePath, nodeFilePath, workingDir, operation, options, monitor);
+			openWithConsole(ngFilePath, executeNgWithFile, nodeFilePath, workingDir, operation, options, monitor);
 		}
-
 	}
 
 	private String[] getOptions(String options) {
@@ -79,8 +81,8 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 		return options.split(" ");
 	}
 
-	private void openWithTerminal(String ngFilePath, String nodeFilePath, IPath workingDir, String operation,
-			String[] options, IProgressMonitor monitor) throws CoreException {
+	private void openWithTerminal(String ngFilePath, boolean executeNgWithFile, String nodeFilePath, IPath workingDir,
+			String operation, String[] options, IProgressMonitor monitor) throws CoreException {
 
 		// Prepare terminal properties
 		String terminalId = getTerminalId(workingDir, operation);
@@ -94,7 +96,7 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 				"org.eclipse.tm.terminal.connector.local.LocalConnector");
 
 		// Create ng command
-		StringBuilder command = new StringBuilder(CLIProcessHelper.NG_FILENAME);
+		StringBuilder command = new StringBuilder(getNg(ngFilePath, executeNgWithFile));
 		command.append(" ");
 		command.append(operation);
 		for (int i = 0; i < options.length; i++) {
@@ -117,6 +119,18 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 
 		// Open terminal and execute ng command.
 		CommandTerminalService.getInstance().executeCommand(command.toString(), terminalId, properties, done);
+	}
+
+	private String getNg(String ngFilePath, boolean executeNgWithFile) {
+		if (executeNgWithFile) {
+			StringBuilder ng = new StringBuilder(ngFilePath);
+			if ((!ngFilePath.endsWith("/") || ngFilePath.endsWith("\\"))) {
+				ng.append(File.separatorChar);
+			}
+			ng.append(CLIProcessHelper.getNgFileName());
+			return ng.toString();
+		}
+		return CLIProcessHelper.NG_FILENAME;
 	}
 
 	private String getTerminalId(IPath workingDir, String operation) {
@@ -162,8 +176,8 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 		return fileOrDir;
 	}
 
-	private void openWithConsole(String ngFilePath, String nodeFilePath, IPath workingDir, String operation,
-			String[] options, IProgressMonitor monitor) throws CoreException {
+	private void openWithConsole(String ngFilePath, boolean executeNgWithFile, String nodeFilePath, IPath workingDir,
+			String operation, String[] options, IProgressMonitor monitor) throws CoreException {
 		CLICommand command = createCommand(ngFilePath, nodeFilePath, operation, options);
 		IPath wd = workingDir;
 

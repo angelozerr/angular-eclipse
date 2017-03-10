@@ -36,5 +36,6 @@ public class AngularCLIPreferenceInitializer extends AbstractPreferenceInitializ
 	private void initializeCliPreferences(IEclipsePreferences node) {
 		node.putBoolean(AngularCLIPreferenceConstants.NG_USE_GLOBAL_INSTALLATION, true);
 		node.put(AngularCLIPreferenceConstants.NG_CUSTOM_FILE_PATH, "");
+		node.putBoolean(AngularCLIPreferenceConstants.EXECUTE_NG_WITH_FILE, false);
 	}
 }

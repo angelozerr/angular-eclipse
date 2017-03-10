@@ -25,6 +25,7 @@ import org.eclipse.debug.ui.DebugUITools;
 import ts.eclipse.ide.angular2.cli.NgCommand;
 import ts.eclipse.ide.angular2.cli.launch.AngularCLILaunchConstants;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIProject;
+import ts.eclipse.ide.angular2.internal.cli.AngularCLIProjectSettings;
 import ts.eclipse.ide.angular2.internal.cli.Trace;
 import ts.eclipse.ide.core.TypeScriptCorePlugin;
 import ts.eclipse.ide.core.utils.TypeScriptResourceUtil;
@@ -92,9 +93,11 @@ public class AngularCLILaunchHelper {
 
 	public static void updateNgFilePath(IProject project, ILaunchConfigurationWorkingCopy newConfiguration)
 			throws CoreException {
-		File ngFile = AngularCLIProject.getAngularCLIProject(project).getSettings().getNgFile();
+		AngularCLIProjectSettings  settings = AngularCLIProject.getAngularCLIProject(project).getSettings();
+		File ngFile = settings.getNgFile();
 		if (ngFile != null) {
 			newConfiguration.setAttribute(AngularCLILaunchConstants.NG_FILE_PATH, FileUtils.getPath(ngFile));
+			newConfiguration.setAttribute(AngularCLILaunchConstants.EXECUTE_NG_WITH_FILE, settings.isExecuteNgWithFile());
 		}
 	}
 

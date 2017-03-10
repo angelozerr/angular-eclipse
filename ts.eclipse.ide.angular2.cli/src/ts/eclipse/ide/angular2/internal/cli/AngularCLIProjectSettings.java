@@ -29,4 +29,8 @@ public class AngularCLIProjectSettings extends AbstractTypeScriptSettings {
 		return null;
 	}
 
+	public boolean isExecuteNgWithFile() {
+		return super.getBooleanPreferencesValue(AngularCLIPreferenceConstants.EXECUTE_NG_WITH_FILE, false);
+	}
+
 }

@@ -29,6 +29,7 @@ public class AngularCLIMessages extends NLS {
 	public static String AngularCLIConfigurationBlock_cli_group_label;
 	public static String AngularCLIConfigurationBlock_ngUseGlobalInstallation_label;
 	public static String AngularCLIConfigurationBlock_ngUseCustomFile_label;
+	public static String AngularCLIConfigurationBlock_executeNgWithFile_label;
 	public static String AngularCLIConfigurationBlock_cliPath_label;
 	public static String AngularCLIConfigurationBlock_cliVersion_label;
 	public static String AngularCLIConfigurationBlock_ngGlobal_notFound_error;

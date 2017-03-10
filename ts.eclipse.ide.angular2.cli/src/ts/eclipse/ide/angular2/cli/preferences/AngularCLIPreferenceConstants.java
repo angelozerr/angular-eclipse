@@ -18,5 +18,6 @@ public class AngularCLIPreferenceConstants {
 
 	public static final String NG_USE_GLOBAL_INSTALLATION = "ngUseGlobalInstallation"; //$NON-NLS-1$
 	public static final String NG_CUSTOM_FILE_PATH = "ngCustomFilePath"; //$NON-NLS-1$
+	public static final String EXECUTE_NG_WITH_FILE = "executeNgWithFile"; //$NON-NLS-1$
 
 }

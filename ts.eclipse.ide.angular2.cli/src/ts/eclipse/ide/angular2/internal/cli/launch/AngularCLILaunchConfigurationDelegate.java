@@ -35,12 +35,14 @@ import org.eclipse.wst.jsdt.js.cli.core.CLIStreamListener;
 
 import ts.eclipse.ide.angular2.cli.NgCommand;
 import ts.eclipse.ide.angular2.cli.launch.AngularCLILaunchConstants;
+import ts.eclipse.ide.angular2.cli.utils.CLIProcessHelper;
 import ts.eclipse.ide.angular2.internal.cli.jobs.NgProjectJob;
 import ts.eclipse.ide.angular2.internal.cli.jsdt.CLI;
 import ts.eclipse.ide.core.utils.WorkbenchResourceUtil;
 import ts.eclipse.ide.terminal.interpreter.CommandTerminalService;
 import ts.eclipse.ide.terminal.interpreter.EnvPath;
 import ts.utils.FileUtils;
+import ts.utils.StringUtils;
 
 /**
  * Launch configuration which consumes angular-cli to generate project,
@@ -56,7 +58,7 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 		String nodeFilePath = configuration.getAttribute(AngularCLILaunchConstants.NODE_FILE_PATH, (String) null);
 		IPath workingDir = ExternalToolsCoreUtil.getWorkingDirectory(configuration);
 		String operation = configuration.getAttribute(AngularCLILaunchConstants.OPERATION, (String) null);
-		String[] options = configuration.getAttribute(AngularCLILaunchConstants.OPERATION_PARAMETERS, "").split(" ");
+		String[] options = getOptions(configuration.getAttribute(AngularCLILaunchConstants.OPERATION_PARAMETERS, (String) null));
 		if (monitor.isCanceled()) {
 			return;
 		}
@@ -68,6 +70,13 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 			openWithConsole(ngFilePath, nodeFilePath, workingDir, operation, options, monitor);
 		}
 
+	}
+
+	private String[] getOptions(String options) {
+		if (options == null) {
+			return StringUtils.EMPTY_STRING;
+		}
+		return options.split(" ");
 	}
 
 	private void openWithTerminal(String ngFilePath, String nodeFilePath, IPath workingDir, String operation,
@@ -85,7 +94,7 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 				"org.eclipse.tm.terminal.connector.local.LocalConnector");
 
 		// Create ng command
-		StringBuilder command = new StringBuilder("ng");
+		StringBuilder command = new StringBuilder(CLIProcessHelper.NG_FILENAME);
 		command.append(" ");
 		command.append(operation);
 		for (int i = 0; i < options.length; i++) {
@@ -206,7 +215,7 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 			}
 			return new CLICommand("node", ngFilePath, operation.toLowerCase(), options);
 		}
-		return new CLICommand("ng", operation.toLowerCase(), null, options);
+		return new CLICommand(CLIProcessHelper.NG_FILENAME, operation.toLowerCase(), null, options);
 	}
 
 	private CLIStreamListener createListener(NgCommand ngCommand, IProject project, String[] options) {

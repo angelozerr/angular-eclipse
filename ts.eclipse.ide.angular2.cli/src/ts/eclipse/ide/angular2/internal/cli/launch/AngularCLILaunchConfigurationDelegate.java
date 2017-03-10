@@ -125,7 +125,13 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 		if (executeNgWithFile) {
 			StringBuilder ng = new StringBuilder(ngFilePath);
 			if ((!ngFilePath.endsWith("/") || ngFilePath.endsWith("\\"))) {
-				ng.append(File.separatorChar);
+				if (ngFilePath.contains("/")) {
+					ng.append("/");
+				} else if (ngFilePath.contains("\\")) {
+					ng.append("\\");
+				} else {
+					ng.append(File.separatorChar);
+				}
 			}
 			ng.append(CLIProcessHelper.getNgFileName());
 			return ng.toString();

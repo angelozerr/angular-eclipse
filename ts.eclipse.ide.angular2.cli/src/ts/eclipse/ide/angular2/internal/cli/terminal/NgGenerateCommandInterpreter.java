@@ -12,7 +12,7 @@
 package ts.eclipse.ide.angular2.internal.cli.terminal;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -28,15 +28,12 @@ public class NgGenerateCommandInterpreter extends AbstractCommandInterpreter {
 
 	private static final String CREATE = "create";
 
-	private final Collection<String> fileNames;
-
+	private final List<String> fileNames;
 	private final String blueprint;
-	private boolean lastLineCreate;
 
 	public NgGenerateCommandInterpreter(String blueprint, String workingDir) {
 		super(workingDir);
 		this.fileNames = new ArrayList<String>();
-		this.lastLineCreate = false;
 		this.blueprint = blueprint;
 	}
 
@@ -55,12 +52,13 @@ public class NgGenerateCommandInterpreter extends AbstractCommandInterpreter {
 	@Override
 	public void onTrace(String line) {
 		line = line.trim();
-		if (lastLineCreate) {
-			String filename = line.trim();
-			fileNames.add(filename);
-			lastLineCreate = false;
+		if (line.startsWith(CREATE)) {
+			fileNames.add("");
 		} else {
-			lastLineCreate = line.startsWith(CREATE);
+			if (!fileNames.isEmpty()) {
+				int index = fileNames.size() - 1;
+				fileNames.set(index, fileNames.get(index) + line.trim());
+			}
 		}
 	}
 

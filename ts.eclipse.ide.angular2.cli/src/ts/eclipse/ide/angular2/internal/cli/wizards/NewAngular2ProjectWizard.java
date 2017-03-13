@@ -26,9 +26,14 @@ import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IWorkbench;
 
 import ts.eclipse.ide.angular2.cli.NgCommand;
 import ts.eclipse.ide.angular2.cli.launch.AngularCLILaunchConstants;
+import ts.eclipse.ide.angular2.internal.cli.AngularCLIImageResource;
+import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
 import ts.eclipse.ide.angular2.internal.cli.launch.AngularCLILaunchHelper;
 import ts.eclipse.ide.ui.wizards.AbstractNewProjectWizard;
 
@@ -59,15 +64,31 @@ import ts.eclipse.ide.ui.wizards.AbstractNewProjectWizard;
  */
 public class NewAngular2ProjectWizard extends AbstractNewProjectWizard {
 
+	private static final String WIZARD_NAME = "NewAngular2ProjectWizard";
+
 	private static final String ANGULAR_CLI_LAUNCH_NAME = "angular-cli";
-	
+
 	private NewAngular2ProjectParamsWizardPage paramsPage;
 
 	/**
 	 * Creates a wizard for creating a new project resource in the workspace.
 	 */
 	public NewAngular2ProjectWizard() {
-		super("NewAngular2ProjectWizard");
+		super(WIZARD_NAME, AngularCLIMessages.NewAngular2ProjectWizard_newProjectTitle,
+				AngularCLIMessages.NewAngular2ProjectWizard_newProjectDescription);
+	}
+
+	@Override
+	public void init(IWorkbench workbench, IStructuredSelection currentSelection) {
+		super.init(workbench, currentSelection);
+		setNeedsProgressMonitor(true);
+		setWindowTitle(AngularCLIMessages.NewAngular2ProjectWizard_windowTitle);
+	}
+
+	@Override
+	protected void initializeDefaultPageImageDescriptor() {
+		ImageDescriptor desc = AngularCLIImageResource.getImageDescriptor(AngularCLIImageResource.IMG_ANGULAR2_WIZBAN);
+		setDefaultPageImageDescriptor(desc);
 	}
 
 	@Override

@@ -16,6 +16,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.ControlEnableState;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
@@ -26,11 +27,11 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.preferences.IWorkbenchPreferenceContainer;
-import org.eclipse.ui.progress.UIJob;
 
 import ts.eclipse.ide.angular2.cli.AngularCLIPlugin;
 import ts.eclipse.ide.angular2.cli.preferences.AngularCLIPreferenceConstants;
@@ -70,30 +71,41 @@ public class AngularCLIConfigurationBlock extends OptionsConfigurationBlock {
 
 	private Text cliPath;
 	private Text cliVersion;
-	private final UIJob ngVersionJob;
+	private final Job ngVersionJob;
 	private File ngFile;
 
 	public AngularCLIConfigurationBlock(IStatusChangeListener context, IProject project,
 			IWorkbenchPreferenceContainer container) {
 		super(context, project, getKeys(), container);
-		ngVersionJob = new UIJob("") {
+		ngVersionJob = new Job(AngularCLIMessages.AngularCLIConfigurationBlock_ValidatingNgCli_jobName) {
 
 			@Override
-			public IStatus runInUIThread(IProgressMonitor monitor) {
-				String version = CLIProcessHelper.getNgVersion(ngFile);
-				CLIStatus status = null;
-				if (StringUtils.isEmpty(version)) {
-					// ERROR: the file path is not a ng
-					status = new CLIStatus(null,
-							NLS.bind(AngularCLIMessages.AngularCLIConfigurationBlock_ngCustomFile_invalid_error,
-									FileUtils.getPath(ngFile)));
-					cliPath.setText("");
-					cliVersion.setText("");
-				} else {
-					status = new CLIStatus(ngFile, null);
-					cliVersion.setText(version);
+			protected IStatus run(IProgressMonitor monitor) {
+				if (monitor.isCanceled()) {
+					return Status.CANCEL_STATUS;
 				}
-				fContext.statusChanged(status);
+				final String version = CLIProcessHelper.getNgVersion(ngFile);
+				final CLIStatus status = StringUtils.isEmpty(version) ? new CLIStatus(null,
+						NLS.bind(AngularCLIMessages.AngularCLIConfigurationBlock_ngCustomFile_invalid_error,
+								FileUtils.getPath(ngFile)))
+						: new CLIStatus(ngFile, null);
+				Display.getDefault().asyncExec(new Runnable() {
+
+					@Override
+					public void run() {
+						if (cliVersion.isDisposed()) {
+							return;
+						}
+						if (!StringUtils.isEmpty(version)) {
+							cliVersion.setText(version);
+						} else {
+							cliPath.setText("");
+							cliVersion.setText("");
+
+						}
+						fContext.statusChanged(status);
+					}
+				});
 				return Status.OK_STATUS;
 			}
 		};
@@ -147,7 +159,7 @@ public class AngularCLIConfigurationBlock extends OptionsConfigurationBlock {
 		createNgUseGlobalInstallation(group);
 		createNgUseCustomFile(group);
 		createExecuteNgWithFile(group);
-		
+
 		updateComboBoxes();
 	}
 
@@ -190,9 +202,8 @@ public class AngularCLIConfigurationBlock extends OptionsConfigurationBlock {
 
 	private void createExecuteNgWithFile(Composite parent) {
 		// Create "Execute Ng With File" checkbox
-		addCheckBox(parent,
-				AngularCLIMessages.AngularCLIConfigurationBlock_executeNgWithFile_label, PREF_EXECUTE_NG_WITH_FILE,
-				new String[] { "true", "true" }, 0);
+		addCheckBox(parent, AngularCLIMessages.AngularCLIConfigurationBlock_executeNgWithFile_label,
+				PREF_EXECUTE_NG_WITH_FILE, new String[] { "true", "true" }, 0);
 	}
 
 	private void createCLIInfo(Composite parent) {
@@ -336,4 +347,11 @@ public class AngularCLIConfigurationBlock extends OptionsConfigurationBlock {
 		browseButtons.setEnabled(!global);
 	}
 
+	@Override
+	public void dispose() {
+		super.dispose();
+		if (ngVersionJob != null) {
+			ngVersionJob.cancel();
+		}
+	}
 }

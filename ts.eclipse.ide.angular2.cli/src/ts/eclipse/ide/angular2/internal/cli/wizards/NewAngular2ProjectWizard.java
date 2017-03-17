@@ -140,7 +140,7 @@ public class NewAngular2ProjectWizard extends AbstractNewProjectWizard {
 							AngularCLILaunchHelper.updateNodeFilePath(newProjectHandle, newConfiguration);
 							AngularCLILaunchHelper.updateNgFilePath(newProjectHandle, newConfiguration);
 							newConfiguration.setAttribute(AngularCLILaunchConstants.WORKING_DIR,
-									projectLocation.toString());
+									projectLocation.removeLastSegments(1).toString());
 							newConfiguration.setAttribute(AngularCLILaunchConstants.OPERATION,
 									NgCommand.NEW.name().toLowerCase());
 							newConfiguration.setAttribute(AngularCLILaunchConstants.OPERATION_PARAMETERS,

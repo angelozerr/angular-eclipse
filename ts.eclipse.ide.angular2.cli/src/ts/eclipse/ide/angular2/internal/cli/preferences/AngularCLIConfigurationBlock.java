@@ -39,10 +39,10 @@ import ts.eclipse.ide.angular2.cli.utils.CLIProcessHelper;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
 import ts.eclipse.ide.core.utils.WorkbenchResourceUtil;
 import ts.eclipse.ide.ui.preferences.BrowseButtonsComposite;
-import ts.eclipse.ide.ui.preferences.IStatusChangeListener;
 import ts.eclipse.ide.ui.preferences.OptionsConfigurationBlock;
 import ts.eclipse.ide.ui.preferences.ScrolledPageContent;
 import ts.eclipse.ide.ui.preferences.StatusInfo;
+import ts.eclipse.ide.ui.widgets.IStatusChangeListener;
 import ts.utils.FileUtils;
 import ts.utils.StringUtils;
 

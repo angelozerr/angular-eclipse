@@ -61,11 +61,11 @@ public class NewNgClassWizardPage extends NgGenerateBlueprintWizardPage {
 	}
 
 	@Override
-	protected void initializePage() {
-		super.initializePage();
+	protected void initializeDefaultValues() {
+		super.initializeDefaultValues();
 		chkSpec.setSelection(getAngularCLIJson().isSpec(NgBlueprint.CLASS));
 	}
-
+	
 	@Override
 	protected String[] getGeneratedFilesImpl() {
 		AngularCLIJson cliJson = getAngularCLIJson();

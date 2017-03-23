@@ -111,8 +111,8 @@ public class NewNgDirectiveWizardPage extends NgGenerateBlueprintWizardPage {
 	}
 
 	@Override
-	protected void initializePage() {
-		super.initializePage();
+	protected void initializeDefaultValues() {
+		super.initializeDefaultValues();
 		txtPrefix.setText(getAngularCLIJson().getPrefix());
 		chkSpec.setSelection(getAngularCLIJson().isSpec(NgBlueprint.DIRECTIVE));
 		chkFlat.setSelection(true);

@@ -19,13 +19,13 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.jface.dialogs.IMessageProvider;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.window.Window;
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -39,18 +39,18 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 
+import ts.eclipse.ide.angular2.cli.AngularCLIPlugin;
 import ts.eclipse.ide.angular2.cli.NgBlueprint;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIProject;
 import ts.eclipse.ide.angular2.internal.cli.Trace;
 import ts.eclipse.ide.angular2.internal.cli.json.AngularCLIJson;
 import ts.eclipse.ide.ui.utils.DialogUtils;
+import ts.eclipse.ide.ui.wizards.AbstractWizardPage;
 import ts.utils.StringUtils;
 
 /**
@@ -58,7 +58,7 @@ import ts.utils.StringUtils;
  * generate".
  *
  */
-public class NgGenerateBlueprintWizardPage extends WizardPage implements Listener {
+public class NgGenerateBlueprintWizardPage extends AbstractWizardPage {
 
 	private static final int SIZING_TEXT_FIELD_WIDTH = 250;
 
@@ -82,43 +82,28 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 	}
 
 	@Override
-	public void createControl(Composite parent) {
-		initializeDialogUnits(parent);
-		// top level group
-		Composite topLevel = new Composite(parent, SWT.NONE);
-		topLevel.setLayout(new GridLayout());
-		topLevel.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_FILL | GridData.HORIZONTAL_ALIGN_FILL));
-		topLevel.setFont(parent.getFont());
-
-		createNameControl(topLevel);
+	protected void createBody(Composite parent) {
+		createNameControl(parent);
 
 		// Separator
-		Label line = new Label(topLevel, SWT.SEPARATOR | SWT.HORIZONTAL);
+		Label line = new Label(parent, SWT.SEPARATOR | SWT.HORIZONTAL);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 2;
 		line.setLayoutData(gridData);
 
-		createParamsControl(topLevel);
+		createParamsControl(parent);
 
 		// Separator
-		line = new Label(topLevel, SWT.SEPARATOR | SWT.HORIZONTAL);
+		line = new Label(parent, SWT.SEPARATOR | SWT.HORIZONTAL);
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 2;
 		line.setLayoutData(gridData);
 
-		createFilesPreviewControl(topLevel);
-
-		// Initialize fields.
-		initializePage();
-
-		validatePage();
-		// Show description on opening
-		setErrorMessage(null);
-		setMessage(null);
-		setControl(topLevel);
+		createFilesPreviewControl(parent);
 	}
 
-	protected void initializePage() {
+	@Override
+	protected void initializeDefaultValues() {
 		if (folder == null) {
 			return;
 		}
@@ -138,11 +123,6 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 			// Initialize location with root path /$project/$src/app
 			location.setText(rootPath.toString());
 		}
-	}
-
-	public void handleEvent(Event event) {
-		updateGeneratedFiles();
-		setPageComplete(validatePage());
 	}
 
 	protected void createNameControl(Composite parent) {
@@ -202,26 +182,18 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 		// resource name entry field
 		resourceNameField = new Text(nameGroup, SWT.BORDER);
 		resourceNameField.addListener(SWT.Modify, this);
-		// resourceNameField.addFocusListener(new FocusAdapter() {
-		// public void focusLost(FocusEvent e) {
-		// handleResourceNameFocusLostEvent();
-		// }
-		// });
+
 		data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		data.widthHint = SIZING_TEXT_FIELD_WIDTH;
 		data.horizontalSpan = 2;
 		resourceNameField.setLayoutData(data);
 		resourceNameField.setFont(font);
-
-		// validateControls();
-
 	}
 
 	protected void createParamsControl(Composite parent) {
 	}
 
 	protected void createFilesPreviewControl(Composite parent) {
-
 		Font font = parent.getFont();
 		// file preview group
 		Composite filePreview = new Composite(parent, SWT.NONE);
@@ -325,37 +297,45 @@ public class NgGenerateBlueprintWizardPage extends WizardPage implements Listene
 		}
 	}
 
-	protected boolean validatePage() {
-		// Clean error, warning
-		setMessage(null, IMessageProvider.WARNING);
-		setErrorMessage(null);
-		// Validate
+	@Override
+	protected IStatus[] validatePage() {
+		updateGeneratedFiles();
+
 		IContainer folder = getFolder();
 		if (folder == null) {
-			setErrorMessage(AngularCLIMessages.NgGenerateBlueprintWizardPage_invalid_location_error);
-			return false;
+			return new IStatus[] {
+					createErrorStatus(AngularCLIMessages.NgGenerateBlueprintWizardPage_invalid_location_error) };
 		} else if (!isBelongToAngularClIProject(folder)) {
-			setErrorMessage(AngularCLIMessages.NgGenerateBlueprintWizardPage_invalid_project_location_error);
-			return false;
+			return new IStatus[] { createErrorStatus(
+					AngularCLIMessages.NgGenerateBlueprintWizardPage_invalid_project_location_error) };
 		} else if (!isValidAppsLocation(folder, false)) {
 			IPath rootPath = getAngularCLIJson().getRootPath(folder.getProject());
-			setErrorMessage(NLS.bind(AngularCLIMessages.NgGenerateBlueprintWizardPage_invalid_apps_location_error,
-					rootPath.toString()));
-			return false;
+			return new IStatus[] { createErrorStatus(
+					NLS.bind(AngularCLIMessages.NgGenerateBlueprintWizardPage_invalid_apps_location_error,
+							rootPath.toString())) };
 		} else if (StringUtils.isEmpty(resourceNameField.getText())) {
 			setErrorMessage(AngularCLIMessages.NgGenerateBlueprintWizardPage_select_name_required_error);
-			return false;
+			return new IStatus[] {
+					createErrorStatus(AngularCLIMessages.NgGenerateBlueprintWizardPage_select_name_required_error) };
 		} else {
 			for (int i = 0, cnt = files != null ? files.length : 0; i < cnt; i++) {
 				String file = files[i];
 				if (new File(folder.getLocation().toFile(), file).exists()) {
-					setMessage(NLS.bind(AngularCLIMessages.NgGenerateBlueprintWizardPage_file_already_exist, file),
-							IMessageProvider.WARNING);
-					return true; // Only warning
+					// Only warning
+					return new IStatus[] { createWarningStatus(
+							NLS.bind(AngularCLIMessages.NgGenerateBlueprintWizardPage_file_already_exist, file)) };
 				}
 			}
 		}
-		return true;
+		return new IStatus[] { Status.OK_STATUS };
+	}
+
+	protected IStatus createErrorStatus(String message) {
+		return new Status(IStatus.ERROR, AngularCLIPlugin.PLUGIN_ID, message);
+	}
+
+	protected IStatus createWarningStatus(String message) {
+		return new Status(IStatus.WARNING, AngularCLIPlugin.PLUGIN_ID, message);
 	}
 
 	public IContainer getFolder() {

@@ -33,13 +33,13 @@ import ts.eclipse.ide.angular2.internal.cli.json.AngularCLIJson;
 public class NewNgComponentWizardPage extends NgGenerateBlueprintWizardPage {
 
 	// Constants for ViewEncapsulation
-	public static final String VE_EMULATED		= "Emulated";
-	public static final String VE_NATIVE		= "Native";
-	public static final String VE_NONE			= "None";
+	public static final String VE_EMULATED = "Emulated";
+	public static final String VE_NATIVE = "Native";
+	public static final String VE_NONE = "None";
 
 	// Constants for ChangeDetectionStrategy
-	public static final String CD_ON_PUSH		= "OnPush";
-	public static final String CD_DEFAULT		= "Default";
+	public static final String CD_ON_PUSH = "OnPush";
+	public static final String CD_DEFAULT = "Default";
 
 	private static final String PAGE_NAME = "ngComponent";
 
@@ -170,8 +170,8 @@ public class NewNgComponentWizardPage extends NgGenerateBlueprintWizardPage {
 	}
 
 	@Override
-	protected void initializePage() {
-		super.initializePage();
+	protected void initializeDefaultValues() {
+		super.initializeDefaultValues();
 		String prefix = getAngularCLIJson().getPrefix();
 		if (prefix != null)
 			txtPrefix.setText(prefix);

@@ -11,7 +11,6 @@
  */
 package ts.eclipse.ide.angular2.internal.cli.wizards;
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.resources.IContainer;
@@ -35,9 +34,7 @@ import ts.eclipse.ide.angular2.cli.NgBlueprint;
 import ts.eclipse.ide.angular2.cli.NgCommand;
 import ts.eclipse.ide.angular2.cli.launch.AngularCLILaunchConstants;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIImageResource;
-import ts.eclipse.ide.angular2.internal.cli.AngularCLIProject;
 import ts.eclipse.ide.angular2.internal.cli.launch.AngularCLILaunchHelper;
-import ts.utils.FileUtils;
 
 /**
  * Abstract class for wizard which generates Angular2 resources by using "ng

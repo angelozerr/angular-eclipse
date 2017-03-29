@@ -13,6 +13,7 @@ package ts.eclipse.ide.angular2.internal.cli.preferences;
 import java.io.File;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -37,6 +38,9 @@ import ts.eclipse.ide.angular2.cli.AngularCLIPlugin;
 import ts.eclipse.ide.angular2.cli.preferences.AngularCLIPreferenceConstants;
 import ts.eclipse.ide.angular2.cli.utils.CLIProcessHelper;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
+import ts.eclipse.ide.core.TypeScriptCorePlugin;
+import ts.eclipse.ide.core.resources.IIDETypeScriptProjectSettings;
+import ts.eclipse.ide.core.utils.TypeScriptResourceUtil;
 import ts.eclipse.ide.core.utils.WorkbenchResourceUtil;
 import ts.eclipse.ide.ui.preferences.BrowseButtonsComposite;
 import ts.eclipse.ide.ui.preferences.OptionsConfigurationBlock;
@@ -84,7 +88,8 @@ public class AngularCLIConfigurationBlock extends OptionsConfigurationBlock {
 				if (monitor.isCanceled()) {
 					return Status.CANCEL_STATUS;
 				}
-				final String version = CLIProcessHelper.getNgVersion(ngFile);
+				File nodeFile = getNodejsPath(project);
+				final String version = CLIProcessHelper.getNgVersion(ngFile, nodeFile);
 				final CLIStatus status = StringUtils.isEmpty(version) ? new CLIStatus(null,
 						NLS.bind(AngularCLIMessages.AngularCLIConfigurationBlock_ngCustomFile_invalid_error,
 								FileUtils.getPath(ngFile)))
@@ -107,6 +112,14 @@ public class AngularCLIConfigurationBlock extends OptionsConfigurationBlock {
 					}
 				});
 				return Status.OK_STATUS;
+			}
+
+			public File getNodejsPath(IProject project) {
+				try {
+					return TypeScriptResourceUtil.getTypeScriptProject(project).getProjectSettings().getNodejsInstallPath();
+				} catch (Throwable e) {
+					return null;
+				}
 			}
 		};
 		blockEnableState = null;

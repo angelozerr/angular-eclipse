@@ -15,8 +15,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import org.eclipse.tm.terminal.view.core.utils.Env;
+
 import ts.OS;
 import ts.eclipse.ide.core.utils.OSHelper;
+import ts.eclipse.ide.terminal.interpreter.EnvPath;
 import ts.utils.FileUtils;
 import ts.utils.IOUtils;
 import ts.utils.ProcessHelper;
@@ -60,14 +63,24 @@ public class CLIProcessHelper {
 	 * Returns the ng version and null otherwise.
 	 * 
 	 * @param ngFile
+	 * @param nodeFile
 	 * @return the ng version and null otherwise.
 	 */
-	public static String getNgVersion(File ngFile) {
+	public static String getNgVersion(File ngFile, File nodeFile) {
 		if (ngFile != null) {
 			BufferedReader reader = null;
 			try {
+				String[] envp = null;
+				if (nodeFile != null) {
+					// node file is set, add the directory of this node file in
+					// the Path env to consume it when "ng -- version" is
+					// executed.
+					String[] envPath = new String[] {
+							EnvPath.insertToEnvPath(FileUtils.getPath(nodeFile.getParentFile())) };
+					envp = Env.getEnvironment(envPath, true);
+				}
 				String command = FileUtils.getPath(ngFile) + " --version";
-				Process p = Runtime.getRuntime().exec(command);
+				Process p = Runtime.getRuntime().exec(command, envp);
 				reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
 				String line;
 				while ((line = reader.readLine()) != null) {

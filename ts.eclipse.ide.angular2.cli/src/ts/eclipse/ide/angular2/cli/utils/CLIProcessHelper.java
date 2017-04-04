@@ -30,6 +30,8 @@ import ts.utils.ProcessHelper;
  */
 public class CLIProcessHelper {
 
+	private static final String NG_VERSION_CMD = "ng --version";
+
 	public static final String NG_FILENAME = "ng";
 
 	private static final String ANGULAR_CLI = "@angular/cli:";
@@ -65,22 +67,22 @@ public class CLIProcessHelper {
 	 * @param ngFile
 	 * @param nodeFile
 	 * @return the ng version and null otherwise.
+	 * @throws IOException
 	 */
-	public static String getNgVersion(File ngFile, File nodeFile) {
+	public static String getNgVersion(File ngFile, File nodeFile) throws IOException {
 		if (ngFile != null) {
 			BufferedReader reader = null;
 			try {
-				String[] envp = null;
-				if (nodeFile != null) {
-					// node file is set, add the directory of this node file in
-					// the Path env to consume it when "ng -- version" is
-					// executed.
-					String[] envPath = new String[] {
-							EnvPath.insertToEnvPath(FileUtils.getPath(nodeFile.getParentFile())) };
-					envp = Env.getEnvironment(envPath, true);
-				}
-				String command = FileUtils.getPath(ngFile) + " --version";
-				Process p = Runtime.getRuntime().exec(command, envp);
+				String ngDir = FileUtils.getPath(ngFile.getParentFile());
+				// node file is set, add the directory of this node file in
+				// the Path env to consume it when "ng -- version" is
+				// executed.
+				String nodeDir = nodeFile != null ? FileUtils.getPath(nodeFile.getParentFile()) : null;
+				String[] envPath = new String[] { EnvPath.insertToEnvPath(ngDir, nodeDir) };
+				String[] envp = Env.getEnvironment(envPath, true);
+				String[] cmd = ProcessHelper.getCommand(NG_VERSION_CMD, OSHelper.getOs());
+
+				Process p = Runtime.getRuntime().exec(cmd, envp);
 				reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
 				String line;
 				while ((line = reader.readLine()) != null) {
@@ -90,12 +92,11 @@ public class CLIProcessHelper {
 					}
 				}
 				return null;
-			} catch (IOException e) {
-				return null;
 			} finally {
 				IOUtils.closeQuietly(reader);
 			}
 		}
 		return null;
 	}
+
 }

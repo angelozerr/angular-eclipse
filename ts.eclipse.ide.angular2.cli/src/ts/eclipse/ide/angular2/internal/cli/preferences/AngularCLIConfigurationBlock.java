@@ -67,6 +67,7 @@ public class AngularCLIConfigurationBlock extends OptionsConfigurationBlock {
 
 	private static final Key PREF_NG_USE_GLOBAL_INSTALLATION = getAngularCliKey(
 			AngularCLIPreferenceConstants.NG_USE_GLOBAL_INSTALLATION);
+	
 	private static final Key PREF_NG_CUSTOM_FILE_PATH = getAngularCliKey(
 			AngularCLIPreferenceConstants.NG_CUSTOM_FILE_PATH);
 
@@ -268,7 +269,7 @@ public class AngularCLIConfigurationBlock extends OptionsConfigurationBlock {
 	private void createExecuteNgWithFile(Composite parent) {
 		// Create "Execute Ng With File" checkbox
 		addCheckBox(parent, AngularCLIMessages.AngularCLIConfigurationBlock_executeNgWithFile_label,
-				PREF_EXECUTE_NG_WITH_FILE, new String[] { "true", "true" }, 0);
+				PREF_EXECUTE_NG_WITH_FILE, new String[] { "true", "false" }, 0);
 	}
 
 	private void createCLIInfo(Composite parent) {

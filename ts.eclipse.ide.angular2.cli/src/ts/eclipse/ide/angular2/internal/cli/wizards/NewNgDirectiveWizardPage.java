@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.Text;
 import ts.eclipse.ide.angular2.cli.NgBlueprint;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
 import ts.eclipse.ide.angular2.internal.cli.json.AngularCLIJson;
+import ts.eclipse.ide.angular2.internal.cli.json.GenerateDefaults;
 
 /**
  * Wizard page for Angular2 Directive.
@@ -113,9 +114,10 @@ public class NewNgDirectiveWizardPage extends NgGenerateBlueprintWizardPage {
 	@Override
 	protected void initializeDefaultValues() {
 		super.initializeDefaultValues();
-		txtPrefix.setText(getAngularCLIJson().getPrefix());
-		chkSpec.setSelection(getAngularCLIJson().isSpec(NgBlueprint.DIRECTIVE));
-		chkFlat.setSelection(true);
+		GenerateDefaults gDefaults = getAngularCLIJson().getGenerateDefaults(NgBlueprint.DIRECTIVE);
+		txtPrefix.setText(getAngularCLIJson().getPrefix(NgBlueprint.COMPONENT));
+		chkFlat.setSelection(gDefaults != null ? gDefaults.isFlat() : true);
+		chkSpec.setSelection(gDefaults != null ? gDefaults.isSpec() : false);
 	}
 
 	@Override

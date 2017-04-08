@@ -36,4 +36,13 @@ public class NewNgInterfaceWizard extends AbstractNewNgGenerateWizard {
 		super.init(workbench, selection);
 		super.setWindowTitle(AngularCLIMessages.NewNgInterfaceWizard_windowTitle);
 	}
+
+	@Override
+	protected void appendOperationParameters(StringBuilder sb) {
+		super.appendOperationParameters(sb);
+		NewNgInterfaceWizardPage mainPage = (NewNgInterfaceWizardPage)getMainPage();
+		String prefix = mainPage.getPrefix();
+		if (prefix != null && prefix.length() > 0)
+			sb.append(' ').append("--prefix ").append(prefix);
+	}
 }

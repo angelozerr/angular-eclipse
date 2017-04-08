@@ -16,6 +16,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbench;
 
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
+import ts.eclipse.ide.angular2.internal.cli.json.GenerateDefaults;
 
 /**
  * Wizard to generate Angular2 Component with "ng generate component $name".
@@ -53,10 +54,10 @@ public class NewNgComponentWizard extends AbstractNewNgGenerateWizard {
 		sb.append(' ').append("--spec ").append(mainPage.isSpec());
 		sb.append(' ').append("--flat ").append(mainPage.isFlat());
 		String viewEncapsulation = mainPage.getViewEncapsulation();
-		if (!NewNgComponentWizardPage.VE_EMULATED.equals(viewEncapsulation))
+		if (!GenerateDefaults.VE_EMULATED.equals(viewEncapsulation))
 			sb.append(' ').append("--view-encapsulation ").append(viewEncapsulation);
 		String changeDetection = mainPage.getChangeDetection();
-		if (!NewNgComponentWizardPage.CD_DEFAULT.equals(changeDetection))
+		if (!GenerateDefaults.CD_DEFAULT.equals(changeDetection))
 			sb.append(' ').append("--change-detection ").append(changeDetection);
 	}
 }

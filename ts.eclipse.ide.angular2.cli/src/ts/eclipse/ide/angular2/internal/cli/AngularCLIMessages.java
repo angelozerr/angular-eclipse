@@ -38,7 +38,7 @@ public class AngularCLIMessages extends NLS {
 	public static String AngularCLIConfigurationBlock_ngCustomFile_invalid_error;
 	public static String AngularCLIConfigurationBlock_ngCustomFile_notDir_error;
 	public static String AngularCLIConfigurationBlock_ValidatingNgCli_jobName;
-	
+
 	// Interpreter
 	public static String NgServeJob_jobName;
 	public static String NgServeJob_error;
@@ -54,7 +54,7 @@ public class AngularCLIMessages extends NLS {
 	public static String NewAngular2ProjectWizard_windowTitle;
 	public static String NewAngular2ProjectWizard_newProjectTitle;
 	public static String NewAngular2ProjectWizard_newProjectDescription;
-	
+
 	public static String NewAngular2ProjectParamsWizardPage_title;
 	public static String NewAngular2ProjectParamsWizardPage_prefix;
 	public static String NewAngular2ProjectParamsWizardPage_sourceDir;

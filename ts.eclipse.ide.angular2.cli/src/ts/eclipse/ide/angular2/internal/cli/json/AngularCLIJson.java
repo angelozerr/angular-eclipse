@@ -72,13 +72,8 @@ public class AngularCLIJson {
 		// Search root from the angular-cli.json apps[0].root
 		String root = getRootFromApps();
 		if (StringUtils.isEmpty(root)) {
-			// Not found, search root from the angular-cli.json
-			// defaults.sourceDir
-			root = getSourceDirFromDefaults();
-			if (StringUtils.isEmpty(root)) {
-				// Not found, use default "src" value
-				root = DEFAULT_ROOT;
-			}
+			// Not found, use default "src" value
+			root = DEFAULT_ROOT;
 		}
 		return new Path("/").append(project.getName()).append(root).append(APP);
 	}
@@ -91,27 +86,55 @@ public class AngularCLIJson {
 		return apps.get(0).getRoot();
 	}
 
-	private String getSourceDirFromDefaults() {
-		Defaults defaults = getDefaults();
-		if (defaults == null) {
-			return null;
-		}
-		return defaults.getSourceDir();
-	}
-
-	public String getPrefix() {
-		// Search prefix from the angular-cli.json apps[0].prefix
-		String prefix = getPrefixFromApps();
-		if (StringUtils.isEmpty(prefix)) {
-			// Not found, search prefix from the angular-cli.json
-			// defaults.prefix
-			prefix = getPrefixFromDefaults();
+	public String getPrefix(NgBlueprint blueprint) {
+		GenerateDefaults gDefaults = getGenerateDefaults(blueprint);
+		String prefix = gDefaults != null ? gDefaults.getPrefix() : null;
+		if (StringUtils.isEmpty(prefix) && blueprint != NgBlueprint.INTERFACE) {
+			// Search prefix from the angular-cli.json apps[0].prefix
+			prefix = getPrefixFromApps();
 			if (StringUtils.isEmpty(prefix)) {
 				// Not found, use default "app" value
 				prefix = APP;
 			}
 		}
 		return prefix;
+	}
+
+	public GenerateDefaults getGenerateDefaults(NgBlueprint blueprint) {
+		Defaults defaults = getDefaults();
+		GenerateDefaults gDefaults = null;
+		if (defaults != null) {
+			switch(blueprint) {
+			case CLASS:
+				gDefaults = defaults.getCliClass();
+				break;
+			case COMPONENT:
+				gDefaults = defaults.getComponent();
+				break;
+			case DIRECTIVE:
+				gDefaults = defaults.getDirective();
+				break;
+			case ENUM:
+				gDefaults = defaults.getCliEnum();
+				break;
+			case GUARD:
+				gDefaults = defaults.getGuard();
+				break;
+			case INTERFACE:
+				gDefaults = defaults.getCliInterface();
+				break;
+			case MODULE:
+				gDefaults = defaults.getModule();
+				break;
+			case PIPE:
+				gDefaults = defaults.getPipe();
+				break;
+			case SERVICE:
+				gDefaults = defaults.getService();
+				break;
+			}
+		}
+		return gDefaults;
 	}
 
 	private String getPrefixFromApps() {
@@ -122,64 +145,9 @@ public class AngularCLIJson {
 		return apps.get(0).getPrefix();
 	}
 
-	public String getPrefixFromDefaults() {
-		Defaults defaults = getDefaults();
-		if (defaults == null)
-			return null;
-		else
-			return defaults.getPrefix();
-	}
-
 	public String getStylesExt() {
 		Defaults defaults = getDefaults();
 		return defaults != null ? defaults.getStyleExt() : null;
-	}
-
-	public boolean isInlineTempalte() {
-		Defaults defaults = getDefaults();
-		Inline inline = defaults != null ? defaults.getInline() : null;
-		if (inline == null)
-			return false;
-		else
-			return inline.isTemplate();
-	}
-
-	public boolean isInlineStyle() {
-		Defaults defaults = getDefaults();
-		Inline inline = defaults != null ? defaults.getInline() : null;
-		if (inline == null)
-			return false;
-		else
-			return inline.isStyle();
-	}
-
-	public boolean isSpec(NgBlueprint blueprint) {
-		Defaults defaults = getDefaults();
-		Spec spec = defaults != null ? defaults.getSpec() : null;
-		if (spec == null)
-			return false;
-		else {
-			switch (blueprint) {
-			case MODULE:
-				return spec.isModule();
-			case COMPONENT:
-				return spec.isComponent();
-			case DIRECTIVE:
-				return spec.isDirective();
-			case PIPE:
-				return spec.isPipe();
-			case SERVICE:
-				return spec.isService();
-			case GUARD:
-				return spec.isGuard();
-			case CLASS:
-				return spec.isClass();
-			// case INTERFACE:
-			// case ENUM:
-			default:
-				return false;
-			}
-		}
 	}
 
 	public static String decamelize(String str) {
@@ -228,6 +196,14 @@ public class AngularCLIJson {
 
 	public String getEnumFileName(String name) {
 		return normalize(name).concat(".enum.ts");
+	}
+
+	public String getInterfaceFileName(String name, String prefix) {
+		String fileName = normalize(name);
+		if (prefix != null && prefix.length() > 0)
+			fileName = fileName.concat(".").concat(prefix);
+		fileName = fileName.concat(".ts");
+		return fileName;
 	}
 
 	public String getModuleFileName(String name) {

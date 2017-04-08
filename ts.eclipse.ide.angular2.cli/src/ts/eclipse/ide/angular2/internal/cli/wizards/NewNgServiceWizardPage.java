@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Composite;
 import ts.eclipse.ide.angular2.cli.NgBlueprint;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
 import ts.eclipse.ide.angular2.internal.cli.json.AngularCLIJson;
+import ts.eclipse.ide.angular2.internal.cli.json.GenerateDefaults;
 
 /**
  * Wizard page for Angular2 Service.
@@ -71,8 +72,9 @@ public class NewNgServiceWizardPage extends NgGenerateBlueprintWizardPage {
 	@Override
 	protected void initializeDefaultValues() {
 		super.initializeDefaultValues();
-		chkSpec.setSelection(getAngularCLIJson().isSpec(NgBlueprint.SERVICE));
-		chkFlat.setSelection(true);
+		GenerateDefaults gDefaults = getAngularCLIJson().getGenerateDefaults(NgBlueprint.SERVICE);
+		chkSpec.setSelection(gDefaults != null ? gDefaults.isSpec() : true);
+		chkFlat.setSelection(gDefaults != null ? gDefaults.isFlat() : true);
 	}
 
 	@Override

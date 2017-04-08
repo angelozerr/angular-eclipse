@@ -15,8 +15,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import org.eclipse.tm.terminal.view.core.utils.Env;
+
 import ts.OS;
 import ts.eclipse.ide.core.utils.OSHelper;
+import ts.eclipse.ide.terminal.interpreter.EnvPath;
 import ts.utils.FileUtils;
 import ts.utils.IOUtils;
 import ts.utils.ProcessHelper;
@@ -26,6 +29,8 @@ import ts.utils.ProcessHelper;
  *
  */
 public class CLIProcessHelper {
+
+	private static final String NG_VERSION_CMD = "ng --version";
 
 	public static final String NG_FILENAME = "ng";
 
@@ -60,14 +65,24 @@ public class CLIProcessHelper {
 	 * Returns the ng version and null otherwise.
 	 * 
 	 * @param ngFile
+	 * @param nodeFile
 	 * @return the ng version and null otherwise.
+	 * @throws IOException
 	 */
-	public static String getNgVersion(File ngFile) {
+	public static String getNgVersion(File ngFile, File nodeFile) throws IOException {
 		if (ngFile != null) {
 			BufferedReader reader = null;
 			try {
-				String command = FileUtils.getPath(ngFile) + " --version";
-				Process p = Runtime.getRuntime().exec(command);
+				String ngDir = FileUtils.getPath(ngFile.getParentFile());
+				// node file is set, add the directory of this node file in
+				// the Path env to consume it when "ng -- version" is
+				// executed.
+				String nodeDir = nodeFile != null ? FileUtils.getPath(nodeFile.getParentFile()) : null;
+				String[] envPath = new String[] { EnvPath.insertToEnvPath(ngDir, nodeDir) };
+				String[] envp = Env.getEnvironment(envPath, true);
+				String[] cmd = ProcessHelper.getCommand(NG_VERSION_CMD, OSHelper.getOs());
+
+				Process p = Runtime.getRuntime().exec(cmd, envp);
 				reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
 				String line;
 				while ((line = reader.readLine()) != null) {
@@ -77,12 +92,11 @@ public class CLIProcessHelper {
 					}
 				}
 				return null;
-			} catch (IOException e) {
-				return null;
 			} finally {
 				IOUtils.closeQuietly(reader);
 			}
 		}
 		return null;
 	}
+
 }

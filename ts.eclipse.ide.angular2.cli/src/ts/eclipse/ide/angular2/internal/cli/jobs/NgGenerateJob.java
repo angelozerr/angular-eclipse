@@ -24,10 +24,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.progress.UIJob;
 
 import ts.eclipse.ide.angular2.cli.AngularCLIPlugin;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
+import ts.eclipse.ide.angular2.internal.cli.Trace;
 import ts.eclipse.ide.terminal.interpreter.UIInterpreterHelper;
 
 /**
@@ -52,9 +54,8 @@ public class NgGenerateJob extends UIJob {
 		try {
 			List<IResource> resources = getResources(parent, monitor);
 			if (resources.size() > 0) {
-				// Open the blueprint file in an editor
-				IFile fileToOpen = getFileToOpen(resources);
-				UIInterpreterHelper.openFile(fileToOpen);
+				// Open the generated blueprint files in an editor
+				openGeneratedFiles(resources);
 				// Select in the Project Explorer the generated files.
 				UIInterpreterHelper.selectRevealInDefaultViews(resources);
 			}
@@ -62,6 +63,19 @@ public class NgGenerateJob extends UIJob {
 			return new Status(IStatus.ERROR, AngularCLIPlugin.PLUGIN_ID, AngularCLIMessages.NgGenerateJob_error, e);
 		}
 		return Status.OK_STATUS;
+	}
+
+	private void openGeneratedFiles(List<IResource> resources) {
+		//String suffix = "." + blueprint.toLowerCase() + ".ts";
+		for (IResource resource : resources) {
+			//if (resource.getName().endsWith(suffix)) {
+				try {
+					UIInterpreterHelper.openFile((IFile) resource);
+				} catch (PartInitException e) {
+					Trace.trace(Trace.SEVERE, "Cannot open generated file", e);
+				}
+			//}
+		}
 	}
 
 	/**
@@ -76,7 +90,7 @@ public class NgGenerateJob extends UIJob {
 		List<IResource> resources = new ArrayList<IResource>();
 		for (String filename : fileNames) {
 			IPath path = new Path(filename);
-			// new version of angular-cli display in the console 
+			// new version of angular-cli display in the console
 			// create src\app\a.ts => search in the project
 			if (!addResource(parent.getProject(), path, resources, monitor)) {
 				// old version of angular-cli display in the console
@@ -98,13 +112,4 @@ public class NgGenerateJob extends UIJob {
 		return false;
 	}
 
-	private IFile getFileToOpen(List<IResource> resources) {
-		String suffix = "." + blueprint.toLowerCase() + ".ts";
-		for (IResource resource : resources) {
-			if (resource.getName().endsWith(suffix)) {
-				return (IFile) resource;
-			}
-		}
-		return (IFile) resources.get(resources.size() - 1);
-	}
 }

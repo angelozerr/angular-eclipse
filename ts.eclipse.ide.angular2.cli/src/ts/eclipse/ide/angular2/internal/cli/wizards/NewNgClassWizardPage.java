@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Composite;
 import ts.eclipse.ide.angular2.cli.NgBlueprint;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
 import ts.eclipse.ide.angular2.internal.cli.json.AngularCLIJson;
+import ts.eclipse.ide.angular2.internal.cli.json.GenerateDefaults;
 
 /**
  * Wizard page for Angular2 Class.
@@ -63,9 +64,10 @@ public class NewNgClassWizardPage extends NgGenerateBlueprintWizardPage {
 	@Override
 	protected void initializeDefaultValues() {
 		super.initializeDefaultValues();
-		chkSpec.setSelection(getAngularCLIJson().isSpec(NgBlueprint.CLASS));
+		GenerateDefaults gDefaults = getAngularCLIJson().getGenerateDefaults(NgBlueprint.CLASS);
+		chkSpec.setSelection(gDefaults != null ? gDefaults.isSpec() : false);
 	}
-	
+
 	@Override
 	protected String[] getGeneratedFilesImpl() {
 		AngularCLIJson cliJson = getAngularCLIJson();

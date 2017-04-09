@@ -11,51 +11,74 @@
  */
 package ts.eclipse.ide.angular2.internal.cli.json;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Pojo for "defaults" of angular-cli.json
  *
  */
 public class Defaults {
 
-	private String prefix;
-
-	private String sourceDir;
-
 	private String styleExt;
 
-	private boolean prefixInterfaces;
+	@SerializedName("class")
+	private GenerateDefaults cliClass;
 
-	private String lazyRoutePrefix;
+	private GenerateDefaults component;
 
-	private Spec spec;
+	private GenerateDefaults directive;
 
-	private Inline inline;
+	@SerializedName("enum")
+	private GenerateDefaults cliEnum;
 
-	public String getPrefix() {
-		return prefix;
-	}
+	private GenerateDefaults guard;
 
-	public String getSourceDir() {
-		return sourceDir;
-	}
+	@SerializedName("interface")
+	private GenerateDefaults cliInterface;
+
+	private GenerateDefaults module;
+
+	private GenerateDefaults pipe;
+
+	private GenerateDefaults service;
 
 	public String getStyleExt() {
 		return styleExt;
 	}
 
-	public boolean isPrefixInterfaces() {
-		return prefixInterfaces;
+	public GenerateDefaults getCliClass() {
+		return cliClass;
 	}
 
-	public String getLazyRoutePrefix() {
-		return lazyRoutePrefix;
+	public GenerateDefaults getComponent() {
+		return component;
 	}
 
-	public Spec getSpec() {
-		return spec;
+	public GenerateDefaults getDirective() {
+		return directive;
 	}
 
-	public Inline getInline() {
-		return inline;
+	public GenerateDefaults getCliEnum() {
+		return cliEnum;
+	}
+
+	public GenerateDefaults getGuard() {
+		return guard;
+	}
+
+	public GenerateDefaults getCliInterface() {
+		return cliInterface;
+	}
+
+	public GenerateDefaults getModule() {
+		return module;
+	}
+
+	public GenerateDefaults getPipe() {
+		return pipe;
+	}
+
+	public GenerateDefaults getService() {
+		return service;
 	}
 }

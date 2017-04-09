@@ -25,21 +25,13 @@ import org.eclipse.swt.widgets.Text;
 import ts.eclipse.ide.angular2.cli.NgBlueprint;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
 import ts.eclipse.ide.angular2.internal.cli.json.AngularCLIJson;
+import ts.eclipse.ide.angular2.internal.cli.json.GenerateDefaults;
 
 /**
  * Wizard page for Angular2 Component.
  *
  */
 public class NewNgComponentWizardPage extends NgGenerateBlueprintWizardPage {
-
-	// Constants for ViewEncapsulation
-	public static final String VE_EMULATED = "Emulated";
-	public static final String VE_NATIVE = "Native";
-	public static final String VE_NONE = "None";
-
-	// Constants for ChangeDetectionStrategy
-	public static final String CD_ON_PUSH = "OnPush";
-	public static final String CD_DEFAULT = "Default";
 
 	private static final String PAGE_NAME = "ngComponent";
 
@@ -107,9 +99,9 @@ public class NewNgComponentWizardPage extends NgGenerateBlueprintWizardPage {
 		cbViewEncapsulation.setLayoutData(data);
 
 		// Data for view encapsulation
-		cbViewEncapsulation.add(VE_EMULATED);
-		cbViewEncapsulation.add(VE_NATIVE);
-		cbViewEncapsulation.add(VE_NONE);
+		cbViewEncapsulation.add(GenerateDefaults.VE_EMULATED);
+		cbViewEncapsulation.add(GenerateDefaults.VE_NATIVE);
+		cbViewEncapsulation.add(GenerateDefaults.VE_NONE);
 
 		// Change detection
 		label = new Label(subGroup, SWT.NONE);
@@ -123,8 +115,8 @@ public class NewNgComponentWizardPage extends NgGenerateBlueprintWizardPage {
 		cbChangeDetection.setLayoutData(data);
 
 		// Data for change detection
-		cbChangeDetection.add(CD_ON_PUSH);
-		cbChangeDetection.add(CD_DEFAULT);
+		cbChangeDetection.add(GenerateDefaults.CD_ON_PUSH);
+		cbChangeDetection.add(GenerateDefaults.CD_DEFAULT);
 
 		// Checkbox for flat
 		chkFlat = new Button(paramsGroup, SWT.CHECK);
@@ -172,14 +164,16 @@ public class NewNgComponentWizardPage extends NgGenerateBlueprintWizardPage {
 	@Override
 	protected void initializeDefaultValues() {
 		super.initializeDefaultValues();
-		String prefix = getAngularCLIJson().getPrefix();
+		GenerateDefaults gDefaults = getAngularCLIJson().getGenerateDefaults(NgBlueprint.COMPONENT);
+		String prefix = getAngularCLIJson().getPrefix(NgBlueprint.COMPONENT);
 		if (prefix != null)
 			txtPrefix.setText(prefix);
-		chkInlineTemplate.setSelection(getAngularCLIJson().isInlineTempalte());
-		chkInlineStyle.setSelection(getAngularCLIJson().isInlineStyle());
-		chkSpec.setSelection(getAngularCLIJson().isSpec(NgBlueprint.COMPONENT));
-		cbViewEncapsulation.select(cbViewEncapsulation.indexOf(VE_EMULATED));
-		cbChangeDetection.select(cbChangeDetection.indexOf(CD_DEFAULT));
+		chkFlat.setSelection(gDefaults != null ? gDefaults.isFlat() : false);
+		chkSpec.setSelection(gDefaults != null ? gDefaults.isInlineStyle() : true);
+		chkInlineStyle.setSelection(gDefaults != null ? gDefaults.isInlineStyle() : false);
+		chkInlineTemplate.setSelection(gDefaults != null ? gDefaults.isInlineTemplate() : false);
+		cbViewEncapsulation.select(cbViewEncapsulation.indexOf(gDefaults != null ? gDefaults.getViewEncapsulation() : GenerateDefaults.VE_EMULATED));
+		cbChangeDetection.select(cbChangeDetection.indexOf(gDefaults != null ? gDefaults.getChangeDetection() : GenerateDefaults.CD_DEFAULT));
 	}
 
 	@Override

@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Composite;
 import ts.eclipse.ide.angular2.cli.NgBlueprint;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
 import ts.eclipse.ide.angular2.internal.cli.json.AngularCLIJson;
+import ts.eclipse.ide.angular2.internal.cli.json.GenerateDefaults;
 
 /**
  * Wizard page for Angular2 Module.
@@ -33,6 +34,7 @@ public class NewNgModuleWizardPage extends NgGenerateBlueprintWizardPage {
 
 	private Button chkRouting;
 	private Button chkSpec;
+	private Button chkFlat;
 
 	protected NewNgModuleWizardPage(IContainer folder) {
 		super(PAGE_NAME, AngularCLIMessages.NewNgModuleWizardPage_title, null, NgBlueprint.MODULE, folder);
@@ -66,12 +68,21 @@ public class NewNgModuleWizardPage extends NgGenerateBlueprintWizardPage {
 		chkSpec.setText(AngularCLIMessages.NgGenerateBlueprintWizardPage_generate_spec);
 		data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		chkSpec.setLayoutData(data);
+
+		// Checkbox for flat
+		chkFlat = new Button(paramsGroup, SWT.CHECK);
+		chkFlat.addListener(SWT.Selection, this);
+		chkFlat.setText(AngularCLIMessages.NgGenerateBlueprintWizardPage_flat);
+		data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		chkFlat.setLayoutData(data);
 	}
 
 	@Override
 	protected void initializeDefaultValues() {
 		super.initializeDefaultValues();
-		chkSpec.setSelection(getAngularCLIJson().isSpec(NgBlueprint.MODULE));
+		GenerateDefaults gDefaults = getAngularCLIJson().getGenerateDefaults(NgBlueprint.MODULE);
+		chkSpec.setSelection(gDefaults != null ? gDefaults.isSpec() : false);
+		chkFlat.setSelection(gDefaults != null ? gDefaults.isFlat() : false);
 	}
 
 	@Override

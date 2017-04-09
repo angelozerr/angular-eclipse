@@ -17,12 +17,13 @@ import java.util.List;
 import ts.eclipse.ide.angular2.cli.NgCommand;
 import ts.eclipse.ide.terminal.interpreter.ICommandInterpreter;
 import ts.eclipse.ide.terminal.interpreter.ICommandInterpreterFactory;
+import ts.eclipse.ide.terminal.interpreter.ICommandInterpreterParametersExtractor;
 
 /**
  * Angular command interpeter factory.
  *
  */
-public class NgCommandInterpreterFactory implements ICommandInterpreterFactory {
+public class NgCommandInterpreterFactory implements ICommandInterpreterFactory, ICommandInterpreterParametersExtractor {
 
 	@Override
 	public ICommandInterpreter create(List<String> parameters, String workingDir) {
@@ -76,5 +77,24 @@ public class NgCommandInterpreterFactory implements ICommandInterpreterFactory {
 		}
 		String projectName = parameters.get(1);
 		return new File(workingDir, projectName);
+	}
+
+	@Override
+	public String extractParameters(String cmdWithParameters) {
+		int index = cmdWithParameters.indexOf("ng");
+		if (index == -1) {
+			return null;
+		}
+		if (index == 0) {
+			return cmdWithParameters.substring(index + "ng".length(), cmdWithParameters.length());
+		}
+		String start = cmdWithParameters.substring(index, cmdWithParameters.length());
+		if (start.startsWith("ng.cmd ")) {
+			return cmdWithParameters.substring(index + "ng.cmd ".length(), cmdWithParameters.length());
+		}
+		if (start.startsWith("ng ")) {
+			return cmdWithParameters.substring(index + "ng ".length(), cmdWithParameters.length());
+		}
+		return null;
 	}
 }

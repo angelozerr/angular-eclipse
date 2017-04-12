@@ -33,8 +33,9 @@ public class Angular2PerspectiveFactory implements IPerspectiveFactory {
 		left.addPlaceholder(IPageLayout.ID_RES_NAV);
 
 		IFolderLayout bottom = layout.createFolder("bottom", IPageLayout.BOTTOM, (float) 0.75, editorArea); //$NON-NLS-1$
+		bottom.addView("org.eclipse.tm.terminal.view.ui.TerminalsView");
 		bottom.addView(IPageLayout.ID_PROBLEM_VIEW);
-
+		
 		bottom.addPlaceholder(TemplatesView.ID);
 		bottom.addPlaceholder(NewSearchUI.SEARCH_VIEW_ID);
 		bottom.addPlaceholder(IConsoleConstants.ID_CONSOLE_VIEW);

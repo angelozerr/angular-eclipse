@@ -169,7 +169,7 @@ public class NewNgComponentWizardPage extends NgGenerateBlueprintWizardPage {
 		if (prefix != null)
 			txtPrefix.setText(prefix);
 		chkFlat.setSelection(gDefaults != null ? gDefaults.isFlat() : false);
-		chkSpec.setSelection(gDefaults != null ? gDefaults.isInlineStyle() : true);
+		chkSpec.setSelection(gDefaults != null ? gDefaults.isSpec() : true);
 		chkInlineStyle.setSelection(gDefaults != null ? gDefaults.isInlineStyle() : false);
 		chkInlineTemplate.setSelection(gDefaults != null ? gDefaults.isInlineTemplate() : false);
 		cbViewEncapsulation.select(cbViewEncapsulation.indexOf(gDefaults != null ? gDefaults.getViewEncapsulation() : GenerateDefaults.VE_EMULATED));

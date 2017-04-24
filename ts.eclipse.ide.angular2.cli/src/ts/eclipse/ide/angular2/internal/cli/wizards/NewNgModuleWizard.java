@@ -41,6 +41,8 @@ public class NewNgModuleWizard extends AbstractNewNgGenerateWizard {
 	protected void appendOperationParameters(StringBuilder sb) {
 		super.appendOperationParameters(sb);
 		NewNgModuleWizardPage mainPage = (NewNgModuleWizardPage)getMainPage();
+		if (mainPage.isFlat())
+			sb.append(' ').append("--flat");
 		if (mainPage.isRouting())
 			sb.append(' ').append("--routing");
 		sb.append(' ').append("--spec ").append(mainPage.isSpec());

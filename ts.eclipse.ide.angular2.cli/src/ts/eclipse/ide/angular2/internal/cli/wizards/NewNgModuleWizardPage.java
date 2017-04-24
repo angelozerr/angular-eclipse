@@ -93,7 +93,7 @@ public class NewNgModuleWizardPage extends NgGenerateBlueprintWizardPage {
 		if (isRouting())
 			cnt ++;
 		String[] files = new String[cnt];
-		String folderName = cliJson.getFolderName(name);
+		String folderName = isFlat() ? "" : cliJson.getFolderName(name);
 		int i = 0;
 		files[i++] = folderName.concat(cliJson.getModuleFileName(name));
 		if (isSpec())
@@ -101,6 +101,10 @@ public class NewNgModuleWizardPage extends NgGenerateBlueprintWizardPage {
 		if (isRouting())
 			files[i++] = folderName.concat(cliJson.getRoutingModuleFileName(name));
 		return files;
+	}
+
+	public boolean isFlat() {
+		return chkFlat.getSelection();
 	}
 
 	public boolean isRouting() {

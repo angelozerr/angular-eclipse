@@ -240,5 +240,23 @@
          
         </perspectiveExtension> 
     </extension>
-   	 
+   	
+   	<!-- External TextMate grammar injection to have colorization for Angular @Component/template and @Component/styles -->
+	<extension
+   	      point="org.eclipse.tm4e.registry.grammars">
+  	   <grammar scopeName="template.ng"
+                path="./syntaxes/template.ng.json" >
+       </grammar>
+       <grammar scopeName="styles.ng"
+                path="./syntaxes/styles.ng.json" >                
+       </grammar>
+  	   <grammar scopeName="source.ng.css"
+                path="./syntaxes/source.ng.css.json" >                
+       </grammar>
+       <injection scopeName="template.ng" injectTo="source.ts"/>
+  	   <injection scopeName="template.ng" injectTo="source.tsx"/>
+  	   <injection scopeName="styles.ng" injectTo="source.ts"/>
+       <injection scopeName="styles.ng" injectTo="source.tsx"/>
+	</extension>
+   	
 </plugin>        

@@ -36,6 +36,7 @@ import ts.eclipse.ide.angular2.internal.cli.AngularCLIImageResource;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
 import ts.eclipse.ide.angular2.internal.cli.launch.AngularCLILaunchHelper;
 import ts.eclipse.ide.ui.wizards.AbstractNewProjectWizard;
+import ts.eclipse.ide.ui.wizards.WizardNewTypeScriptProjectCreationPage;
 
 /**
  * Standard workbench wizard that creates a new angular-cli project resource in
@@ -78,6 +79,11 @@ public class NewAngular2ProjectWizard extends AbstractNewProjectWizard {
 				AngularCLIMessages.NewAngular2ProjectWizard_newProjectDescription);
 	}
 
+	@Override
+	protected WizardNewTypeScriptProjectCreationPage createMainPage() {
+		return new WizardNewNgProjectCreationPage("NgMainPage", this);
+	}
+	
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection currentSelection) {
 		super.init(workbench, currentSelection);

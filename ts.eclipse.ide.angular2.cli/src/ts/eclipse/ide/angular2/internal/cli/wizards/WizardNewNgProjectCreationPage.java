@@ -12,10 +12,12 @@ package ts.eclipse.ide.angular2.internal.cli.wizards;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.wizards.newresource.BasicNewResourceWizard;
 
 import ts.eclipse.ide.angular2.cli.AngularCLIPlugin;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
+import ts.eclipse.ide.ui.utils.StatusUtil;
 import ts.eclipse.ide.ui.wizards.WizardNewTypeScriptProjectCreationPage;
 
 /**
@@ -25,9 +27,8 @@ import ts.eclipse.ide.ui.wizards.WizardNewTypeScriptProjectCreationPage;
 public class WizardNewNgProjectCreationPage extends WizardNewTypeScriptProjectCreationPage {
 
 	public static final String projectNameRegexp = "^[a-zA-Z][.0-9a-zA-Z]*(-[.0-9a-zA-Z]*)*$";
-	public static final String[] unsupportedProjectNames = new String[] { "test", "ember", "ember-cli", "vendor", "app" };
-
-	private static final Status ERROR_STATUS = new Status(IStatus.ERROR, AngularCLIPlugin.PLUGIN_ID, AngularCLIMessages.NewAngular2ProjectWizard_invalidProjectName);
+	public static final String[] unsupportedProjectNames = new String[] { "test", "ember", "ember-cli", "vendor",
+			"app" };
 
 	public WizardNewNgProjectCreationPage(String pageName, BasicNewResourceWizard wizard) {
 		super(pageName, wizard);
@@ -38,18 +39,19 @@ public class WizardNewNgProjectCreationPage extends WizardNewTypeScriptProjectCr
 		if (super.validatePage()) {
 			IStatus nameStatus = validateNgProjectName(getProjectName());
 			if (!nameStatus.isOK()) {
-				setErrorMessage(nameStatus.getMessage());
-				return false;
+				StatusUtil.applyToStatusLine(this, nameStatus);
+				return true;
 			}
 		}
 		return true;
 	}
 
 	private IStatus validateNgProjectName(String name) {
-		IStatus status = name != null && name.length() > 0 ? Status.OK_STATUS : ERROR_STATUS;
+		IStatus status = Status.OK_STATUS;
 		for (int i = 0, cnt = unsupportedProjectNames.length; i < cnt; i++) {
 			if (unsupportedProjectNames[i].equals(name)) {
-				status = ERROR_STATUS;
+				status = new Status(IStatus.WARNING, AngularCLIPlugin.PLUGIN_ID,
+						NLS.bind(AngularCLIMessages.NewAngular2ProjectWizard_unsupportedProjectNames, name));
 				break;
 			}
 		}
@@ -57,7 +59,8 @@ public class WizardNewNgProjectCreationPage extends WizardNewTypeScriptProjectCr
 			String[] parts = name.split("-");
 			for (int i = 0, cnt = parts.length; i < cnt; i++) {
 				if (!parts[i].matches(projectNameRegexp)) {
-					status = ERROR_STATUS;
+					status = new Status(IStatus.WARNING, AngularCLIPlugin.PLUGIN_ID,
+							NLS.bind(AngularCLIMessages.NewAngular2ProjectWizard_invalidProjectName, name));
 					break;
 				}
 			}

@@ -55,7 +55,8 @@ public class AngularCLIMessages extends NLS {
 	public static String NewAngular2ProjectWizard_newProjectTitle;
 	public static String NewAngular2ProjectWizard_newProjectDescription;
 	public static String NewAngular2ProjectWizard_invalidProjectName;
-
+	public static String NewAngular2ProjectWizard_unsupportedProjectNames;
+	
 	public static String NewAngular2ProjectParamsWizardPage_title;
 	public static String NewAngular2ProjectParamsWizardPage_prefix;
 	public static String NewAngular2ProjectParamsWizardPage_sourceDir;

@@ -258,5 +258,15 @@
   	   <injection scopeName="styles.ng" injectTo="source.ts"/>
        <injection scopeName="styles.ng" injectTo="source.tsx"/>
 	</extension>
-   	
+ 
+ 	<!-- TextMate Snippets -->
+ 	<extension
+       point="org.eclipse.tm4e.ui.snippets">
+	    <snippet
+	          name="%textmate.snippet.ng"
+	          path="./snippets/Angular2Snippet.ts"
+	          scopeName="source.ts">
+	    </snippet>
+	</extension>
+ 
 </plugin>        

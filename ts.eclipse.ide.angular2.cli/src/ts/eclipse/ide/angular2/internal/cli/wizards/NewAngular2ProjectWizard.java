@@ -39,7 +39,7 @@ import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
 import ts.eclipse.ide.angular2.internal.cli.launch.AngularCLILaunchHelper;
 import ts.eclipse.ide.core.TypeScriptCorePlugin;
 import ts.eclipse.ide.ui.wizards.AbstractNewProjectWizard;
-import ts.eclipse.ide.ui.wizards.WizardNewTypeScriptProjectCreationPage;
+import ts.eclipse.ide.ui.wizards.AbstractWizardNewTypeScriptProjectCreationPage;
 
 /**
  * Standard workbench wizard that creates a new angular-cli project resource in
@@ -83,7 +83,7 @@ public class NewAngular2ProjectWizard extends AbstractNewProjectWizard {
 	}
 
 	@Override
-	protected WizardNewTypeScriptProjectCreationPage createMainPage() {
+	protected AbstractWizardNewTypeScriptProjectCreationPage createMainPage() {
 		return new WizardNewNgProjectCreationPage("NgMainPage", this);
 	}
 

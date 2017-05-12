@@ -9,7 +9,7 @@
  *     IBM Corporation - initial API and implementation
  *     Remy Chi Jian Suen <remy.suen@gmail.com>
  *     		- Bug 44162 [Wizards]  Define constants for wizard ids of new.file, new.folder, and new.project
- *     Angelo Zerr <angelo.zerr@gmail.com> - adapt for Angular2 cli init project.     
+ *     Angelo Zerr <angelo.zerr@gmail.com> - adapt for Angular2 cli init project.
  *******************************************************************************/
 package ts.eclipse.ide.angular2.internal.cli.wizards;
 
@@ -17,9 +17,11 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
@@ -35,6 +37,7 @@ import ts.eclipse.ide.angular2.cli.launch.AngularCLILaunchConstants;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIImageResource;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
 import ts.eclipse.ide.angular2.internal.cli.launch.AngularCLILaunchHelper;
+import ts.eclipse.ide.core.TypeScriptCorePlugin;
 import ts.eclipse.ide.ui.wizards.AbstractNewProjectWizard;
 import ts.eclipse.ide.ui.wizards.WizardNewTypeScriptProjectCreationPage;
 
@@ -60,7 +63,7 @@ import ts.eclipse.ide.ui.wizards.WizardNewTypeScriptProjectCreationPage;
  * name is created, the dialog closes, and the call to <code>open</code>
  * returns.
  * </p>
- * 
+ *
  * @noextend This class is not intended to be subclassed by clients.
  */
 public class NewAngular2ProjectWizard extends AbstractNewProjectWizard {
@@ -83,7 +86,7 @@ public class NewAngular2ProjectWizard extends AbstractNewProjectWizard {
 	protected WizardNewTypeScriptProjectCreationPage createMainPage() {
 		return new WizardNewNgProjectCreationPage("NgMainPage", this);
 	}
-	
+
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection currentSelection) {
 		super.init(workbench, currentSelection);
@@ -142,6 +145,9 @@ public class NewAngular2ProjectWizard extends AbstractNewProjectWizard {
 					public void run() {
 						try {
 							final String operationParams = paramsPage.getParamsString();
+							IEclipsePreferences preferences = new ProjectScope(newProjectHandle)
+									.getNode(TypeScriptCorePlugin.PLUGIN_ID);
+							mainPage.updateNodeJSPreferences(preferences);
 							ILaunchConfigurationWorkingCopy newConfiguration = createEmptyLaunchConfiguration();
 							AngularCLILaunchHelper.updateNodeFilePath(newProjectHandle, newConfiguration);
 							AngularCLILaunchHelper.updateNgFilePath(newProjectHandle, newConfiguration);

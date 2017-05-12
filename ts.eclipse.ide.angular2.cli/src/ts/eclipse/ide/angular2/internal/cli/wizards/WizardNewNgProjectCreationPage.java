@@ -10,6 +10,8 @@
  */
 package ts.eclipse.ide.angular2.internal.cli.wizards;
 
+import java.util.ArrayList;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.osgi.util.NLS;
@@ -17,14 +19,13 @@ import org.eclipse.ui.wizards.newresource.BasicNewResourceWizard;
 
 import ts.eclipse.ide.angular2.cli.AngularCLIPlugin;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
-import ts.eclipse.ide.ui.utils.StatusUtil;
-import ts.eclipse.ide.ui.wizards.WizardNewTypeScriptProjectCreationPage;
+import ts.eclipse.ide.ui.wizards.AbstractWizardNewTypeScriptProjectCreationPage;
 
 /**
  * Main wizard page to create an Angular2 project.
  *
  */
-public class WizardNewNgProjectCreationPage extends WizardNewTypeScriptProjectCreationPage {
+public class WizardNewNgProjectCreationPage extends AbstractWizardNewTypeScriptProjectCreationPage {
 
 	public static final String projectNameRegexp = "^[a-zA-Z][.0-9a-zA-Z]*(-[.0-9a-zA-Z]*)*$";
 	public static final String[] unsupportedProjectNames = new String[] { "test", "ember", "ember-cli", "vendor",
@@ -35,15 +36,12 @@ public class WizardNewNgProjectCreationPage extends WizardNewTypeScriptProjectCr
 	}
 
 	@Override
-	protected boolean validatePage() {
-		if (super.validatePage()) {
-			IStatus nameStatus = validateNgProjectName(getProjectName());
-			if (!nameStatus.isOK()) {
-				StatusUtil.applyToStatusLine(this, nameStatus);
-				return true;
-			}
-		}
-		return true;
+	protected ArrayList<IStatus> validatePageImpl() {
+		ArrayList<IStatus> status = super.validatePageImpl();
+		if (status == null)
+			status = new ArrayList<>();
+		status.add(validateNgProjectName(getProjectName()));
+		return status;
 	}
 
 	private IStatus validateNgProjectName(String name) {

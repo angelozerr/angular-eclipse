@@ -10,8 +10,6 @@
  */
 package ts.eclipse.ide.angular2.internal.cli.wizards;
 
-import java.util.ArrayList;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.osgi.util.NLS;
@@ -19,6 +17,7 @@ import org.eclipse.ui.wizards.newresource.BasicNewResourceWizard;
 
 import ts.eclipse.ide.angular2.cli.AngularCLIPlugin;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
+import ts.eclipse.ide.ui.utils.StatusUtil;
 import ts.eclipse.ide.ui.wizards.AbstractWizardNewTypeScriptProjectCreationPage;
 
 /**
@@ -28,22 +27,24 @@ import ts.eclipse.ide.ui.wizards.AbstractWizardNewTypeScriptProjectCreationPage;
 public class WizardNewNgProjectCreationPage extends AbstractWizardNewTypeScriptProjectCreationPage {
 
 	public static final String projectNameRegexp = "^[a-zA-Z][.0-9a-zA-Z]*(-[.0-9a-zA-Z]*)*$";
-	public static final String[] unsupportedProjectNames = new String[] { "test", "ember", "ember-cli", "vendor",
-			"app" };
+	public static final String[] unsupportedProjectNames = new String[] {
+		"test",
+		"ember",
+		"ember-cli",
+		"vendor",
+		"app"
+	};
 
 	public WizardNewNgProjectCreationPage(String pageName, BasicNewResourceWizard wizard) {
 		super(pageName, wizard);
 	}
 
 	@Override
-	protected ArrayList<IStatus> validatePageImpl() {
-		ArrayList<IStatus> status = super.validatePageImpl();
-		if (status == null)
-			status = new ArrayList<>();
-		status.add(validateNgProjectName(getProjectName()));
-		return status;
+	protected IStatus validatePageImpl() {
+		return StatusUtil.getMoreSevere(super.validatePageImpl(), validateNgProjectName(getProjectName()));
 	}
 
+	/** Validates the name of the Angular-CLI Project. */
 	private IStatus validateNgProjectName(String name) {
 		IStatus status = Status.OK_STATUS;
 		for (int i = 0, cnt = unsupportedProjectNames.length; i < cnt; i++) {

@@ -15,8 +15,10 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
+import ts.client.ISupportable;
 import ts.eclipse.ide.core.resources.IIDETypeScriptProject;
 import ts.eclipse.ide.core.utils.TypeScriptResourceUtil;
+import ts.utils.VersionHelper;
 
 /**
  * Angular2 project.
@@ -26,6 +28,14 @@ public class Angular2Project {
 
 	private static final String ANGULAR2_PROJECT = Angular2Project.class.getName();
 
+	private static final ISupportable ANGULAR_LANGUAGE_SERVICE_CAPABILITY = new ISupportable() {
+		
+		@Override
+		public boolean canSupport(String version) {
+			return VersionHelper.canSupport(version, "2.4.0");
+		}
+	};
+	
 	private final Angular2ProjectSettings settings;
 
 	Angular2Project(IIDETypeScriptProject tsProject) {
@@ -55,5 +65,17 @@ public class Angular2Project {
 
 	public Angular2ProjectSettings getSettings() {
 		return settings;
+	}
+
+	public static boolean canSupportAngularLanguageService(IProject project) {
+		if (isAngular2Project(project)) {
+			try {
+				IIDETypeScriptProject tsProject = TypeScriptResourceUtil.getTypeScriptProject(project);
+				return tsProject.canSupport(ANGULAR_LANGUAGE_SERVICE_CAPABILITY);
+			} catch (CoreException e) {
+				return false;
+			}			
+		}
+		return false;
 	}
 }

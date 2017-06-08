@@ -31,4 +31,12 @@
 		<validator class="ts.eclipse.ide.angular2.internal.core.validation.HTMLAngular2AttributeValidator"></validator>
 	</extension>
 
+	<!-- consume tsserver for html, htm files to benefit with Angular2 Language Service -->
+	<extension
+	      point="ts.eclipse.ide.core.typeScriptResourceParticipants">
+	    <participant
+	          class="ts.eclipse.ide.angular2.internal.core.html.HTMLAngularTemplateParticipant" >
+	    </participant>
+	</extension>
+	
 </plugin>        

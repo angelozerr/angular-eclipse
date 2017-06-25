@@ -13,6 +13,8 @@ package ts.eclipse.ide.angular2.internal.cli.wizards;
 import java.io.File;
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
@@ -40,11 +42,15 @@ import ts.eclipse.ide.angular2.cli.utils.CLIProcessHelper;
 import ts.eclipse.ide.angular2.cli.utils.CLIStatus;
 import ts.eclipse.ide.angular2.cli.utils.NgVersionJob;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
+import ts.eclipse.ide.core.utils.WorkbenchResourceUtil;
+import ts.eclipse.ide.terminal.interpreter.EnvPath;
 import ts.eclipse.ide.terminal.interpreter.LineCommand;
 import ts.eclipse.ide.terminal.interpreter.TerminalCommandAdapter;
 import ts.eclipse.ide.ui.utils.StatusUtil;
+import ts.eclipse.ide.ui.widgets.IStatusChangeListener;
 import ts.eclipse.ide.ui.widgets.NpmInstallWidget;
 import ts.eclipse.ide.ui.wizards.AbstractWizardNewTypeScriptProjectCreationPage;
+import ts.utils.FileUtils;
 
 /**
  * Main wizard page to create an Angular2 project.
@@ -123,7 +129,17 @@ public class WizardNewNgProjectCreationPage extends AbstractWizardNewTypeScriptP
 				updateAngularCLIMode();
 			}
 		});
-		installAngularCLI = new NpmInstallWidget("@angular/cli", this, parent, SWT.NONE);
+		installAngularCLI = new NpmInstallWidget(
+			"@angular/cli",
+			new IStatusChangeListener() {
+				@Override
+				public void statusChanged(IStatus status) {
+					setPageComplete(validatePage());
+				}
+			},
+			parent,
+			SWT.NONE
+		);
 		installAngularCLI.getVersionText().addListener(SWT.Modify, this);
 	}
 
@@ -226,20 +242,22 @@ public class WizardNewNgProjectCreationPage extends AbstractWizardNewTypeScriptP
 	}
 
 	@Override
-	public void updateCommand(List<LineCommand> commands, final IEclipsePreferences preferences) {
+	public void updateCommand(List<LineCommand> commands, final IProject project) {
 		if (!useGlobalAngularCLI) {
 			// when Angular CLI is installed, update the project Eclipse preferences
 			// to consume this installed Angular CLI.
 			commands.add(new LineCommand(installAngularCLI.getNpmInstallCommand(), new TerminalCommandAdapter() {
 				@Override
 				public void onTerminateCommand(LineCommand lineCommand) {
-
 					Display.getDefault().asyncExec(new Runnable() {
 						@Override
 						public void run() {
+							IEclipsePreferences preferences = new ProjectScope(project).getNode(AngularCLIPlugin.PLUGIN_ID);
 							preferences.putBoolean(AngularCLIPreferenceConstants.NG_USE_GLOBAL_INSTALLATION, false);
-							preferences.put(AngularCLIPreferenceConstants.NG_CUSTOM_FILE_PATH,
-									"${project_loc:node_modules/.bin}");
+							preferences.put(
+								AngularCLIPreferenceConstants.NG_CUSTOM_FILE_PATH,
+								"${project_loc:node_modules/.bin}"
+							);
 							try {
 								preferences.flush();
 							} catch (BackingStoreException e) {
@@ -250,6 +268,9 @@ public class WizardNewNgProjectCreationPage extends AbstractWizardNewTypeScriptP
 
 				}
 			}));
+			commands.add(EnvPath.createSetPathCommand(
+				EnvPath.insertToEnvPath(FileUtils.getPath(WorkbenchResourceUtil.resolvePath("${project_loc:node_modules/.bin}", project)))
+			));
 		}
 	}
 

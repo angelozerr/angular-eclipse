@@ -47,7 +47,7 @@ public class HTMLAngular2TagsCompletionProposalComputer extends DefaultXMLComple
 					new HTMLAngular2CompletionCollector(element, attr, contentAssistRequest, this));
 		}
 	}
-	
+
 	@Override
 	public List computeCompletionProposals(CompletionProposalInvocationContext context, IProgressMonitor monitor) {
 		ITextViewer textViewer = context.getViewer();
@@ -64,11 +64,14 @@ public class HTMLAngular2TagsCompletionProposalComputer extends DefaultXMLComple
 
 		ContentAssistRequest contentAssistRequest = null;
 
-//		IStructuredDocumentRegion sdRegion = getStructuredDocumentRegion(documentPosition);
-//		ITextRegion completionRegion = getCompletionRegion(documentPosition, node);
-//
-//		String matchString = getMatchString(sdRegion, completionRegion, documentPosition);
-//		
+		// IStructuredDocumentRegion sdRegion =
+		// getStructuredDocumentRegion(documentPosition);
+		// ITextRegion completionRegion = getCompletionRegion(documentPosition,
+		// node);
+		//
+		// String matchString = getMatchString(sdRegion, completionRegion,
+		// documentPosition);
+		//
 		IResource resource = DOMUtils.getFile(xmlnode);
 		if (resource != null) {
 			try {
@@ -82,10 +85,10 @@ public class HTMLAngular2TagsCompletionProposalComputer extends DefaultXMLComple
 
 						IDocument document = context.getDocument();
 						ITypeScriptFile tsFile = tsProject.openFile(resource, document);
-						CharSequence prefix = ""; //context.computeIdentifierPrefix();
+						CharSequence prefix = ""; // context.computeIdentifierPrefix();
 
 						String p = prefix != null ? prefix.toString() : "";
-						return tsFile.completions(position, new JSDTCompletionProposalFactory(position, p))
+						return tsFile.completions(position, new JSDTCompletionProposalFactory(position, p, textViewer))
 								.get(5000, TimeUnit.MILLISECONDS).stream().filter(entry -> entry.updatePrefix(p))
 								.collect(Collectors.toList());
 					}
@@ -102,11 +105,12 @@ public class HTMLAngular2TagsCompletionProposalComputer extends DefaultXMLComple
 		}
 		return super.computeCompletionProposals(context, monitor);
 	}
-	
-//	/**
-//	 * StructuredTextViewer must be set before using this.
-//	 */
-//	private IStructuredDocumentRegion getStructuredDocumentRegion(int pos) {
-//		return null; //ContentAssistUtils.getStructuredDocumentRegion(fTextViewer, pos);
-//	}
+
+	// /**
+	// * StructuredTextViewer must be set before using this.
+	// */
+	// private IStructuredDocumentRegion getStructuredDocumentRegion(int pos) {
+	// return null;
+	// //ContentAssistUtils.getStructuredDocumentRegion(fTextViewer, pos);
+	// }
 }

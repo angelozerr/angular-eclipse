@@ -11,7 +11,13 @@
  */
 package ts.eclipse.ide.angular2.internal.cli.wizards;
 
-import org.eclipse.jface.wizard.WizardPage;
+import java.util.List;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontMetrics;
@@ -23,16 +29,19 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Widget;
 
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
+import ts.eclipse.ide.terminal.interpreter.LineCommand;
+import ts.eclipse.ide.terminal.interpreter.TerminalCommandAdapter;
+import ts.eclipse.ide.ui.wizards.AbstractWizardPage;
 
 /**
  * Wizard page for the optional Project-Parameters.
  *
  */
-public class NewAngular2ProjectParamsWizardPage extends WizardPage implements Listener {
+public class NewAngular2ProjectParamsWizardPage extends AbstractWizardPage {
 
 	private static final String PAGE_NAME	= "newProjectParamsPage";
 
@@ -45,6 +54,16 @@ public class NewAngular2ProjectParamsWizardPage extends WizardPage implements Li
 	//  aliases: -lc
 	//--directory (String)
 	//  aliases: -dir <value>
+	private boolean skipInstall;
+	private boolean skipGit;
+	private boolean skipTests;
+	private boolean skipCommit;
+	private String sourceDir;
+	private String style;
+	private String prefix;
+	private boolean routing;
+	private boolean inlineStyle;
+	private boolean inlineTemplate;
 
 	/**
 	 * --skip-install (Boolean) (Default: false)
@@ -107,27 +126,7 @@ public class NewAngular2ProjectParamsWizardPage extends WizardPage implements Li
 	}
 
 	@Override
-	public void createControl(Composite parent) {
-		initializeDialogUnits(parent);
-		Composite topLevel = new Composite(parent, SWT.NONE);
-		topLevel.setLayout(new GridLayout());
-		topLevel.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_FILL | GridData.HORIZONTAL_ALIGN_FILL));
-		topLevel.setFont(parent.getFont());
-
-		createParamsControl(topLevel);
-
-		// initialize page with default values
-		initializeDefaultValues();
-
-		validatePage();
-
-		// Show description on opening
-		setErrorMessage(null);
-		setMessage(null);
-		setControl(topLevel);
-	}
-
-	protected void createParamsControl(Composite parent) {
+	public void createBody(Composite parent) {
 		Font font = parent.getFont();
 
 		// params group
@@ -294,7 +293,8 @@ public class NewAngular2ProjectParamsWizardPage extends WizardPage implements Li
 		label = new Label(paramsGroup, SWT.NONE);
 	}
 
-	private void initializeDefaultValues() {
+	@Override
+	protected void initializeDefaultValues() {
 		//chkSkipInstall.setSelection(false);
 		//chkSkipGit.setSelection(false);
 		//chkSkipTests.setSelection(false);
@@ -309,91 +309,89 @@ public class NewAngular2ProjectParamsWizardPage extends WizardPage implements Li
 
 	@Override
 	public void handleEvent(Event event) {
-		setPageComplete(validatePage());
+		super.handleEvent(event);
+		Widget item = event != null ? event.item : null;
+		if (item == chkSkipInstall)
+			skipInstall = chkSkipInstall.getSelection();
+		else if (item == chkSkipGit)
+			skipGit = chkSkipGit.getSelection();
+		else if (item == chkSkipTests)
+			skipTests = chkSkipTests.getSelection();
+		else if (item == chkSkipCommit)
+			skipCommit = chkSkipCommit.getSelection();
+		else if (item == txtSourceDir)
+			sourceDir = txtSourceDir.getText();
+		else if (item == cbStyle)
+			style = cbStyle.getText();
+		else if (item == txtPrefix)
+			prefix = txtPrefix.getText();
+		else if (item == chkRouting)
+			routing = chkRouting.getSelection();
+		else if (item == chkInlineStyle)
+			inlineStyle = chkInlineStyle.getSelection();
+		else if (item == chkInlineTemplate)
+			inlineTemplate = chkInlineTemplate.getSelection();
 	}
 
-	protected boolean validatePage() {
-		// TODO Validation required?
-		return true;
-	}
-
-	public boolean isSkipInstall() {
-		return chkSkipInstall.getSelection();
-	}
-
-	public boolean isSkipGit() {
-		return chkSkipGit.getSelection();
-	}
-
-	public boolean isSkipTests() {
-		return chkSkipTests.getSelection();
-	}
-
-	public boolean isSkipCommit() {
-		return chkSkipCommit.getSelection();
-	}
-
-	public String getSourceDir() {
-		return txtSourceDir.getText();
-	}
-
-	public String getStyle() {
-		return cbStyle.getText();
-	}
-
-	public String getPrefix() {
-		return txtPrefix.getText();
-	}
-
-	public boolean isRouting() {
-		return chkRouting.getSelection();
-	}
-
-	public boolean isInlineStyle() {
-		return chkInlineStyle.getSelection();
-	}
-
-	public boolean isInlineTemplate() {
-		return chkInlineTemplate.getSelection();
+	protected IStatus[] validatePage() {
+		return null;
 	}
 
 	public String getParamsString() {
 		StringBuilder sbParams = new StringBuilder();
 
-		if (isSkipInstall())
+		if (skipInstall)
 			sbParams.append("-si").append(' ');
 
-		if (isSkipGit())
+		if (skipGit)
 			sbParams.append("-sg").append(' ');
 
-		if (isSkipTests())
+		if (skipTests)
 			sbParams.append("-st").append(' ');
 
-		if (isSkipCommit())
+		if (skipCommit)
 			sbParams.append("-sc").append(' ');
 
-		String sourceDir = getSourceDir();
 		if (sourceDir != null && sourceDir.length() > 0 && !sourceDir.equals("src"))
 			sbParams.append("-sd").append(' ').append(sourceDir).append(' ');
 
-		String style = getStyle();
 		if (style != null && style.length() > 0 && !style.equalsIgnoreCase("CSS"))
 			sbParams.append("--style").append(' ').append(style).append(' ');
 
-		String prefix = getPrefix();
 		if (prefix != null && prefix.length() > 0 && !prefix.equals("app"))
 			sbParams.append("-p").append(' ').append(prefix).append(' ');
 
-		if (isRouting())
+		if (routing)
 			sbParams.append("--routing").append(' ');
 
-		if (isInlineStyle())
+		if (inlineStyle)
 			sbParams.append("-is").append(' ');
 
-		if (isInlineTemplate())
+		if (inlineTemplate)
 			sbParams.append("-it").append(' ');
+
+		sbParams.append("-dir ./");		// Directory is already created
 
 		return sbParams.toString();
 	}
 
+	@Override
+	public void updateCommand(List<LineCommand> commands, IProject project) {
+		StringBuilder sbCommand = new StringBuilder()
+			.append("ng new ")
+			.append(project.getName())
+			.append(" ")
+			.append(getParamsString());
+		commands.add(new LineCommand(sbCommand.toString(), new TerminalCommandAdapter() {
+			@Override
+			public void onTerminateCommand(LineCommand lineCommand) {
+				IFile tslintJsonFile = project.getFile("tslint.json");
+				try {
+					tslintJsonFile.refreshLocal(IResource.DEPTH_INFINITE, null);
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
+			}
+		}));
+	}
 }

@@ -7,7 +7,7 @@
  *
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
- *  
+ *
  */
 package ts.eclipse.ide.angular2.internal.cli.terminal;
 
@@ -75,8 +75,7 @@ public class NgCommandInterpreterFactory implements ICommandInterpreterFactory, 
 		if (parameters.size() < 2) {
 			return null;
 		}
-		String projectName = parameters.get(1);
-		return new File(workingDir, projectName);
+		return new File(workingDir);
 	}
 
 	@Override

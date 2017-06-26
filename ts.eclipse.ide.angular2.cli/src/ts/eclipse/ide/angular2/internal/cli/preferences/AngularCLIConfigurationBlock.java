@@ -11,14 +11,10 @@
 package ts.eclipse.ide.angular2.internal.cli.preferences;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.dialogs.ControlEnableState;
 import org.eclipse.osgi.util.NLS;
@@ -39,13 +35,14 @@ import org.eclipse.ui.preferences.IWorkbenchPreferenceContainer;
 import ts.eclipse.ide.angular2.cli.AngularCLIPlugin;
 import ts.eclipse.ide.angular2.cli.preferences.AngularCLIPreferenceConstants;
 import ts.eclipse.ide.angular2.cli.utils.CLIProcessHelper;
+import ts.eclipse.ide.angular2.cli.utils.CLIStatus;
+import ts.eclipse.ide.angular2.cli.utils.NgVersionJob;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
 import ts.eclipse.ide.core.utils.TypeScriptResourceUtil;
 import ts.eclipse.ide.core.utils.WorkbenchResourceUtil;
 import ts.eclipse.ide.ui.preferences.BrowseButtonsComposite;
 import ts.eclipse.ide.ui.preferences.OptionsConfigurationBlock;
 import ts.eclipse.ide.ui.preferences.ScrolledPageContent;
-import ts.eclipse.ide.ui.preferences.StatusInfo;
 import ts.eclipse.ide.ui.widgets.IStatusChangeListener;
 import ts.utils.FileUtils;
 import ts.utils.StringUtils;
@@ -67,7 +64,7 @@ public class AngularCLIConfigurationBlock extends OptionsConfigurationBlock {
 
 	private static final Key PREF_NG_USE_GLOBAL_INSTALLATION = getAngularCliKey(
 			AngularCLIPreferenceConstants.NG_USE_GLOBAL_INSTALLATION);
-	
+
 	private static final Key PREF_NG_CUSTOM_FILE_PATH = getAngularCliKey(
 			AngularCLIPreferenceConstants.NG_CUSTOM_FILE_PATH);
 
@@ -79,75 +76,11 @@ public class AngularCLIConfigurationBlock extends OptionsConfigurationBlock {
 	private NgVersionJob ngVersionJob;
 	private File ngFile;
 
-	private class NgVersionJob extends Job {
-
-		private final IProject project;
-
-		public NgVersionJob(IProject project) {
-			super(AngularCLIMessages.AngularCLIConfigurationBlock_ValidatingNgCli_jobName);
-			this.project = project;
-		}
-
-		@Override
-		protected IStatus run(IProgressMonitor monitor) {
-			if (monitor.isCanceled()) {
-				return Status.CANCEL_STATUS;
-			}
-			File currentNgFile = ngFile;
-			if (currentNgFile == null) {
-				return Status.CANCEL_STATUS;
-			}
-			File nodeFile = getNodejsPath(project);
-			String version = null;
-			String errorMessage = null;
-			try {
-				version = CLIProcessHelper.getNgVersion(currentNgFile, nodeFile);
-			} catch (IOException e) {
-				errorMessage = e.getMessage();
-			}
-			final CLIStatus status = StringUtils.isEmpty(version) ? new CLIStatus(null,
-					errorMessage != null ? errorMessage
-							: NLS.bind(AngularCLIMessages.AngularCLIConfigurationBlock_ngCustomFile_invalid_error,
-									FileUtils.getPath(currentNgFile)))
-					: new CLIStatus(currentNgFile, null);
-			status.setVersion(version);
-			if (monitor.isCanceled() || !currentNgFile.equals(ngFile)) {
-				return Status.CANCEL_STATUS;
-			}
-			Display.getDefault().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-					if (cliVersion.isDisposed()) {
-						return;
-					}
-					if (!StringUtils.isEmpty(status.getVersion())) {
-						cliVersion.setText(status.getVersion());
-					} else {
-						cliPath.setText("");
-						cliVersion.setText("");
-
-					}
-					fContext.statusChanged(status);
-				}
-			});
-
-			return status;
-		}
-
-		public File getNodejsPath(IProject project) {
-			try {
-				return TypeScriptResourceUtil.getTypeScriptProject(project).getProjectSettings().getNodejsInstallPath();
-			} catch (Throwable e) {
-				return null;
-			}
-		}
-	};
-
 	public AngularCLIConfigurationBlock(IStatusChangeListener context, IProject project,
 			IWorkbenchPreferenceContainer container) {
 		super(context, project, getKeys(), container);
-		ngVersionJob = new NgVersionJob(project);
+		ngVersionJob = new NgVersionJob();
+		ngVersionJob.setNodeFile(getNodejsPath(project));
 		ngVersionJob.addJobChangeListener(new JobChangeAdapter() {
 			@Override
 			public void done(IJobChangeEvent event) {
@@ -176,6 +109,15 @@ public class AngularCLIConfigurationBlock extends OptionsConfigurationBlock {
 			}
 		});
 		blockEnableState = null;
+	}
+
+	/** Gets the NodeJS-File for this Project. */
+	private File getNodejsPath(IProject project) {
+		try {
+			return TypeScriptResourceUtil.getTypeScriptProject(project).getProjectSettings().getNodejsInstallPath();
+		} catch (Throwable e) {
+			return null;
+		}
 	}
 
 	private static Key[] getKeys() {
@@ -320,40 +262,16 @@ public class AngularCLIConfigurationBlock extends OptionsConfigurationBlock {
 			cliPath.setText(FileUtils.getPath(status.getNgFile()));
 			cliVersion.setText("Executing 'ng --version'...");
 			ngFile = status.getNgFile();
+			ngVersionJob.setNgFile(ngFile);
 			ngVersionJob.schedule();
 		} else {
 			fContext.statusChanged(status);
 		}
 	}
 
-	private class CLIStatus extends StatusInfo {
-
-		private final File ngFile;
-		private String version;
-
-		public CLIStatus(File ngFile, String errorMessage) {
-			if (errorMessage != null) {
-				setError(errorMessage);
-			}
-			this.ngFile = ngFile;
-		}
-
-		public File getNgFile() {
-			return ngFile;
-		}
-
-		public void setVersion(String version) {
-			this.version = version;
-		}
-
-		public String getVersion() {
-			return version;
-		}
-	}
-
 	/**
 	 * Returns the status of the ng path.
-	 * 
+	 *
 	 * @return the status of the ng path.
 	 */
 	private CLIStatus validateCLIPath() {

@@ -13,8 +13,14 @@
  *******************************************************************************/
 package ts.eclipse.ide.angular2.internal.cli.wizards;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.ProjectScope;
@@ -22,24 +28,26 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.debug.core.DebugPlugin;
-import org.eclipse.debug.core.ILaunchConfigurationType;
-import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
-import org.eclipse.debug.core.ILaunchManager;
-import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.tm.terminal.view.core.interfaces.constants.ITerminalsConnectorConstants;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.ide.undo.CreateProjectOperation;
+import org.eclipse.ui.ide.undo.WorkspaceUndoUtil;
+import org.eclipse.ui.internal.wizards.newresource.ResourceMessages;
+import org.osgi.service.prefs.BackingStoreException;
 
-import ts.eclipse.ide.angular2.cli.NgCommand;
-import ts.eclipse.ide.angular2.cli.launch.AngularCLILaunchConstants;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIImageResource;
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
-import ts.eclipse.ide.angular2.internal.cli.launch.AngularCLILaunchHelper;
 import ts.eclipse.ide.core.TypeScriptCorePlugin;
+import ts.eclipse.ide.core.utils.TypeScriptResourceUtil;
+import ts.eclipse.ide.terminal.interpreter.EnvPath;
+import ts.eclipse.ide.terminal.interpreter.LineCommand;
 import ts.eclipse.ide.ui.wizards.AbstractNewProjectWizard;
 import ts.eclipse.ide.ui.wizards.AbstractWizardNewTypeScriptProjectCreationPage;
+import ts.utils.FileUtils;
+import ts.utils.StringUtils;
 
 /**
  * Standard workbench wizard that creates a new angular-cli project resource in
@@ -69,8 +77,6 @@ import ts.eclipse.ide.ui.wizards.AbstractWizardNewTypeScriptProjectCreationPage;
 public class NewAngular2ProjectWizard extends AbstractNewProjectWizard {
 
 	private static final String WIZARD_NAME = "NewAngular2ProjectWizard";
-
-	private static final String ANGULAR_CLI_LAUNCH_NAME = "angular-cli";
 
 	private NewAngular2ProjectParamsWizardPage paramsPage;
 
@@ -119,19 +125,6 @@ public class NewAngular2ProjectWizard extends AbstractNewProjectWizard {
 		this.addPage(paramsPage);
 	}
 
-	private abstract class ErrorRunnable implements Runnable {
-
-		private Throwable error;
-
-		public Throwable getError() {
-			return error;
-		}
-
-		private void setError(Throwable error) {
-			this.error = error;
-		}
-	}
-
 	@Override
 	protected IRunnableWithProgress getRunnable(final IProject newProjectHandle, final IProjectDescription description,
 			final IPath projectLocation) {
@@ -139,45 +132,59 @@ public class NewAngular2ProjectWizard extends AbstractNewProjectWizard {
 
 			@Override
 			public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-				// Execute @angular/cli "ng new $project-name"
-				ErrorRunnable runnable = new ErrorRunnable() {
-					@Override
-					public void run() {
-						try {
-							final String operationParams = paramsPage.getParamsString();
-							IEclipsePreferences preferences = new ProjectScope(newProjectHandle)
-									.getNode(TypeScriptCorePlugin.PLUGIN_ID);
-							mainPage.updateNodeJSPreferences(preferences);
-							ILaunchConfigurationWorkingCopy newConfiguration = createEmptyLaunchConfiguration();
-							AngularCLILaunchHelper.updateNodeFilePath(newProjectHandle, newConfiguration);
-							AngularCLILaunchHelper.updateNgFilePath(newProjectHandle, newConfiguration);
-							newConfiguration.setAttribute(AngularCLILaunchConstants.WORKING_DIR,
-									projectLocation.removeLastSegments(1).toString());
-							newConfiguration.setAttribute(AngularCLILaunchConstants.OPERATION,
-									NgCommand.NEW.name().toLowerCase());
-							newConfiguration.setAttribute(AngularCLILaunchConstants.OPERATION_PARAMETERS,
-									newProjectHandle.getName() + " " + operationParams);
-							DebugUITools.launch(newConfiguration, ILaunchManager.RUN_MODE);
-						} catch (CoreException e) {
-							super.setError(e);
-						}
-					}
-				};
-				getShell().getDisplay().syncExec(runnable);
-				if (runnable.getError() != null) {
-					throw new InvocationTargetException(runnable.getError());
+				final CreateProjectOperation op1 = new CreateProjectOperation(description,
+						ResourceMessages.NewProject_windowTitle);
+				try {
+					// see bug
+					// https://bugs.eclipse.org/bugs/show_bug.cgi?id=219901
+					// directly execute the operation so that the undo state is
+					// not preserved. Making this undoable resulted in too many
+					// accidental file deletions.
+					op1.execute(monitor, WorkspaceUndoUtil.getUIInfoAdapter(getShell()));
+				} catch (ExecutionException e) {
+					throw new InvocationTargetException(e);
 				}
+
+				// Add TypeScript builder
+				try {
+					TypeScriptResourceUtil.addTypeScriptBuilder(newProjectHandle);
+				} catch (CoreException e) {
+					throw new InvocationTargetException(e);
+				}
+
+				IEclipsePreferences preferences = new ProjectScope(newProjectHandle)
+						.getNode(TypeScriptCorePlugin.PLUGIN_ID);
+
+				// Update node.js preferences
+				mainPage.updateNodeJSPreferences(preferences);
+
+				// Get the commands to run
+				List<LineCommand> commands = new ArrayList<>();
+				Map<String, Object> properties = new HashMap<String, Object>();
+				mainPage.updateCommand(commands, newProjectHandle);
+				paramsPage.updateCommand(commands, newProjectHandle);
+
+				if (!commands.isEmpty()) {
+					// Prepare terminal properties
+					properties.put(ITerminalsConnectorConstants.PROP_PROCESS_WORKING_DIR, projectLocation.toString());
+					String nodeFilePath = getNodeFilePath();
+					if (!StringUtils.isEmpty(nodeFilePath)) {
+						EnvPath.insertToEnvPath(properties, nodeFilePath);
+					}
+					String terminalId = "Angular Projects";
+					executeCommandsInTerminal(terminalId, commands, properties);
+				}
+				try {
+					preferences.flush();
+				} catch (BackingStoreException e) {
+					e.printStackTrace();
+				}
+			}
+
+			private String getNodeFilePath() {
+				File nodeFile = TypeScriptResourceUtil.getWorkspaceNodejsInstallPath();
+				return nodeFile != null ? FileUtils.getPath(nodeFile) : null;
 			}
 		};
 	}
-
-	private ILaunchConfigurationWorkingCopy createEmptyLaunchConfiguration() throws CoreException {
-		ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
-		ILaunchConfigurationType launchConfigurationType = launchManager
-				.getLaunchConfigurationType(AngularCLILaunchConstants.LAUNCH_CONFIGURATION_ID);
-		ILaunchConfigurationWorkingCopy launchConfiguration = launchConfigurationType.newInstance(null,
-				launchManager.generateLaunchConfigurationName(ANGULAR_CLI_LAUNCH_NAME));
-		return launchConfiguration;
-	}
-
 }

@@ -32,7 +32,9 @@ Require-Bundle: org.eclipse.ui,
  ts.eclipse.ide.jsdt.core,
  ts.eclipse.ide.jsdt.ui,
  org.eclipse.wst.jsdt.ui,
- org.eclipse.search
+ org.eclipse.search,
+ ts.eclipse.ide.ui,
+ ts.eclipse.ide.validator.ui
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: ts.eclipse.ide.angular2.ui.Angular2UIPlugin
 Import-Package: com.eclipsesource.json;version="[0.9.4,0.9.5)"

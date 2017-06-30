@@ -166,6 +166,18 @@
 			</contentTypeIdentifier>			
 		</validator>
 	</extension>
+
+ 	<!-- Hyperlink for HTML Angular template (inside HTML file) -->        
+   <extension
+         point="org.eclipse.ui.workbench.texteditor.hyperlinkDetectors">
+      <hyperlinkDetector
+            class="ts.eclipse.ide.ui.hyperlink.TypeScriptHyperLinkDetector"
+            id="ts.eclipse.ide.ui.hyperlink.HTMLTypeScriptHyperLinkDetector"
+            name="%HTMLTypeScriptHyperLinkDetector"
+            activate="true"
+            targetId="org.eclipse.wst.html.core.htmlsource">
+      </hyperlinkDetector>      
+   </extension>
 		
 	<!-- Templates -->
 	<extension point="org.eclipse.ui.editors.templates">

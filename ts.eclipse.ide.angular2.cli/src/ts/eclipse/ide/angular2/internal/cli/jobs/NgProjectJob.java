@@ -14,6 +14,10 @@ package ts.eclipse.ide.angular2.internal.cli.jobs;
 
 import java.io.File;
 
+import org.eclipse.core.filebuffers.FileBuffers;
+import org.eclipse.core.filebuffers.ITextFileBuffer;
+import org.eclipse.core.filebuffers.ITextFileBufferManager;
+import org.eclipse.core.filebuffers.LocationKind;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -21,10 +25,14 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.Document;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.progress.UIJob;
 
@@ -96,6 +104,9 @@ public class NgProjectJob extends UIJob {
 			if (tsconfigJsonFile.exists()) {
 				try {
 					tsconfigJsonFile.refreshLocal(IResource.DEPTH_INFINITE, null);
+					// Add plugins if needed
+					updateTsconfig(tsconfigJsonFile);
+					tsconfigJsonFile.refreshLocal(IResource.DEPTH_INFINITE, null);
 				} catch (CoreException e) {
 					e.printStackTrace();
 				}
@@ -107,6 +118,88 @@ public class NgProjectJob extends UIJob {
 		return Status.OK_STATUS;
 	}
 
+	private static void updateTsconfig(IFile tsconfigJsonFile) {
+
+		IPath path = tsconfigJsonFile.getLocation();
+		ITextFileBufferManager manager = FileBuffers.getTextFileBufferManager();
+		try {
+			manager.connect(path, LocationKind.LOCATION, null);
+			ITextFileBuffer buffer = manager.getTextFileBuffer(path, LocationKind.LOCATION);
+			IDocument document =  buffer.getDocument();
+			updateTsconfig(document);
+			buffer.commit(null, true);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			try {
+				manager.disconnect(path, LocationKind.LOCATION, null);
+			} catch (CoreException ex) {
+				ex.printStackTrace();
+			}
+		}
+	}
+	
+	private static void updateTsconfig(IDocument document) throws BadLocationException {
+		int length = document.getNumberOfLines();
+		String line = null;
+		Integer bracket = null;
+		boolean found = false;
+		int lineOffset = 0;
+		for (int i = 0; i < length; i++) {
+			lineOffset = document.getLineOffset(i);
+			line = document.get(lineOffset, document.getLineLength(i));
+			if (!found) {
+				found = line.contains("\"compilerOptions\"");				
+			}
+			if (found) {
+				if (line.contains("\"plugins\"")) {
+					// ng new generate plugins, do nothing
+					break;
+				}
+				if (line.contains("{")) {
+					if (bracket == null) {
+						bracket = 1;
+					} else {
+						bracket++;
+					}
+				} else if (line.contains("}")) {
+					if (bracket == null) {
+						bracket = 0;
+					} else {
+						bracket--;
+					}
+				}
+				if (bracket!= null && bracket == 0) {
+					// end of "compilerOptions"
+					// add "plugins" section
+					int index = line.indexOf("}");
+					if (index != -1) {
+						String indent = document.get(lineOffset, index); 
+						int offset = document.getLineOffset(i - 1) + document.getLineLength(i - 1) - document.getLineDelimiter(i - 1).length();
+						document.replace(offset, 0, ",\n" + 
+								indent + "  \"plugins\": [\n" +
+								indent + "    { \"name\": \"@angular/language-service\"},\n" + 
+								indent + "    { \"name\": \"tslint-language-service\"}\n" +
+								indent + "  ]" + 
+				"");
+						break;
+					}
+				}
+			}
+		}		
+	}
+
+
+	public static void main(String[] args) throws BadLocationException {
+		Document document = new Document("{\n"
+				+ "    \"compilerOptions\":{\n"
+				+ "      \"module\": \"commonjs\"\n"
+				+ "    }\n" +
+				"}") ;
+		updateTsconfig(document);
+		System.err.println(document.get());
+	}
+	
 	// Code copied from
 	// org.eclipse.ui.internal.wizards.datatransfer.SmartImportJob
 

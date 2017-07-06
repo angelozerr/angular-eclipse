@@ -13,10 +13,7 @@ package ts.eclipse.ide.angular2.internal.cli.wizards;
 
 import java.util.List;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
@@ -34,7 +31,6 @@ import org.eclipse.swt.widgets.Widget;
 
 import ts.eclipse.ide.angular2.internal.cli.AngularCLIMessages;
 import ts.eclipse.ide.terminal.interpreter.LineCommand;
-import ts.eclipse.ide.terminal.interpreter.TerminalCommandAdapter;
 import ts.eclipse.ide.ui.wizards.AbstractWizardPage;
 
 /**
@@ -43,17 +39,17 @@ import ts.eclipse.ide.ui.wizards.AbstractWizardPage;
  */
 public class NewAngular2ProjectParamsWizardPage extends AbstractWizardPage {
 
-	private static final String PAGE_NAME	= "newProjectParamsPage";
+	private static final String PAGE_NAME = "newProjectParamsPage";
 
 	// TODO usefull?
-	//--dry-run (Boolean) (Default: false)
-	//  aliases: -d
-	//--verbose (Boolean) (Default: false)
-	//  aliases: -v
-	//--link-cli (Boolean) (Default: false)
-	//  aliases: -lc
-	//--directory (String)
-	//  aliases: -dir <value>
+	// --dry-run (Boolean) (Default: false)
+	// aliases: -d
+	// --verbose (Boolean) (Default: false)
+	// aliases: -v
+	// --link-cli (Boolean) (Default: false)
+	// aliases: -lc
+	// --directory (String)
+	// aliases: -dir <value>
 	private boolean skipInstall;
 	private boolean skipGit;
 	private boolean skipTests;
@@ -66,32 +62,27 @@ public class NewAngular2ProjectParamsWizardPage extends AbstractWizardPage {
 	private boolean inlineTemplate;
 
 	/**
-	 * --skip-install (Boolean) (Default: false)
-	 * aliases: -si, --skipInstall
+	 * --skip-install (Boolean) (Default: false) aliases: -si, --skipInstall
 	 */
 	private Button chkSkipInstall;
 
 	/**
-	 * --skip-git (Boolean) (Default: false)
-	 * aliases: -sg
+	 * --skip-git (Boolean) (Default: false) aliases: -sg
 	 */
 	private Button chkSkipGit;
 
 	/**
-	 * --skip-tests (Boolean) (Default: false)
-	 * aliases: -st
+	 * --skip-tests (Boolean) (Default: false) aliases: -st
 	 */
 	private Button chkSkipTests;
 
 	/**
-	 * --skip-commit (Boolean) (Default: false)
-	 * aliases: -sc
+	 * --skip-commit (Boolean) (Default: false) aliases: -sc
 	 */
 	private Button chkSkipCommit;
 
 	/**
-	 * --source-dir (String) (Default: src)
-	 * aliases: -sd <value>
+	 * --source-dir (String) (Default: src) aliases: -sd <value>
 	 */
 	private Text txtSourceDir;
 
@@ -99,25 +90,22 @@ public class NewAngular2ProjectParamsWizardPage extends AbstractWizardPage {
 	private Combo cbStyle;
 
 	/**
-	 * --prefix (String) (Default: app)
-	 * aliases: -p <value>
+	 * --prefix (String) (Default: app) aliases: -p <value>
 	 */
 	private Text txtPrefix;
 
-	//--mobile (Boolean) (Default: false) TODO disabled temporarily
+	// --mobile (Boolean) (Default: false) TODO disabled temporarily
 
 	/** --routing (Boolean) (Default: false) */
 	private Button chkRouting;
 
 	/**
-	 * --inline-style (Boolean) (Default: false)
-	 * aliases: -is
+	 * --inline-style (Boolean) (Default: false) aliases: -is
 	 */
 	private Button chkInlineStyle;
 
 	/**
-	 * --inline-template (Boolean) (Default: false)
-	 * aliases: -it
+	 * --inline-template (Boolean) (Default: false) aliases: -it
 	 */
 	private Button chkInlineTemplate;
 
@@ -295,16 +283,16 @@ public class NewAngular2ProjectParamsWizardPage extends AbstractWizardPage {
 
 	@Override
 	protected void initializeDefaultValues() {
-		//chkSkipInstall.setSelection(false);
-		//chkSkipGit.setSelection(false);
-		//chkSkipTests.setSelection(false);
-		//chkSkipCommit.setSelection(false);
+		// chkSkipInstall.setSelection(false);
+		// chkSkipGit.setSelection(false);
+		// chkSkipTests.setSelection(false);
+		// chkSkipCommit.setSelection(false);
 		txtSourceDir.setText("src");
 		cbStyle.select(cbStyle.indexOf("css"));
 		txtPrefix.setText("app");
-		//chkRouting.setSelection(false);
-		//chkInlineStyle.setSelection(false);
-		//chkInlineTemplate.setSelection(false);
+		// chkRouting.setSelection(false);
+		// chkInlineStyle.setSelection(false);
+		// chkInlineTemplate.setSelection(false);
 	}
 
 	@Override
@@ -370,28 +358,20 @@ public class NewAngular2ProjectParamsWizardPage extends AbstractWizardPage {
 		if (inlineTemplate)
 			sbParams.append("-it").append(' ');
 
-		sbParams.append("-dir ./");		// Directory is already created
+		sbParams.append("-dir ./"); // Directory is already created
 
 		return sbParams.toString();
 	}
 
 	@Override
 	public void updateCommand(List<LineCommand> commands, IProject project) {
-		StringBuilder sbCommand = new StringBuilder()
-			.append("ng new ")
-			.append(project.getName())
-			.append(" ")
-			.append(getParamsString());
-		commands.add(new LineCommand(sbCommand.toString(), new TerminalCommandAdapter() {
-			@Override
-			public void onTerminateCommand(LineCommand lineCommand) {
-				IFile tslintJsonFile = project.getFile("tslint.json");
-				try {
-					tslintJsonFile.refreshLocal(IResource.DEPTH_INFINITE, null);
-				} catch (CoreException e) {
-					e.printStackTrace();
-				}
-			}
-		}));
+		StringBuilder sbCommand = new StringBuilder().append("ng new ").append(project.getName()).append(" ")
+				.append(getParamsString());
+		commands.add(new LineCommand(sbCommand.toString()));
+		if (!skipInstall) {
+			// by waiting for https://github.com/angular/angular-cli/issues/6125
+			// force the install of tslint-language-service.
+			commands.add(new LineCommand("npm install tslint-language-service"));
+		}
 	}
 }

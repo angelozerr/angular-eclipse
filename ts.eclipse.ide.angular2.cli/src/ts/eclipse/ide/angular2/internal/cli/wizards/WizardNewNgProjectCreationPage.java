@@ -59,13 +59,8 @@ import ts.utils.FileUtils;
 public class WizardNewNgProjectCreationPage extends AbstractWizardNewTypeScriptProjectCreationPage {
 
 	public static final String projectNameRegexp = "^[a-zA-Z][.0-9a-zA-Z]*(-[.0-9a-zA-Z]*)*$";
-	public static final String[] unsupportedProjectNames = new String[] {
-		"test",
-		"ember",
-		"ember-cli",
-		"vendor",
-		"app"
-	};
+	public static final String[] unsupportedProjectNames = new String[] { "test", "ember", "ember-cli", "vendor",
+			"app" };
 
 	// Angular CLI
 	private Boolean hasGlobalAngularCLI;
@@ -104,8 +99,7 @@ public class WizardNewNgProjectCreationPage extends AbstractWizardNewTypeScriptP
 	/** Creates the field for install Angular CLI. */
 	private void createGlobalAngularCLIField(Composite parent) {
 		useGlobalAngularCLIButton = new Button(parent, SWT.RADIO);
-		useGlobalAngularCLIButton
-		.setText(AngularCLIMessages.WizardNewNgProjectCreationPage_useGlobalAngularCLI);
+		useGlobalAngularCLIButton.setText(AngularCLIMessages.WizardNewNgProjectCreationPage_useGlobalAngularCLI);
 		useGlobalAngularCLIButton.addListener(SWT.Selection, this);
 		useGlobalAngularCLIButton.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -120,8 +114,7 @@ public class WizardNewNgProjectCreationPage extends AbstractWizardNewTypeScriptP
 	/** Creates the field for install Angular CLI. */
 	private void createInstallAngularCLIField(Composite parent) {
 		useInstallAngularCLIButton = new Button(parent, SWT.RADIO);
-		useInstallAngularCLIButton
-				.setText(AngularCLIMessages.WizardNewNgProjectCreationPage_useInstallAngularCLI);
+		useInstallAngularCLIButton.setText(AngularCLIMessages.WizardNewNgProjectCreationPage_useInstallAngularCLI);
 		useInstallAngularCLIButton.addListener(SWT.Selection, this);
 		useInstallAngularCLIButton.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -129,17 +122,12 @@ public class WizardNewNgProjectCreationPage extends AbstractWizardNewTypeScriptP
 				updateAngularCLIMode();
 			}
 		});
-		installAngularCLI = new NpmInstallWidget(
-			"@angular/cli",
-			new IStatusChangeListener() {
-				@Override
-				public void statusChanged(IStatus status) {
-					setPageComplete(validatePage());
-				}
-			},
-			parent,
-			SWT.NONE
-		);
+		installAngularCLI = new NpmInstallWidget("@angular/cli", new IStatusChangeListener() {
+			@Override
+			public void statusChanged(IStatus status) {
+				setPageComplete(validatePage());
+			}
+		}, parent, SWT.NONE);
 		installAngularCLI.getVersionText().addListener(SWT.Modify, this);
 	}
 
@@ -167,8 +155,7 @@ public class WizardNewNgProjectCreationPage extends AbstractWizardNewTypeScriptP
 						version = s.getVersion();
 						if (s.isOK())
 							hasGlobalAngularCLI = Boolean.TRUE;
-					}
-					else {
+					} else {
 						hasGlobalAngularCLI = Boolean.FALSE;
 						version = "";
 					}
@@ -232,9 +219,11 @@ public class WizardNewNgProjectCreationPage extends AbstractWizardNewTypeScriptP
 	private IStatus validateAngularCLI() {
 		if (useGlobalAngularCLI) {
 			if (hasGlobalAngularCLI == null)
-				return new Status(IStatus.ERROR, AngularCLIPlugin.PLUGIN_ID, AngularCLIMessages.WizardNewNgProjectCreationPage_searchingForGlobalAngularCLI);
+				return new Status(IStatus.ERROR, AngularCLIPlugin.PLUGIN_ID,
+						AngularCLIMessages.WizardNewNgProjectCreationPage_searchingForGlobalAngularCLI);
 			else if (!hasGlobalAngularCLI.booleanValue())
-				return new Status(IStatus.ERROR, AngularCLIPlugin.PLUGIN_ID, AngularCLIMessages.WizardNewNgProjectCreationPage_noGlobalAngularCLI);
+				return new Status(IStatus.ERROR, AngularCLIPlugin.PLUGIN_ID,
+						AngularCLIMessages.WizardNewNgProjectCreationPage_noGlobalAngularCLI);
 			else
 				return Status.OK_STATUS;
 		}
@@ -242,7 +231,7 @@ public class WizardNewNgProjectCreationPage extends AbstractWizardNewTypeScriptP
 	}
 
 	@Override
-	public void updateCommand(List<LineCommand> commands, final IProject project) {
+	public void updateCommand(List<LineCommand> commands, final IProject project, String nodeFilePath) {
 		if (!useGlobalAngularCLI) {
 			// when Angular CLI is installed, update the project Eclipse preferences
 			// to consume this installed Angular CLI.
@@ -252,12 +241,11 @@ public class WizardNewNgProjectCreationPage extends AbstractWizardNewTypeScriptP
 					Display.getDefault().asyncExec(new Runnable() {
 						@Override
 						public void run() {
-							IEclipsePreferences preferences = new ProjectScope(project).getNode(AngularCLIPlugin.PLUGIN_ID);
+							IEclipsePreferences preferences = new ProjectScope(project)
+									.getNode(AngularCLIPlugin.PLUGIN_ID);
 							preferences.putBoolean(AngularCLIPreferenceConstants.NG_USE_GLOBAL_INSTALLATION, false);
-							preferences.put(
-								AngularCLIPreferenceConstants.NG_CUSTOM_FILE_PATH,
-								"${project_loc:node_modules/.bin}"
-							);
+							preferences.put(AngularCLIPreferenceConstants.NG_CUSTOM_FILE_PATH,
+									"${project_loc:node_modules/.bin}");
 							try {
 								preferences.flush();
 							} catch (BackingStoreException e) {
@@ -268,9 +256,8 @@ public class WizardNewNgProjectCreationPage extends AbstractWizardNewTypeScriptP
 
 				}
 			}));
-			commands.add(EnvPath.createSetPathCommand(
-				EnvPath.insertToEnvPath(FileUtils.getPath(WorkbenchResourceUtil.resolvePath("${project_loc:node_modules/.bin}", project)))
-			));
+			commands.add(EnvPath.createSetPathCommand(EnvPath.insertToEnvPath(nodeFilePath, FileUtils
+					.getPath(WorkbenchResourceUtil.resolvePath("${project_loc:node_modules/.bin}", project)))));
 		}
 	}
 

@@ -69,7 +69,7 @@ public class NgProjectJob extends UIJob {
 				return new Status(IStatus.CANCEL, AngularCLIPlugin.PLUGIN_ID,
 						AngularCLIMessages.AbstractProjectCommandInterpreter_error);
 			}
-			project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+			project.refreshLocal(IResource.DEPTH_ONE, monitor);
 
 			// Open angular-cli.json in an Editor
 			IFile angularCliJsonFile = AngularCLIProject.getAngularCliJsonFile(project);
@@ -81,6 +81,24 @@ public class NgProjectJob extends UIJob {
 				UIInterpreterHelper.openFile(angularCliJsonFile);
 				// Select in the Project Explorer the angular-cli.json file.
 				UIInterpreterHelper.selectRevealInDefaultViews(angularCliJsonFile);
+			}
+			// Refresh tslint.json
+			IFile tslintJsonFile = project.getFile("tslint.json");
+			if (tslintJsonFile.exists()) {
+				try {
+					tslintJsonFile.refreshLocal(IResource.DEPTH_INFINITE, null);
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
+			}
+			// Refresh tsconfig.json
+			IFile tsconfigJsonFile = project.getFile("tsconfig.json");
+			if (tsconfigJsonFile.exists()) {
+				try {
+					tsconfigJsonFile.refreshLocal(IResource.DEPTH_INFINITE, null);
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
 			}
 		} catch (CoreException e) {
 			return new Status(IStatus.ERROR, AngularCLIPlugin.PLUGIN_ID,

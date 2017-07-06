@@ -21,8 +21,8 @@ import ts.eclipse.ide.terminal.interpreter.AbstractCommandInterpreter;
  */
 public class NgServeCommandInterpreter extends AbstractCommandInterpreter {
 
-	private static final String SERVING_ON = "Server is running on ";
-
+	private static final String HTTP = "http";
+	
 	public NgServeCommandInterpreter(String workingDir) {
 		super(workingDir);
 	}
@@ -36,10 +36,11 @@ public class NgServeCommandInterpreter extends AbstractCommandInterpreter {
 
 	@Override
 	public void onTrace(String line) {
-		int startIndex = line.indexOf(SERVING_ON);
-		if (startIndex != -1) {
-			// ** NG Live Development Server is running on http://localhost:4200. **
-			startIndex += SERVING_ON.length();
+		// track 
+		// ** NG Live Development Server is running on http://localhost:4200. **
+		// ** NG Live Development Server is listening on localhost:4200, open your browser on http://localhost:4200 **
+		int startIndex = line.indexOf(HTTP);
+		if (startIndex != -1) {			
 			int endIndex = line.indexOf(".", startIndex);
 			if (endIndex == -1) {
 				endIndex = line.indexOf(" ", startIndex);
@@ -48,7 +49,6 @@ public class NgServeCommandInterpreter extends AbstractCommandInterpreter {
 					.trim();
 			// Open a Web Browser with the given server URL
 			new NgServeJob(serverURL).schedule();
-
 		}
 	}
 

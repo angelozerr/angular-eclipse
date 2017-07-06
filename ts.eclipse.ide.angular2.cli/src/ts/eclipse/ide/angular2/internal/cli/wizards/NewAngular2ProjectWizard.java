@@ -161,13 +161,13 @@ public class NewAngular2ProjectWizard extends AbstractNewProjectWizard {
 				// Get the commands to run
 				List<LineCommand> commands = new ArrayList<>();
 				Map<String, Object> properties = new HashMap<String, Object>();
-				mainPage.updateCommand(commands, newProjectHandle);
+				String nodeFilePath = getNodeFilePath();
+				mainPage.updateCommand(commands, newProjectHandle, nodeFilePath);
 				paramsPage.updateCommand(commands, newProjectHandle);
 
 				if (!commands.isEmpty()) {
 					// Prepare terminal properties
-					properties.put(ITerminalsConnectorConstants.PROP_PROCESS_WORKING_DIR, projectLocation.toString());
-					String nodeFilePath = getNodeFilePath();
+					properties.put(ITerminalsConnectorConstants.PROP_PROCESS_WORKING_DIR, projectLocation.toString());					
 					if (!StringUtils.isEmpty(nodeFilePath)) {
 						EnvPath.insertToEnvPath(properties, nodeFilePath);
 					}

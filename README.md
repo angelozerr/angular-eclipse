@@ -1,16 +1,16 @@
-# angular2-eclipse
+# Angular Eclipse
 
 [![Build Status](https://secure.travis-ci.org/angelozerr/angular2-eclipse.png)](http://travis-ci.org/angelozerr/angular2-eclipse)
 [![Eclipse install](https://marketplace.eclipse.org/sites/all/themes/solstice/public/images/marketplace/btn-install.png)](http://marketplace.eclipse.org/marketplace-client-intro?mpc_install=3037144)
 
-Angular2 Eclipse Plugin is based on [typescript.java](https://github.com/angelozerr/typescript.java).
+[Angular Eclipse](https://github.com/angelozerr/angular-eclipse) which is based on [TypeScript IDE](https://github.com/angelozerr/typescript.java) is a set of plugins which provide support for [Angular](https://angular.io/) :
 
-Today this project is just a POC, you benefit with TypeScript features (completion, validation, hover, hyperlink, etc) from [typescript.java](https://github.com/angelozerr/typescript.java).
+ * `Completion, validation, hover, hyperlink` for `Angular template` defined in the `HTML` or `TypeScript` file by integrating [@angular/language-service](https://github.com/angular/angular/tree/master/packages/language-service):
+ 
+![HTML Angular](images/HTMLAngularDemo.gif)
 
-This project highlights Angular expression inside HTML editor, but that's all. Once [typescript.java](https://github.com/angelozerr/typescript.java) will be released, I will work on this project.
+ * `Angular Wizards/Launches` to create Angular project, components, build, start server, etc by integrating [@angular/cli](https://github.com/angular/angular-cli):
+ 
+![New Angular Project Wizard](images/NewAngularProjectWizard.png)
 
-For the moment:
-
- * see https://github.com/angelozerr/angular2-eclipse/wiki/Getting-Started to install it
- * see https://github.com/angelozerr/angular2-eclipse/wiki/RoadMap
- * please create issues at https://github.com/angelozerr/angular2-eclipse/issues 
+Please starts with [Getting Started](https://github.com/angelozerr/angular-eclipse/wiki/Getting-Started).

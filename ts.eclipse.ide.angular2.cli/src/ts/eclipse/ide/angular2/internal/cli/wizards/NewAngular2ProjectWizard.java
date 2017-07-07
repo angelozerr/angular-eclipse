@@ -13,7 +13,6 @@
  *******************************************************************************/
 package ts.eclipse.ide.angular2.internal.cli.wizards;
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,7 +45,6 @@ import ts.eclipse.ide.terminal.interpreter.EnvPath;
 import ts.eclipse.ide.terminal.interpreter.LineCommand;
 import ts.eclipse.ide.ui.wizards.AbstractNewProjectWizard;
 import ts.eclipse.ide.ui.wizards.AbstractWizardNewTypeScriptProjectCreationPage;
-import ts.utils.FileUtils;
 import ts.utils.StringUtils;
 
 /**
@@ -112,10 +110,9 @@ public class NewAngular2ProjectWizard extends AbstractNewProjectWizard {
 
 		// only add page if there are already projects in the workspace
 		/*
-		 * if (ResourcesPlugin.getWorkspace().getRoot().getProjects().length >
-		 * 0) { referencePage = new
-		 * WizardNewProjectReferencePage("basicReferenceProjectPage");//$NON-NLS
-		 * -1$
+		 * if (ResourcesPlugin.getWorkspace().getRoot().getProjects().length > 0) {
+		 * referencePage = new
+		 * WizardNewProjectReferencePage("basicReferenceProjectPage");//$NON-NLS -1$
 		 * referencePage.setTitle(ResourceMessages.NewProject_referenceTitle);
 		 * referencePage.setDescription(ResourceMessages.
 		 * NewProject_referenceDescription); this.addPage(referencePage); }
@@ -167,7 +164,7 @@ public class NewAngular2ProjectWizard extends AbstractNewProjectWizard {
 
 				if (!commands.isEmpty()) {
 					// Prepare terminal properties
-					properties.put(ITerminalsConnectorConstants.PROP_PROCESS_WORKING_DIR, projectLocation.toString());					
+					properties.put(ITerminalsConnectorConstants.PROP_PROCESS_WORKING_DIR, projectLocation.toString());
 					if (!StringUtils.isEmpty(nodeFilePath)) {
 						EnvPath.insertToEnvPath(properties, nodeFilePath);
 					}
@@ -179,11 +176,6 @@ public class NewAngular2ProjectWizard extends AbstractNewProjectWizard {
 				} catch (BackingStoreException e) {
 					e.printStackTrace();
 				}
-			}
-
-			private String getNodeFilePath() {
-				File nodeFile = TypeScriptResourceUtil.getWorkspaceNodejsInstallPath();
-				return nodeFile != null ? FileUtils.getPath(nodeFile) : null;
 			}
 		};
 	}

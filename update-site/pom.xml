@@ -3,7 +3,7 @@
   <parent>
     <groupId>fr.opensagres.angular2</groupId>
     <artifactId>angular2-eclipse</artifactId>
-    <version>1.3.0-SNAPSHOT</version>
+    <version>1.3.0</version>
   </parent>
   <artifactId>update-site</artifactId>
   <packaging>pom</packaging>

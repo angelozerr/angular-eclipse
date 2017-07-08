@@ -215,7 +215,7 @@
 		<repository>
 			<id>typescript.java</id>
 			<layout>p2</layout>
-			<url>http://oss.opensagres.fr/typescript.ide/1.3.0-SNAPSHOT/</url>
+			<url>http://oss.opensagres.fr/typescript.ide/1.3.0/</url>
 		</repository>
 		<repository>
 			<id>license-feature</id>

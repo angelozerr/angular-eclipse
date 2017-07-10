@@ -1,6 +1,6 @@
 # Angular Eclipse
 
-[![Build Status](https://secure.travis-ci.org/angelozerr/angular2-eclipse.png)](http://travis-ci.org/angelozerr/angular2-eclipse)
+[![Build Status](https://secure.travis-ci.org/angelozerr/angular-eclipse.png)](http://travis-ci.org/angelozerr/angular-eclipse)
 [![Eclipse install](https://marketplace.eclipse.org/sites/all/themes/solstice/public/images/marketplace/btn-install.png)](http://marketplace.eclipse.org/marketplace-client-intro?mpc_install=3037144)
 
 [Angular Eclipse](https://github.com/angelozerr/angular-eclipse) which is based on [TypeScript IDE](https://github.com/angelozerr/typescript.java) is a set of plugins which provide support for [Angular](https://angular.io/) :

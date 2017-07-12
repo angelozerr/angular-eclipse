@@ -299,6 +299,8 @@ public class NewAngular2ProjectParamsWizardPage extends AbstractWizardPage {
 	public void handleEvent(Event event) {
 		super.handleEvent(event);
 		Widget item = event != null ? event.item : null;
+		if (event != null && item == null)
+			item = event.widget;
 		if (item == chkSkipInstall)
 			skipInstall = chkSkipInstall.getSelection();
 		else if (item == chkSkipGit)

@@ -199,14 +199,14 @@ public class NewAngular2ProjectParamsWizardPage extends AbstractWizardPage {
 
 		// Checkbox for Skip install
 		chkSkipInstall = new Button(paramsGroup, SWT.CHECK);
-		chkSkipInstall.addListener(SWT.Modify, this);
+		chkSkipInstall.addListener(SWT.Selection, this);
 		chkSkipInstall.setText(AngularCLIMessages.NewAngular2ProjectParamsWizardPage_install);
 		data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		chkSkipInstall.setLayoutData(data);
 
 		// Checkbox for Skip Git
 		chkSkipGit = new Button(paramsGroup, SWT.CHECK);
-		chkSkipGit.addListener(SWT.Modify, this);
+		chkSkipGit.addListener(SWT.Selection, this);
 		chkSkipGit.setText(AngularCLIMessages.NewAngular2ProjectParamsWizardPage_git);
 		data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		chkSkipGit.setLayoutData(data);
@@ -216,14 +216,14 @@ public class NewAngular2ProjectParamsWizardPage extends AbstractWizardPage {
 
 		// Checkbox for Skip tests
 		chkSkipTests = new Button(paramsGroup, SWT.CHECK);
-		chkSkipTests.addListener(SWT.Modify, this);
+		chkSkipTests.addListener(SWT.Selection, this);
 		chkSkipTests.setText(AngularCLIMessages.NewAngular2ProjectParamsWizardPage_tests);
 		data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		chkSkipTests.setLayoutData(data);
 
 		// Checkbox for Skip commit
 		chkSkipCommit = new Button(paramsGroup, SWT.CHECK);
-		chkSkipCommit.addListener(SWT.Modify, this);
+		chkSkipCommit.addListener(SWT.Selection, this);
 		chkSkipCommit.setText(AngularCLIMessages.NewAngular2ProjectParamsWizardPage_commit);
 		data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		chkSkipCommit.setLayoutData(data);
@@ -241,7 +241,7 @@ public class NewAngular2ProjectParamsWizardPage extends AbstractWizardPage {
 
 		// Checkbox for inline style
 		chkInlineStyle = new Button(paramsGroup, SWT.CHECK);
-		chkInlineStyle.addListener(SWT.Modify, this);
+		chkInlineStyle.addListener(SWT.Selection, this);
 		chkInlineStyle.setText(AngularCLIMessages.NewAngular2ProjectParamsWizardPage_inlineStyle);
 		data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		chkInlineStyle.setLayoutData(data);
@@ -252,7 +252,7 @@ public class NewAngular2ProjectParamsWizardPage extends AbstractWizardPage {
 
 		// Checkbox for inline tempalte
 		chkInlineTemplate = new Button(paramsGroup, SWT.CHECK);
-		chkInlineTemplate.addListener(SWT.Modify, this);
+		chkInlineTemplate.addListener(SWT.Selection, this);
 		chkInlineTemplate.setText(AngularCLIMessages.NewAngular2ProjectParamsWizardPage_inlineTemplate);
 		data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		chkInlineTemplate.setLayoutData(data);
@@ -273,7 +273,7 @@ public class NewAngular2ProjectParamsWizardPage extends AbstractWizardPage {
 
 		// Checkbox for Routing
 		chkRouting = new Button(paramsGroup, SWT.CHECK);
-		chkRouting.addListener(SWT.Modify, this);
+		chkRouting.addListener(SWT.Selection, this);
 		data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		chkRouting.setLayoutData(data);
 

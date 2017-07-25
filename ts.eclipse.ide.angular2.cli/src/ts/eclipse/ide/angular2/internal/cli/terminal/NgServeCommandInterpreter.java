@@ -7,9 +7,11 @@
  *
  *  Contributors:
  *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
- *  
+ *
  */
 package ts.eclipse.ide.angular2.internal.cli.terminal;
+
+import java.net.URL;
 
 import ts.eclipse.ide.angular2.internal.cli.jobs.NgServeJob;
 import ts.eclipse.ide.terminal.interpreter.AbstractCommandInterpreter;
@@ -22,7 +24,9 @@ import ts.eclipse.ide.terminal.interpreter.AbstractCommandInterpreter;
 public class NgServeCommandInterpreter extends AbstractCommandInterpreter {
 
 	private static final String HTTP = "http";
-	
+
+	private boolean open;						// Has the browser already been opened?
+
 	public NgServeCommandInterpreter(String workingDir) {
 		super(workingDir);
 	}
@@ -36,19 +40,30 @@ public class NgServeCommandInterpreter extends AbstractCommandInterpreter {
 
 	@Override
 	public void onTrace(String line) {
-		// track 
+		// track
 		// ** NG Live Development Server is running on http://localhost:4200. **
 		// ** NG Live Development Server is listening on localhost:4200, open your browser on http://localhost:4200 **
-		int startIndex = line.indexOf(HTTP);
-		if (startIndex != -1) {			
-			int endIndex = line.indexOf(".", startIndex);
-			if (endIndex == -1) {
-				endIndex = line.indexOf(" ", startIndex);
+		if (!open) {
+			int startIndex = line.indexOf(HTTP);
+			if (startIndex != -1) {
+				int endIndex = line.indexOf(".", startIndex);
+				if (endIndex == -1) {
+					endIndex = line.indexOf(" ", startIndex);
+				}
+				final String serverURL = line.substring(startIndex, endIndex != -1 ? endIndex : line.length()).trim();
+
+				// Basic URL-Validation
+				URL u;
+				try {
+					u = new URL(serverURL);		// this would check for the protocol
+					u.toURI(); 					// extra checking required for validation of URI
+
+					// Open a Web Browser with the given server URL
+					new NgServeJob(serverURL).schedule();
+					open = true;
+				} catch (Exception ignore) {
+				}
 			}
-			final String serverURL = line.substring(startIndex, endIndex != -1 ? endIndex : line.length())
-					.trim();
-			// Open a Web Browser with the given server URL
-			new NgServeJob(serverURL).schedule();
 		}
 	}
 

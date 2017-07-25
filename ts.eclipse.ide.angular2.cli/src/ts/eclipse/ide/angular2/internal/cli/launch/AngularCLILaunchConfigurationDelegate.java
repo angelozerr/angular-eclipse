@@ -17,9 +17,7 @@ import java.util.Map;
 
 import org.eclipse.core.externaltools.internal.launchConfigurations.ExternalToolsCoreUtil;
 import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -29,15 +27,10 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
 import org.eclipse.tm.terminal.view.core.interfaces.ITerminalService;
 import org.eclipse.tm.terminal.view.core.interfaces.constants.ITerminalsConnectorConstants;
-import org.eclipse.ui.progress.UIJob;
-import org.eclipse.wst.jsdt.js.cli.core.CLICommand;
-import org.eclipse.wst.jsdt.js.cli.core.CLIStreamListener;
 
 import ts.eclipse.ide.angular2.cli.NgCommand;
 import ts.eclipse.ide.angular2.cli.launch.AngularCLILaunchConstants;
 import ts.eclipse.ide.angular2.cli.utils.CLIProcessHelper;
-import ts.eclipse.ide.angular2.internal.cli.jobs.NgProjectJob;
-import ts.eclipse.ide.angular2.internal.cli.jsdt.CLI;
 import ts.eclipse.ide.core.utils.WorkbenchResourceUtil;
 import ts.eclipse.ide.terminal.interpreter.CommandTerminalService;
 import ts.eclipse.ide.terminal.interpreter.EnvPath;
@@ -65,13 +58,7 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 		if (monitor.isCanceled()) {
 			return;
 		}
-
-		boolean withTerminal = true;
-		if (withTerminal) {
-			openWithTerminal(ngFilePath, executeNgWithFile, nodeFilePath, workingDir, operation, options, monitor);
-		} else {
-			openWithConsole(ngFilePath, executeNgWithFile, nodeFilePath, workingDir, operation, options, monitor);
-		}
+		openWithTerminal(ngFilePath, executeNgWithFile, nodeFilePath, workingDir, operation, options, monitor);
 	}
 
 	private String[] getOptions(String options) {
@@ -181,77 +168,4 @@ public class AngularCLILaunchConfigurationDelegate implements ILaunchConfigurati
 		}
 		return fileOrDir;
 	}
-
-	private void openWithConsole(String ngFilePath, boolean executeNgWithFile, String nodeFilePath, IPath workingDir,
-			String operation, String[] options, IProgressMonitor monitor) throws CoreException {
-		CLICommand command = createCommand(ngFilePath, nodeFilePath, operation, options);
-		IPath wd = workingDir;
-
-		NgCommand ngCommand = NgCommand.getCommand(operation);
-		boolean waitForTerminate = isWaitForTerminate(ngCommand);
-
-		IContainer folder = ResourcesPlugin.getWorkspace().getRoot().getContainerForLocation(wd);
-		IProject project = folder instanceof IProject ? (IProject) folder : folder.getProject();
-
-		CLIStreamListener listener = createListener(ngCommand, project, options);
-		try {
-			new CLI(null, wd, command).execute(listener, waitForTerminate, monitor);
-		} finally {
-			if (ngCommand != null) {
-				File projectDir = workingDir.toFile();
-				UIJob job = null;
-				switch (ngCommand) {
-				case NEW:
-				case INIT:
-					// Refresh Eclipse project and open angular-cli.json
-					job = new NgProjectJob(projectDir);
-					job.setRule(ResourcesPlugin.getWorkspace().getRoot());
-					job.schedule();
-					break;
-				default:
-					break;
-				}
-			}
-		}
-	}
-
-	private boolean isWaitForTerminate(NgCommand ngCommand) {
-		if (ngCommand != null) {
-			switch (ngCommand) {
-			case SERVE:
-			case TEST:
-				return false;
-			default:
-				return true;
-			}
-		}
-		return true;
-	}
-
-	private CLICommand createCommand(String ngFilePath, String nodeFilePath, String operation, String[] options) {
-		if (ngFilePath != null) {
-			if (nodeFilePath != null) {
-				return new CLICommand(nodeFilePath, ngFilePath, operation.toLowerCase(), options);
-			}
-			return new CLICommand("node", ngFilePath, operation.toLowerCase(), options);
-		}
-		return new CLICommand(CLIProcessHelper.NG_FILENAME, operation.toLowerCase(), null, options);
-	}
-
-	private CLIStreamListener createListener(NgCommand ngCommand, IProject project, String[] options) {
-		if (ngCommand == null) {
-			return new CLIStreamListener();
-		}
-		switch (ngCommand) {
-		case GENERATE:
-			if (options != null && options.length > 1) {
-				return new NgGenerateCLIStreamListener(options[0], project);
-			}
-		case SERVE:
-			return new NgServeCLIStreamListener();
-		default:
-			return new CLIStreamListener();
-		}
-	}
-
 }

@@ -1,16 +1,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>fr.opensagres.angular2</groupId>
+		<groupId>fr.opensagres.angular</groupId>
 		<artifactId>update-site</artifactId>
 		<version>1.4.0-SNAPSHOT</version>
 	</parent>
-	<artifactId>angular2.ide</artifactId>
+	<artifactId>angular.ide</artifactId>
 	<packaging>eclipse-repository</packaging>
 	<scm>
-		<url>https://github.com/angelozerr/angular2-eclipse</url>
-		<connection>scm:git:https://github.com/angelozerr/angular2-eclipse.git</connection>
-		<developerConnection>scm:git:https://github.com/angelozerr/angular2-eclipse.git</developerConnection>
+		<url>https://github.com/angelozerr/angular-eclipse</url>
+		<connection>scm:git:https://github.com/angelozerr/angular-eclipse.git</connection>
+		<developerConnection>scm:git:https://github.com/angelozerr/angular-eclipse.git</developerConnection>
 	</scm>
 	<properties>
 		<url.suffix>snapshot</url.suffix>
@@ -32,7 +32,7 @@
 			<properties>
 				<!-- Properties relative to the distant host where to upload the repo -->
 				<ftp.url>ftp://ftp.online.net</ftp.url>
-				<ftp.toDir>/oss/angular2-eclipse/${url.suffix}</ftp.toDir>
+				<ftp.toDir>/oss/angular-eclipse/${url.suffix}</ftp.toDir>
 				<!-- Relative path to the repo being uploaded -->
 				<repo.path>${project.build.directory}/repository/</repo.path>
 			</properties>

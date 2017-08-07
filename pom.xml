@@ -5,8 +5,8 @@
 		<version>7</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>fr.opensagres.angular2</groupId>
-	<artifactId>angular2-eclipse</artifactId>
+	<groupId>fr.opensagres.angular</groupId>
+	<artifactId>angular-eclipse</artifactId>
 	<version>1.4.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<properties>
@@ -21,10 +21,10 @@
 		</license>
 	</licenses>
 	<modules>
-	    <module>ts.eclipse.ide.angular2.core</module>
-        <module>ts.eclipse.ide.angular2.core.tests</module>
-	    <module>ts.eclipse.ide.angular2.ui</module>
-        <module>ts.eclipse.ide.angular2.cli</module>
+	    <module>ts.eclipse.ide.angular.core</module>
+        <module>ts.eclipse.ide.angular.core.tests</module>
+	    <module>ts.eclipse.ide.angular.ui</module>
+        <module>ts.eclipse.ide.angular.cli</module>
 		<module>update-site</module>
 	</modules>
 	<build>
@@ -224,9 +224,9 @@
 		</repository>
 	</repositories>
 	<scm>
-		<url>https://github.com/angelozerr/angular2-eclipse</url>
-		<connection>scm:git:https://github.com/angelozerr/angular2-eclipse.git</connection>
-		<developerConnection>scm:git:https://github.com/angelozerr/angular2-eclipse.git</developerConnection>
+		<url>https://github.com/angelozerr/angular-eclipse</url>
+		<connection>scm:git:https://github.com/angelozerr/angular-eclipse.git</connection>
+		<developerConnection>scm:git:https://github.com/angelozerr/angular-eclipse.git</developerConnection>
 	</scm>
 	<profiles>
 		<profile>

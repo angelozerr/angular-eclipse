@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature id="angular2-feature">
-      <category name="Angular2 IDE"/>
+   <feature id="angular-feature">
+      <category name="Angular IDE"/>
    </feature>
    <feature id="ts-feature">
       <category name="TypeScript IDE"/>
@@ -39,9 +39,9 @@
    <feature id="tm-feature" >
       <category name="TypeScript IDE"/>
    </feature>
-   <category-def name="Angular2 IDE" label="Angular2 IDE">
+   <category-def name="Angular IDE" label="Angular IDE">
       <description>
-         Angular2 IDE to use Angular2 with Eclipse IDE.
+         Angular IDE to use Angular with Eclipse IDE.
       </description>
    </category-def>
    <category-def name="TypeScript IDE" label="TypeScript IDE">

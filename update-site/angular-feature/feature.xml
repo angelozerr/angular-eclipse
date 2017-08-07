@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="angular2-feature"
+      id="angular-feature"
       label="%featureName"
       version="1.4.0.qualifier"
       provider-name="%featureProvider"
@@ -24,21 +24,21 @@
    </requires>
 
    <plugin
-         id="ts.eclipse.ide.angular2.core"
+         id="ts.eclipse.ide.angular.core"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="ts.eclipse.ide.angular2.ui"
+         id="ts.eclipse.ide.angular.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="ts.eclipse.ide.angular2.cli"
+         id="ts.eclipse.ide.angular.cli"
          download-size="0"
          install-size="0"
          version="0.0.0"

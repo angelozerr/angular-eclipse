@@ -16,26 +16,26 @@
 
    <extension point="org.eclipse.core.expressions.propertyTesters">
 		<propertyTester
-			id="ts.eclipse.ide.angular2.core.Angular2NatureTester"
+			id="ts.eclipse.ide.angular.core.AngularNatureTester"
 			type="org.eclipse.core.resources.IResource"
-			namespace="ts.eclipse.ide.angular2.core"
-			properties="isAngular2Project"
-			class="ts.eclipse.ide.angular2.internal.core.Angular2NatureTester">
+			namespace="ts.eclipse.ide.angular.core"
+			properties="isAngularProject"
+			class="ts.eclipse.ide.angular.internal.core.AngularNatureTester">
 		</propertyTester>
 	</extension>
 
 	<extension point="org.eclipse.wst.html.core.customTagValidator">
-		<validator class="ts.eclipse.ide.angular2.internal.core.validation.HTMLAngular2TagValidator"></validator>
+		<validator class="ts.eclipse.ide.angular.internal.core.validation.HTMLAngularTagValidator"></validator>
 	</extension>
 	<extension point="org.eclipse.wst.html.core.customAttributeValidator">
-		<validator class="ts.eclipse.ide.angular2.internal.core.validation.HTMLAngular2AttributeValidator"></validator>
+		<validator class="ts.eclipse.ide.angular.internal.core.validation.HTMLAngularAttributeValidator"></validator>
 	</extension>
 
-	<!-- consume tsserver for html, htm files to benefit with Angular2 Language Service -->
+	<!-- consume tsserver for html, htm files to benefit with Angular Language Service -->
 	<extension
 	      point="ts.eclipse.ide.core.typeScriptResourceParticipants">
 	    <participant
-	          class="ts.eclipse.ide.angular2.internal.core.html.HTMLAngularTemplateParticipant" >
+	          class="ts.eclipse.ide.angular.internal.core.html.HTMLAngularTemplateParticipant" >
 	    </participant>
 	</extension>
 	

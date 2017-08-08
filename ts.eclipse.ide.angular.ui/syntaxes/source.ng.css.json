@@ -1,6 +1,6 @@
 {
   "fileTypes": [ "css", "css.erb" ],
-  "name": "Angular2 CSS",
+  "name": "Angular CSS",
   "patterns": [
     { "include": "#comment-block" },
     { "include": "#selector" },

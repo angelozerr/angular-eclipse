@@ -15,53 +15,53 @@
 <plugin>
         
 	<!--======================================================================================-->
-	<!-- Angular2 Preferences                                    						      -->
+	<!-- Angular Preferences                                    						      -->
 	<!--======================================================================================-->
     <extension
        point="org.eclipse.ui.preferencePages">  
-       <!-- Angular2 Global preferences page -->  
+       <!-- Angular Global preferences page -->  
        <page
-	          class="ts.eclipse.ide.angular2.internal.ui.preferences.Angular2GlobalPreferencesPage"
-	          id="ts.eclipse.ide.angular2.preferences"
-	          name="%Angular2PreferencePage.name"
+	          class="ts.eclipse.ide.angular.internal.ui.preferences.AngularGlobalPreferencesPage"
+	          id="ts.eclipse.ide.angular.preferences"
+	          name="%AngularPreferencePage.name"
 	          category="ts.eclipse.ide.ui.preference.TypeScriptMainPreferencePage"/>
-       <!-- Angular2 HTML Files preferences page -->  
+       <!-- Angular HTML Files preferences page -->  
        <page
-              category="ts.eclipse.ide.angular2.preferences"
-	          class="ts.eclipse.ide.angular2.internal.ui.preferences.html.HTMLAngular2GlobalPreferencesPage"
-	          id="ts.eclipse.ide.angular2.html.preferences"
-	          name="%HTMLAngular2GlobalPreferencesPage.name"/>	          
-	    <!-- Angular2 Editor preferences page -->
+              category="ts.eclipse.ide.angular.preferences"
+	          class="ts.eclipse.ide.angular.internal.ui.preferences.html.HTMLAngularGlobalPreferencesPage"
+	          id="ts.eclipse.ide.angular.html.preferences"
+	          name="%HTMLAngularGlobalPreferencesPage.name"/>	          
+	    <!-- Angular Editor preferences page -->
 		<page
-	          category="ts.eclipse.ide.angular2.html.preferences"
-	          class="ts.eclipse.ide.angular2.internal.ui.preferences.html.HTMLAngular2EditorPreferencesPage"
-	          id="ts.eclipse.ide.angular2.html.preferences.editor"
-	          name="%HTMLAngular2EditorPreferencePage.name"/>
-	    <!-- Angular2 Syntax Coloring preferences page -->
+	          category="ts.eclipse.ide.angular.html.preferences"
+	          class="ts.eclipse.ide.angular.internal.ui.preferences.html.HTMLAngularEditorPreferencesPage"
+	          id="ts.eclipse.ide.angular.html.preferences.editor"
+	          name="%HTMLAngularEditorPreferencePage.name"/>
+	    <!-- Angular Syntax Coloring preferences page -->
 		<page
-	          category="ts.eclipse.ide.angular2.html.preferences.editor"
-	          class="ts.eclipse.ide.angular2.internal.ui.preferences.html.HTMLAngular2EditorSyntaxColoringPreferencePage"
-	          id="ts.eclipse.ide.angular2.html.preferences.editor.syntaxcoloring"
-	          name="%HTMLAngular2EditorSyntaxColoringPreferencePage.name"/>
-	    <!-- Angular2 Typing preferences page -->
+	          category="ts.eclipse.ide.angular.html.preferences.editor"
+	          class="ts.eclipse.ide.angular.internal.ui.preferences.html.HTMLAngularEditorSyntaxColoringPreferencePage"
+	          id="ts.eclipse.ide.angular.html.preferences.editor.syntaxcoloring"
+	          name="%HTMLAngularEditorSyntaxColoringPreferencePage.name"/>
+	    <!-- Angular Typing preferences page -->
 		<page
-	          category="ts.eclipse.ide.angular2.html.preferences.editor"
-	          class="ts.eclipse.ide.angular2.internal.ui.preferences.html.HTMLAngular2TypingPreferencePage"
-	          id="ts.eclipse.ide.angular2.html.preferences.editor.typing"
-	          name="%HTMLAngular2TypingPreferencePage.name"/>            
+	          category="ts.eclipse.ide.angular.html.preferences.editor"
+	          class="ts.eclipse.ide.angular.internal.ui.preferences.html.HTMLAngularTypingPreferencePage"
+	          id="ts.eclipse.ide.angular.html.preferences.editor.typing"
+	          name="%HTMLAngularTypingPreferencePage.name"/>            
    </extension>
    
    <!-- Property Pages -->          		
    <extension
          point="org.eclipse.ui.propertyPages">		      
       <page
-            name="%Angular2PreferencePage.name"        
-            class="ts.eclipse.ide.angular2.internal.ui.preferences.Angular2MainPropertyPage"
-            id="ts.eclipse.ide.angular2.preferences.Angular2MainPropertyPage"
+            name="%AngularPreferencePage.name"        
+            class="ts.eclipse.ide.angular.internal.ui.preferences.AngularMainPropertyPage"
+            id="ts.eclipse.ide.angular.preferences.AngularMainPropertyPage"
             category="ts.eclipse.ide.ui.property.TypeScriptMainPropertyPage" >
          <enabledWhen>
 		     <adapt type="org.eclipse.core.resources.IProject">
-		     	  <test property="ts.eclipse.ide.angular2.core.isAngular2Project"
+		     	  <test property="ts.eclipse.ide.angular.core.isAngularProject"
 		     	  		forcePluginActivation="true" />
 		     </adapt>         
          </enabledWhen>
@@ -70,37 +70,37 @@
 		     
 	<extension point="org.eclipse.core.runtime.preferences">
 		<initializer
-			class="ts.eclipse.ide.angular2.internal.ui.preferences.Angular2UIPreferenceInitializer" />
+			class="ts.eclipse.ide.angular.internal.ui.preferences.AngularUIPreferenceInitializer" />
 	</extension>		     
         
 	<!--======================================================================================-->
-	<!-- Angular2 Highlighting                                      						      -->
+	<!-- Angular Highlighting                                      						      -->
 	<!--======================================================================================-->
 	
 	<extension
 	       point="org.eclipse.wst.sse.ui.semanticHighlighting">
 	    <highlighting
-	          class="ts.eclipse.ide.angular2.ui.style.DirectiveSemanticHighlighting"
+	          class="ts.eclipse.ide.angular.ui.style.DirectiveSemanticHighlighting"
 	          target="org.eclipse.wst.html.core.htmlsource"
-	          styleStringKey="angular2DirectiveName">
+	          styleStringKey="angularDirectiveName">
 	    </highlighting>
 	 </extension>
 
 	 <extension
 	       point="org.eclipse.wst.sse.ui.semanticHighlighting">
 	    <highlighting
-	          class="ts.eclipse.ide.angular2.ui.style.AngularExpressionSemanticHighlighting"
+	          class="ts.eclipse.ide.angular.ui.style.AngularExpressionSemanticHighlighting"
 	          target="org.eclipse.wst.html.core.htmlsource"
-	          styleStringKey="angular2Expression">
+	          styleStringKey="angularExpression">
 	    </highlighting>
 	 </extension>
 	 
 	 <extension
 	       point="org.eclipse.wst.sse.ui.semanticHighlighting">
 	    <highlighting
-	          class="ts.eclipse.ide.angular2.ui.style.AngularExpressionBorderSemanticHighlighting"
+	          class="ts.eclipse.ide.angular.ui.style.AngularExpressionBorderSemanticHighlighting"
 	          target="org.eclipse.wst.html.core.htmlsource"
-	          styleStringKey="angular2ExpressionBorder">
+	          styleStringKey="angularExpressionBorder">
 	    </highlighting>
 	 </extension>
    
@@ -114,32 +114,32 @@
     
 
 	<!--======================================================================================-->
-	<!-- HTML editor configuration for Angular2                 						      -->
+	<!-- HTML editor configuration for Angular                 						      -->
 	<!--======================================================================================-->	    
               
 	<extension point="org.eclipse.wst.sse.ui.editorConfiguration">
   		<documentationTextHover
-        	class="ts.eclipse.ide.angular2.internal.ui.taginfo.HTMLAngular2TagInfoHoverProcessor"
+        	class="ts.eclipse.ide.angular.internal.ui.taginfo.HTMLAngularTagInfoHoverProcessor"
         	target="org.eclipse.wst.html.HTML_DEFAULT">
   		</documentationTextHover>			
 		<provisionalConfiguration
 			type="autoeditstrategy"
-			class="ts.eclipse.ide.angular2.internal.ui.autoedit.StructuredAutoEditStrategyAngular2"
+			class="ts.eclipse.ide.angular.internal.ui.autoedit.StructuredAutoEditStrategyAngular"
 			target="org.eclipse.wst.html.HTML_DEFAULT, org.eclipse.wst.html.HTML_DECLARATION" />            
 	</extension>
 	
    <extension
        point="org.eclipse.wst.sse.ui.completionProposal">
     	<proposalCategory
-          icon="icons/full/obj16/angular2.png"
-          id="ts.eclipse.ide.angular2.ui.proposalCategory.htmlTags"
+          icon="icons/full/obj16/angular.png"
+          id="ts.eclipse.ide.angular.ui.proposalCategory.htmlTags"
           name="%proposalCategory.htmlTags" >
         </proposalCategory>       	
 	    <proposalComputer
 	          activate="true"
-	          categoryId="ts.eclipse.ide.angular2.ui.proposalCategory.htmlTags"
-	          class="ts.eclipse.ide.angular2.internal.ui.contentassist.HTMLAngular2TagsCompletionProposalComputer"
-	          id="org.eclipse.angular2.ui.proposalComputer.htmlTags">
+	          categoryId="ts.eclipse.ide.angular.ui.proposalCategory.htmlTags"
+	          class="ts.eclipse.ide.angular.internal.ui.contentassist.HTMLAngularTagsCompletionProposalComputer"
+	          id="org.eclipse.angular.ui.proposalComputer.htmlTags">
 	       <contentType
 	             id="org.eclipse.wst.html.core.htmlsource">
 	          <partitionType
@@ -155,7 +155,7 @@
 		<validator
 			scope="total"
 			class="ts.eclipse.ide.validator.ui.validation.TypeScriptSourceValidator"
-			id="ts.eclipse.ide.angular2.ui.validation.TypeScriptSourceValidator">
+			id="ts.eclipse.ide.angular.ui.validation.TypeScriptSourceValidator">
 			<contentTypeIdentifier
 				id="org.eclipse.wst.html.core.htmlsource">
 				<partitionType id="org.eclipse.wst.html.HTML_DEFAULT"/>
@@ -181,30 +181,30 @@
 		
 	<!-- Templates -->
 	<extension point="org.eclipse.ui.editors.templates">
-		<!-- HTML Angular2 template which looks like https://github.com/johnpapa/vscode-angular2-snippets/blob/master/snippets/html.json -->
+		<!-- HTML Angular template which looks like https://github.com/johnpapa/vscode-angular-snippets/blob/master/snippets/html.json -->
 		<include
-			file="templates/htmlangular2-templates.xml"
-			translations="$nl$/templates/htmlangular2-templates.properties">
+			file="templates/htmlangular-templates.xml"
+			translations="$nl$/templates/htmlangular-templates.properties">
 		</include>
-		<!-- TypeScript Angular2 template which looks like https://github.com/johnpapa/vscode-angular2-snippets/blob/master/snippets/typescript.json -->
+		<!-- TypeScript Angular template which looks like https://github.com/johnpapa/vscode-angular-snippets/blob/master/snippets/typescript.json -->
         <contextType
-            name="%templates.angular2.contextType.name"
-            class="ts.eclipse.ide.angular2.core.template.Angular2ContextType"
+            name="%templates.angular.contextType.name"
+            class="ts.eclipse.ide.angular.core.template.AngularContextType"
             registryId="ts.eclipse.ide.jsdt.ui.ContextTypeRegistry"
-            id="Angular2">
+            id="Angular">
         </contextType>		
 		<include
-			file="templates/typescriptangular2-templates.xml"
-			translations="$nl$/templates/typescriptangular2-templates.properties">
+			file="templates/typescriptangular-templates.xml"
+			translations="$nl$/templates/typescriptangular-templates.properties">
 		</include>			
 	</extension>
 
-	<!-- template proposals for Angular2 TypeScript-->
+	<!-- template proposals for Angular TypeScript-->
 	<extension
 		point="org.eclipse.wst.jsdt.ui.javaCompletionProposalComputer"
-		id="Angular2TemplateProposalComputer">
+		id="AngularTemplateProposalComputer">
 		<javaCompletionProposalComputer
-			class="ts.eclipse.ide.angular2.internal.ui.contentassist.TypeScriptAngular2TemplateCompletionProposalComputer"
+			class="ts.eclipse.ide.angular.internal.ui.contentassist.TypeScriptAngularTemplateCompletionProposalComputer"
 			categoryId="org.eclipse.wst.jsdt.ui.templateProposalCategory">
 			<partition type="__dftl_partition_content_type"/>
 		</javaCompletionProposalComputer>		
@@ -214,15 +214,15 @@
 	<extension
 	      point="org.eclipse.ui.newWizards">
 		<category
-		   id="ts.eclipse.ide.angular2.ui.new"
-		   name="%NewAngular2Wizard.category">
+		   id="ts.eclipse.ide.angular.ui.new"
+		   name="%NewAngularWizard.category">
 		</category>
 	</extension>
 	
-	 <!-- I don't know why, but startup should be done, otherwise TypeScriptAngular2TemplateCompletionProposalComputer is not registered? -->
+	 <!-- I don't know why, but startup should be done, otherwise TypeScriptAngularTemplateCompletionProposalComputer is not registered? -->
 	 <extension
 	       point="org.eclipse.ui.startup">	
-	       <startup class="ts.eclipse.ide.angular2.internal.ui.Angular2UIStartup" />       
+	       <startup class="ts.eclipse.ide.angular.internal.ui.AngularUIStartup" />       
 	 </extension>
 	 
    <!-- Perspective --> 
@@ -230,18 +230,18 @@
          point="org.eclipse.ui.perspectives">
       <perspective
             name="%ng.perspective.name"
-            icon="icons/full/obj16/angular2.png"
-            class="ts.eclipse.ide.angular2.internal.ui.perspectives.Angular2PerspectiveFactory"
-            id="ts.eclipse.ide.angular2.ui.perspectives.Angular2Perspective">
+            icon="icons/full/obj16/angular.png"
+            class="ts.eclipse.ide.angular.internal.ui.perspectives.AngularPerspectiveFactory"
+            id="ts.eclipse.ide.angular.ui.perspectives.AngularPerspective">
 		<description>
             %ng.perspective.description
          </description>            
       </perspective>
    	</extension>
 
-	<!-- Provide JS, CSS, HTML, etc wizards, Console, etc views for the Angular2 perspective  -->
+	<!-- Provide JS, CSS, HTML, etc wizards, Console, etc views for the Angular perspective  -->
 	<extension point="org.eclipse.ui.perspectiveExtensions"> 
-        <perspectiveExtension targetID="ts.eclipse.ide.angular2.ui.perspectives.Angular2Perspective">
+        <perspectiveExtension targetID="ts.eclipse.ide.angular.ui.perspectives.AngularPerspective">
             
             <newWizardShortcut id="ts.eclipse.ide.ui.wizards.new.project"/>
             <newWizardShortcut id="org.eclipse.wst.xml.ui.internal.wizards.NewXMLWizard"/>            
@@ -294,7 +294,7 @@
        point="org.eclipse.tm4e.ui.snippets">
 	    <snippet
 	          name="%textmate.snippet.ng"
-	          path="./snippets/Angular2Snippet.ts"
+	          path="./snippets/AngularSnippet.ts"
 	          scopeName="source.ts">
 	    </snippet>
 	</extension>

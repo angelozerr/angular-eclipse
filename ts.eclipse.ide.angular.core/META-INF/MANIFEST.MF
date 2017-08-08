@@ -19,12 +19,12 @@ Require-Bundle: org.eclipse.core.runtime,
  ts.eclipse.ide.core,
  com.google.gson,
  ts.eclipse.ide.jsdt.core
-Export-Package: ts.eclipse.ide.angular2.core,
- ts.eclipse.ide.angular2.core.html,
- ts.eclipse.ide.angular2.core.template,
- ts.eclipse.ide.angular2.core.utils,
- ts.eclipse.ide.angular2.internal.core.html.schema;x-friends:="ts.eclipse.ide.angular2.core.tests"
+Export-Package: ts.eclipse.ide.angular.core,
+ ts.eclipse.ide.angular.core.html,
+ ts.eclipse.ide.angular.core.template,
+ ts.eclipse.ide.angular.core.utils,
+ ts.eclipse.ide.angular.internal.core.html.schema;x-friends:="ts.eclipse.ide.angular.core.tests"
 Bundle-ActivationPolicy: lazy
-Bundle-Activator: ts.eclipse.ide.angular2.core.Angular2CorePlugin
+Bundle-Activator: ts.eclipse.ide.angular.core.AngularCorePlugin
 Import-Package: com.eclipsesource.json;version="[0.9.4,0.9.5)"
 

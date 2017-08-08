@@ -10,23 +10,23 @@
 # Contributors:
 #     Angelo Zerr <angelo.zerr@gmail.com> - Initial API and implementation 
 #
-# HTML Angular2 template which looks like https://github.com/johnpapa/vscode-angular2-snippets/blob/master/snippets/html.json
+# HTML Angular template which looks like https://github.com/johnpapa/vscode-angular-snippets/blob/master/snippets/html.json
 ###############################################################################
 -->
 <templates>
 
-<template name="%Templates.ngClass.name" description="%Templates.ngClass.desc" id="ts.eclipse.ide.angular2.ui.templates.ngClass" context="html_attribute" enabled="true">[ngClass]="{${cssClass}: ${expression}}"</template>
+<template name="%Templates.ngClass.name" description="%Templates.ngClass.desc" id="ts.eclipse.ide.angular.ui.templates.ngClass" context="html_attribute" enabled="true">[ngClass]="{${cssClass}: ${expression}}"</template>
 
-<template name="%Templates.ngFor.name" description="%Templates.ngFor.desc" id="ts.eclipse.ide.angular2.ui.templates.ngFor" context="html_attribute" enabled="true">*ngFor="let ${item} of ${list}"</template>
+<template name="%Templates.ngFor.name" description="%Templates.ngFor.desc" id="ts.eclipse.ide.angular.ui.templates.ngFor" context="html_attribute" enabled="true">*ngFor="let ${item} of ${list}"</template>
 
-<template name="%Templates.ngIf.name" description="%Templates.ngIf.desc" id="ts.eclipse.ide.angular2.ui.templates.ngIf" context="html_attribute" enabled="true">*ngIf="${expression}"</template>
+<template name="%Templates.ngIf.name" description="%Templates.ngIf.desc" id="ts.eclipse.ide.angular.ui.templates.ngIf" context="html_attribute" enabled="true">*ngIf="${expression}"</template>
 
-<template name="%Templates.ngModel.name" description="%Templates.ngModel.desc" id="ts.eclipse.ide.angular2.ui.templates.ngModel" context="html_attribute" enabled="true">[(ngModel)]="${binding}"</template>
+<template name="%Templates.ngModel.name" description="%Templates.ngModel.desc" id="ts.eclipse.ide.angular.ui.templates.ngModel" context="html_attribute" enabled="true">[(ngModel)]="${binding}"</template>
 
-<template name="%Templates.ngRouterLink.name" description="%Templates.ngRouterLink.desc" id="ts.eclipse.ide.angular2.ui.templates.ngRouterLink" context="html_attribute" enabled="true">[routerLink]="['${routeName}']"</template>
+<template name="%Templates.ngRouterLink.name" description="%Templates.ngRouterLink.desc" id="ts.eclipse.ide.angular.ui.templates.ngRouterLink" context="html_attribute" enabled="true">[routerLink]="['${routeName}']"</template>
 
-<template name="%Templates.ngStyle.name" description="%Templates.ngStyle.desc" id="ts.eclipse.ide.angular2.ui.templates.ngStyle" context="html_attribute" enabled="true">[ngStyle]="{${style}: ${expression}}"</template>
+<template name="%Templates.ngStyle.name" description="%Templates.ngStyle.desc" id="ts.eclipse.ide.angular.ui.templates.ngStyle" context="html_attribute" enabled="true">[ngStyle]="{${style}: ${expression}}"</template>
 
-<template name="%Templates.ngSwitch.name" description="%Templates.ngSwitch.desc" id="ts.eclipse.ide.angular2.ui.templates.ngSwitch" context="html_tag" enabled="true">%Templates.ngSwitch.content</template>
+<template name="%Templates.ngSwitch.name" description="%Templates.ngSwitch.desc" id="ts.eclipse.ide.angular.ui.templates.ngSwitch" context="html_tag" enabled="true">%Templates.ngSwitch.content</template>
 
 </templates>

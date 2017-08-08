@@ -16,7 +16,7 @@ Require-Bundle: org.eclipse.core.runtime,
  ts.eclipse.ide.ui,
  org.eclipse.ui.forms,
  ts.core,
- ts.eclipse.ide.angular2.core,
+ ts.eclipse.ide.angular.core,
  org.eclipse.core.externaltools,
  ts.eclipse.ide.terminal.interpreter,
  org.eclipse.wst.sse.ui,
@@ -29,9 +29,9 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.tm.terminal.view.core,
  org.eclipse.jface.text
 Bundle-ActivationPolicy: lazy
-Bundle-Activator: ts.eclipse.ide.angular2.cli.AngularCLIPlugin
-Export-Package: ts.eclipse.ide.angular2.cli,
- ts.eclipse.ide.angular2.cli.launch,
- ts.eclipse.ide.angular2.cli.preferences
+Bundle-Activator: ts.eclipse.ide.angular.cli.AngularCLIPlugin
+Export-Package: ts.eclipse.ide.angular.cli,
+ ts.eclipse.ide.angular.cli.launch,
+ ts.eclipse.ide.angular.cli.preferences
 
 

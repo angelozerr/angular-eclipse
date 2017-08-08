@@ -10,12 +10,12 @@
 # Contributors:
 #     Angelo Zerr <angelo.zerr@gmail.com> - Initial API and implementation 
 #
-# TypeScript Angular2 template which looks like https://github.com/johnpapa/vscode-angular2-snippets/blob/master/snippets/typescript.json
+# TypeScript Angular template which looks like https://github.com/johnpapa/vscode-angular-snippets/blob/master/snippets/typescript.json
 ###############################################################################
 -->
 <templates>
 
-<template name="ng2-component" description="%Templates.ng2-component.desc" id="ts.eclipse.ide.angular2.ui.templates.ng2-component" context="Angular2" enabled="true">import { Component, OnInit } from '@angular/core';
+<template name="ng2-component" description="%Templates.ng2-component.desc" id="ts.eclipse.ide.angular.ui.templates.ng2-component" context="Angular" enabled="true">import { Component, OnInit } from '@angular/core';
 
 @Component({
 	moduleId: module.id,
@@ -28,14 +28,14 @@ export class ${ComponentName}Component implements OnInit {
 	ngOnInit() { }${cursor}
 }</template>
 
-<template name="ng2-service" description="%Templates.ng2-service.desc" id="ts.eclipse.ide.angular2.ui.templates.ng2-service" context="Angular2" enabled="true">import { Injectable } from '@angular/core';
+<template name="ng2-service" description="%Templates.ng2-service.desc" id="ts.eclipse.ide.angular.ui.templates.ng2-service" context="Angular" enabled="true">import { Injectable } from '@angular/core';
 
 @Injectable()
 export class ${ServiceName}Service {
 	${cursor}constructor() { }
 }</template>
 
-<template name="ng2-pipe" description="%Templates.ng2-pipe.desc" id="ts.eclipse.ide.angular2.ui.templates.ng2-pipe" context="Angular2" enabled="true">import { Pipe, PipeTransform } from '@angular/core';"
+<template name="ng2-pipe" description="%Templates.ng2-pipe.desc" id="ts.eclipse.ide.angular.ui.templates.ng2-pipe" context="Angular" enabled="true">import { Pipe, PipeTransform } from '@angular/core';"
 
 @Pipe({
 	name: '${name}'
@@ -47,7 +47,7 @@ export class ${PipeName}Pipe implements PipeTransform {
 	}
 }</template>
 
-<template name="ng2-routing" description="%Templates.ng2-routing.desc" id="ts.eclipse.ide.angular2.ui.templates.ng2-routing" context="Angular2" enabled="true">import { NgModule } from '@angular/core';
+<template name="ng2-routing" description="%Templates.ng2-routing.desc" id="ts.eclipse.ide.angular.ui.templates.ng2-routing" context="Angular" enabled="true">import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ${Name}Component } from './${name}.component';
 
@@ -63,20 +63,20 @@ export class ${Name}RoutingModule { }
 
 export const routedComponents = [${Name}Component];</template>
 
-<template name="ng2-http-get" description="%Templates.ng2-http-get.desc" id="ts.eclipse.ide.angular2.ui.templates.ng2-http-get" context="Angular2" enabled="true">return this.http.get('${url}')
+<template name="ng2-http-get" description="%Templates.ng2-http-get.desc" id="ts.eclipse.ide.angular.ui.templates.ng2-http-get" context="Angular" enabled="true">return this.http.get('${url}')
 	.map((response: Response) => response.json()${cursor});</template>
 
-<template name="ng2-subscribe" description="%Templates.ng2-subscribe.desc" id="ts.eclipse.ide.angular2.ui.templates.ng2-subscribe" context="Angular2" enabled="true">this.${service}.${function}()
+<template name="ng2-subscribe" description="%Templates.ng2-subscribe.desc" id="ts.eclipse.ide.angular.ui.templates.ng2-subscribe" context="Angular" enabled="true">this.${service}.${function}()
 	.subscribe(${arg} => this.${property} = ${arg});${cursor}</template>
 
-<template name="ng2-bootstrap" description="%Templates.ng2-bootstrap.desc" id="ts.eclipse.ide.angular2.ui.templates.ng2-bootstrap" context="Angular2" enabled="true">import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+<template name="ng2-bootstrap" description="%Templates.ng2-bootstrap.desc" id="ts.eclipse.ide.angular.ui.templates.ng2-bootstrap" context="Angular" enabled="true">import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { ${App}Module } from './${app}.module';
 
 platformBrowserDynamic().bootstrapModule(${App}Module)
 	.then(success => console.log(`Bootstrap success`))
 	.catch(error => console.log(error));${cursor}</template>
 
-<template name="ng2-component-root" description="%Templates.ng2-component-root.desc" id="ts.eclipse.ide.angular2.ui.templates.ng2-component-root" context="Angular2" enabled="true">import { Component } from '@angular/core';
+<template name="ng2-component-root" description="%Templates.ng2-component-root.desc" id="ts.eclipse.ide.angular.ui.templates.ng2-component-root" context="Angular" enabled="true">import { Component } from '@angular/core';
 
 @Component({
 	moduleId: module.id,
@@ -87,7 +87,7 @@ platformBrowserDynamic().bootstrapModule(${App}Module)
 })
 export class ${App}Component { }${cursor}</template>
 
-<template name="ng2-module-root" description="%Templates.ng2-module-root.desc" id="ts.eclipse.ide.angular2.ui.templates.ng2-module-root" context="Angular2" enabled="true">import { NgModule } from '@angular/core';
+<template name="ng2-module-root" description="%Templates.ng2-module-root.desc" id="ts.eclipse.ide.angular.ui.templates.ng2-module-root" context="Angular" enabled="true">import { NgModule } from '@angular/core';
 import { BrowserModule  } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 
@@ -107,7 +107,7 @@ import { AppRoutingModule } from './${app}.routing'; //TODO: Create ${app}.routi
 })
 export class ${App}Module { }${cursor}</template>
 
-<template name="ng2-module" description="%Templates.ng2-module.desc" id="ts.eclipse.ide.angular2.ui.templates.ng2-module" context="Angular2" enabled="true">import { NgModule } from '@angular/core';
+<template name="ng2-module" description="%Templates.ng2-module.desc" id="ts.eclipse.ide.angular.ui.templates.ng2-module" context="Angular" enabled="true">import { NgModule } from '@angular/core';
 
 import { ${Name}Component }   from './${name}.component';
 

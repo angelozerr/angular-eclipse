@@ -43,6 +43,7 @@ import ts.eclipse.ide.core.utils.WorkbenchResourceUtil;
 import ts.eclipse.ide.ui.preferences.BrowseButtonsComposite;
 import ts.eclipse.ide.ui.preferences.OptionsConfigurationBlock;
 import ts.eclipse.ide.ui.preferences.ScrolledPageContent;
+import ts.eclipse.ide.ui.preferences.StatusInfo;
 import ts.eclipse.ide.ui.widgets.IStatusChangeListener;
 import ts.utils.FileUtils;
 import ts.utils.StringUtils;
@@ -74,7 +75,6 @@ public class AngularCLIConfigurationBlock extends OptionsConfigurationBlock {
 	private Text cliPath;
 	private Text cliVersion;
 	private NgVersionJob ngVersionJob;
-	private File ngFile;
 
 	public AngularCLIConfigurationBlock(IStatusChangeListener context, IProject project,
 			IWorkbenchPreferenceContainer container) {
@@ -255,13 +255,12 @@ public class AngularCLIConfigurationBlock extends OptionsConfigurationBlock {
 	protected void validateSettings(Key changedKey, String oldValue, String newValue) {
 		cliVersion.setText("");
 		cliPath.setText("");
-		ngFile = null;
 		ngVersionJob.cancel();
-		CLIStatus status = validateCLIPath();
-		if (status.isOK()) {
-			cliPath.setText(FileUtils.getPath(status.getNgFile()));
+		IStatus status = validateCLIPath();
+		if (status.isOK() && status instanceof CLIStatus) {
+			File ngFile = ((CLIStatus)status).getNgFile();
+			cliPath.setText(FileUtils.getPath(ngFile));
 			cliVersion.setText("Executing 'ng --version'...");
-			ngFile = status.getNgFile();
 			ngVersionJob.setNgFile(ngFile);
 			ngVersionJob.schedule();
 		} else {
@@ -274,9 +273,10 @@ public class AngularCLIConfigurationBlock extends OptionsConfigurationBlock {
 	 *
 	 * @return the status of the ng path.
 	 */
-	private CLIStatus validateCLIPath() {
+	private IStatus validateCLIPath() {
 		File ngFile = null;
 		boolean useGlobal = ngUseGlobalInstallation.getSelection();
+		boolean globalPrefs = getProject() == null;
 		if (useGlobal) {
 			ngFile = CLIProcessHelper.findNg();
 			if (ngFile == null) {
@@ -284,7 +284,7 @@ public class AngularCLIConfigurationBlock extends OptionsConfigurationBlock {
 				// -g"
 				return new CLIStatus(null, AngularCLIMessages.AngularCLIConfigurationBlock_ngGlobal_notFound_error);
 			}
-		} else {
+		} else if (!globalPrefs) {
 			String ngPath = ngCustomFilePath.getText();
 			if (StringUtils.isEmpty(ngPath)) {
 				// ERROR: the installed path is empty
@@ -301,14 +301,16 @@ public class AngularCLIConfigurationBlock extends OptionsConfigurationBlock {
 				ngFile = new File(ngFile, CLIProcessHelper.getNgFileName());
 			}
 		}
-
-		if (!ngFile.exists()) {
-			// ERROR: ng file doesn't exists
-			return new CLIStatus(null,
-					NLS.bind(AngularCLIMessages.AngularCLIConfigurationBlock_ngCustomFile_exists_error,
-							FileUtils.getPath(ngFile)));
-		} else {
-
+		if (!globalPrefs) {
+			if (!ngFile.exists()) {
+				// ERROR: ng file doesn't exists
+				return new CLIStatus(null,
+						NLS.bind(AngularCLIMessages.AngularCLIConfigurationBlock_ngCustomFile_exists_error,
+								FileUtils.getPath(ngFile)));
+			}
+		}
+		else {
+			return StatusInfo.OK_STATUS;
 		}
 		// ng path is valid
 		return new CLIStatus(ngFile, null);

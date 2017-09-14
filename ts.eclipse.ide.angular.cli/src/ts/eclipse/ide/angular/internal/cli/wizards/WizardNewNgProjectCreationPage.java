@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ProjectScope;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
@@ -42,6 +43,9 @@ import ts.eclipse.ide.angular.cli.utils.CLIProcessHelper;
 import ts.eclipse.ide.angular.cli.utils.CLIStatus;
 import ts.eclipse.ide.angular.cli.utils.NgVersionJob;
 import ts.eclipse.ide.angular.internal.cli.AngularCLIMessages;
+import ts.eclipse.ide.angular.internal.cli.AngularCLIProject;
+import ts.eclipse.ide.angular.internal.cli.AngularCLIProjectSettings;
+import ts.eclipse.ide.angular.internal.cli.Trace;
 import ts.eclipse.ide.core.utils.WorkbenchResourceUtil;
 import ts.eclipse.ide.terminal.interpreter.EnvPath;
 import ts.eclipse.ide.terminal.interpreter.LineCommand;
@@ -63,12 +67,12 @@ public class WizardNewNgProjectCreationPage extends AbstractWizardNewTypeScriptP
 			"app" };
 
 	// Angular CLI
-	private Boolean hasGlobalAngularCLI;
-	private Button useGlobalAngularCLIButton;
+	private Boolean hasGlobalPreferencesCLI;
+	private Button useGlobalCLIPreferencesButton;
 	private Button useInstallAngularCLIButton;
 	private Text globalAngularCLIVersion;
 	private NpmInstallWidget installAngularCLI;
-	private boolean useGlobalAngularCLI;
+	private boolean useGlobalCLIPreferences;
 
 	private NgVersionJob ngVersionJob;
 
@@ -98,10 +102,10 @@ public class WizardNewNgProjectCreationPage extends AbstractWizardNewTypeScriptP
 
 	/** Creates the field for install Angular CLI. */
 	private void createGlobalAngularCLIField(Composite parent) {
-		useGlobalAngularCLIButton = new Button(parent, SWT.RADIO);
-		useGlobalAngularCLIButton.setText(AngularCLIMessages.WizardNewNgProjectCreationPage_useGlobalAngularCLI);
-		useGlobalAngularCLIButton.addListener(SWT.Selection, this);
-		useGlobalAngularCLIButton.addSelectionListener(new SelectionAdapter() {
+		useGlobalCLIPreferencesButton = new Button(parent, SWT.RADIO);
+		useGlobalCLIPreferencesButton.setText(AngularCLIMessages.WizardNewNgProjectCreationPage_useGlobalPreferencesCLI);
+		useGlobalCLIPreferencesButton.addListener(SWT.Selection, this);
+		useGlobalCLIPreferencesButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				updateAngularCLIMode();
@@ -134,42 +138,58 @@ public class WizardNewNgProjectCreationPage extends AbstractWizardNewTypeScriptP
 	@Override
 	protected void initializeDefaultValues() {
 		super.initializeDefaultValues();
-		useGlobalAngularCLIButton.setSelection(true);
+		useGlobalCLIPreferencesButton.setSelection(true);
 	}
 
 	@Override
 	protected void nodeJsChanged(File nodeFile) {
 		super.nodeJsChanged(nodeFile);
-		if (hasGlobalAngularCLI == null && nodeFile != null && ngVersionJob == null) {
-			ngVersionJob = new NgVersionJob();
-			ngVersionJob.setNodeFile(nodeFile);
-			ngVersionJob.setNgFile(CLIProcessHelper.findNg());
-			ngVersionJob.addJobChangeListener(new JobChangeAdapter() {
-				@Override
-				public void done(IJobChangeEvent event) {
-					super.done(event);
-					IStatus status = event.getResult();
-					final String version;
-					if (status instanceof CLIStatus) {
-						final CLIStatus s = (CLIStatus) status;
-						version = s.getVersion();
-						if (s.isOK())
-							hasGlobalAngularCLI = Boolean.TRUE;
-					} else {
-						hasGlobalAngularCLI = Boolean.FALSE;
-						version = "";
-					}
-					Display.getDefault().asyncExec(new Runnable() {
-						@Override
-						public void run() {
-							if (!globalAngularCLIVersion.isDisposed())
-								globalAngularCLIVersion.setText(version);
-							validatePage();
+		if (hasGlobalPreferencesCLI == null && nodeFile != null && ngVersionJob == null) {
+			File ngFile = null;
+			try {
+				AngularCLIProjectSettings settings = AngularCLIProject.getAngularCLIProject(getProjectHandle()).getSettings();
+				ngFile = settings.getNgFile();
+				if (ngFile != null && ngFile.isDirectory())
+					ngFile = new File(ngFile, CLIProcessHelper.getNgFileName());
+				else
+					ngFile = null;
+			} catch (CoreException e) {
+				Trace.trace(Trace.SEVERE, "Error while getting Project settings", e);
+				ngFile = null;
+			}
+			if (ngFile == null || !ngFile.exists())
+				hasGlobalPreferencesCLI = Boolean.FALSE;
+			else {
+				ngVersionJob = new NgVersionJob();
+				ngVersionJob.setNodeFile(nodeFile);
+				ngVersionJob.setNgFile(ngFile);
+				ngVersionJob.addJobChangeListener(new JobChangeAdapter() {
+					@Override
+					public void done(IJobChangeEvent event) {
+						super.done(event);
+						IStatus status = event.getResult();
+						final String version;
+						if (status instanceof CLIStatus) {
+							final CLIStatus s = (CLIStatus) status;
+							version = s.getVersion();
+							if (s.isOK())
+								hasGlobalPreferencesCLI = Boolean.TRUE;
+						} else {
+							hasGlobalPreferencesCLI = Boolean.FALSE;
+							version = "";
 						}
-					});
-				}
-			});
-			ngVersionJob.schedule();
+						Display.getDefault().asyncExec(new Runnable() {
+							@Override
+							public void run() {
+								if (!globalAngularCLIVersion.isDisposed())
+									globalAngularCLIVersion.setText(version);
+								validatePage();
+							}
+						});
+					}
+				});
+				ngVersionJob.schedule();
+			}
 		}
 	}
 
@@ -177,13 +197,13 @@ public class WizardNewNgProjectCreationPage extends AbstractWizardNewTypeScriptP
 	protected void updateComponents(Event event) {
 		super.updateComponents(event);
 		Widget item = event != null ? event.item : null;
-		if (item == null || item == useGlobalAngularCLIButton)
+		if (item == null || item == useGlobalCLIPreferencesButton)
 			updateAngularCLIMode();
 	}
 
 	private void updateAngularCLIMode() {
-		useGlobalAngularCLI = useGlobalAngularCLIButton.getSelection();
-		installAngularCLI.setEnabled(!useGlobalAngularCLI);
+		useGlobalCLIPreferences = useGlobalCLIPreferencesButton.getSelection();
+		installAngularCLI.setEnabled(!useGlobalCLIPreferences);
 	}
 
 	@Override
@@ -217,13 +237,13 @@ public class WizardNewNgProjectCreationPage extends AbstractWizardNewTypeScriptP
 
 	/** Validates the Angular CLI. */
 	private IStatus validateAngularCLI() {
-		if (useGlobalAngularCLI) {
-			if (hasGlobalAngularCLI == null)
+		if (useGlobalCLIPreferences) {
+			if (hasGlobalPreferencesCLI == null)
 				return new Status(IStatus.ERROR, AngularCLIPlugin.PLUGIN_ID,
-						AngularCLIMessages.WizardNewNgProjectCreationPage_searchingForGlobalAngularCLI);
-			else if (!hasGlobalAngularCLI.booleanValue())
+						AngularCLIMessages.WizardNewNgProjectCreationPage_searchingForGlobalPreferencesCLI);
+			else if (!hasGlobalPreferencesCLI.booleanValue())
 				return new Status(IStatus.ERROR, AngularCLIPlugin.PLUGIN_ID,
-						AngularCLIMessages.WizardNewNgProjectCreationPage_noGlobalAngularCLI);
+						AngularCLIMessages.WizardNewNgProjectCreationPage_noGlobalPreferencesCLI);
 			else
 				return Status.OK_STATUS;
 		}
@@ -232,7 +252,7 @@ public class WizardNewNgProjectCreationPage extends AbstractWizardNewTypeScriptP
 
 	@Override
 	public void updateCommand(List<LineCommand> commands, final IProject project, String nodeFilePath) {
-		if (!useGlobalAngularCLI) {
+		if (!useGlobalCLIPreferences) {
 			// when Angular CLI is installed, update the project Eclipse preferences
 			// to consume this installed Angular CLI.
 			commands.add(new LineCommand(installAngularCLI.getNpmInstallCommand(), new TerminalCommandAdapter() {
@@ -257,7 +277,7 @@ public class WizardNewNgProjectCreationPage extends AbstractWizardNewTypeScriptP
 				}
 			}));
 			commands.add(EnvPath.createSetPathCommand(EnvPath.insertToEnvPath(nodeFilePath, FileUtils
-					.getPath(WorkbenchResourceUtil.resolvePath("${project_loc:node_modules/.bin}", project)))));
+				.getPath(WorkbenchResourceUtil.resolvePath("${project_loc:node_modules/.bin}", project)))));
 		}
 	}
 

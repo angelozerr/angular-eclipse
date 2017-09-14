@@ -58,10 +58,10 @@ public class AngularCLIMessages extends NLS {
 	public static String NewAngularProjectWizard_unsupportedProjectNames;
 
 	public static String WizardNewNgProjectCreationPage_angular_cli_group_label;
-	public static String WizardNewNgProjectCreationPage_useGlobalAngularCLI;
+	public static String WizardNewNgProjectCreationPage_useGlobalPreferencesCLI;
 	public static String WizardNewNgProjectCreationPage_useInstallAngularCLI;
-	public static String WizardNewNgProjectCreationPage_searchingForGlobalAngularCLI;
-	public static String WizardNewNgProjectCreationPage_noGlobalAngularCLI;
+	public static String WizardNewNgProjectCreationPage_searchingForGlobalPreferencesCLI;
+	public static String WizardNewNgProjectCreationPage_noGlobalPreferencesCLI;
 
 	public static String NewAngularProjectParamsWizardPage_title;
 	public static String NewAngularProjectParamsWizardPage_prefix;

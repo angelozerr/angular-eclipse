@@ -39,7 +39,6 @@ import org.osgi.service.prefs.BackingStoreException;
 
 import ts.eclipse.ide.angular.cli.AngularCLIPlugin;
 import ts.eclipse.ide.angular.cli.preferences.AngularCLIPreferenceConstants;
-import ts.eclipse.ide.angular.cli.utils.CLIProcessHelper;
 import ts.eclipse.ide.angular.cli.utils.CLIStatus;
 import ts.eclipse.ide.angular.cli.utils.NgVersionJob;
 import ts.eclipse.ide.angular.internal.cli.AngularCLIMessages;
@@ -149,10 +148,6 @@ public class WizardNewNgProjectCreationPage extends AbstractWizardNewTypeScriptP
 			try {
 				AngularCLIProjectSettings settings = AngularCLIProject.getAngularCLIProject(getProjectHandle()).getSettings();
 				ngFile = settings.getNgFile();
-				if (ngFile != null && ngFile.isDirectory())
-					ngFile = new File(ngFile, CLIProcessHelper.getNgFileName());
-				else
-					ngFile = null;
 			} catch (CoreException e) {
 				Trace.trace(Trace.SEVERE, "Error while getting Project settings", e);
 				ngFile = null;

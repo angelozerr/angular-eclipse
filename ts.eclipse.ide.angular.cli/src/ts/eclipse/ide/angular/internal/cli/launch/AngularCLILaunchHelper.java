@@ -94,7 +94,7 @@ public class AngularCLILaunchHelper {
 	public static void updateNgFilePath(IProject project, ILaunchConfigurationWorkingCopy newConfiguration)
 			throws CoreException {
 		AngularCLIProjectSettings  settings = AngularCLIProject.getAngularCLIProject(project).getSettings();
-		File ngFile = settings.getNgFile();
+		File ngFile = settings.getCustomNgLocation();
 		if (ngFile != null) {
 			newConfiguration.setAttribute(AngularCLILaunchConstants.NG_FILE_PATH, FileUtils.getPath(ngFile));
 			newConfiguration.setAttribute(AngularCLILaunchConstants.EXECUTE_NG_WITH_FILE, settings.isExecuteNgWithFile());

@@ -280,37 +280,43 @@ public class AngularCLIConfigurationBlock extends OptionsConfigurationBlock {
 		if (useGlobal) {
 			ngFile = CLIProcessHelper.findNg();
 			if (ngFile == null) {
-				// ERROR: ng was not installed with "npm install @angular/cli
-				// -g"
+				// ERROR: ng was not installed with "npm install -g @angular/cli"
 				return new CLIStatus(null, AngularCLIMessages.AngularCLIConfigurationBlock_ngGlobal_notFound_error);
 			}
-		} else if (!globalPrefs) {
+		} else {
 			String ngPath = ngCustomFilePath.getText();
 			if (StringUtils.isEmpty(ngPath)) {
-				// ERROR: the installed path is empty
-				return new CLIStatus(null, AngularCLIMessages.AngularCLIConfigurationBlock_ngCustomFile_required_error);
+				if (!globalPrefs) {
+					// ERROR: the installed path is empty
+					return new CLIStatus(null, AngularCLIMessages.AngularCLIConfigurationBlock_ngCustomFile_required_error);
+				}
+				else
+					return StatusInfo.OK_STATUS;
 			} else {
 				ngFile = WorkbenchResourceUtil.resolvePath(ngPath, getProject());
-				if (!ngFile.isDirectory()) {
-					// ERROR: the ng path must be a directory which contains the
-					// ng/ng.cmd
-					return new CLIStatus(null,
-							NLS.bind(AngularCLIMessages.AngularCLIConfigurationBlock_ngCustomFile_notDir_error,
-									FileUtils.getPath(ngFile)));
+				if (ngFile == null || !ngFile.isDirectory()) {
+					if (!globalPrefs) {
+						// ERROR: the ng path must be a directory which contains the
+						// ng/ng.cmd
+						return new CLIStatus(null,
+								NLS.bind(AngularCLIMessages.AngularCLIConfigurationBlock_ngCustomFile_notDir_error,
+										FileUtils.getPath(ngFile)));
+					}
+					else
+						return StatusInfo.OK_STATUS;
 				}
 				ngFile = new File(ngFile, CLIProcessHelper.getNgFileName());
 			}
 		}
-		if (!globalPrefs) {
-			if (!ngFile.exists()) {
+		if (!ngFile.exists()) {
+			if (!globalPrefs) {
 				// ERROR: ng file doesn't exists
 				return new CLIStatus(null,
 						NLS.bind(AngularCLIMessages.AngularCLIConfigurationBlock_ngCustomFile_exists_error,
 								FileUtils.getPath(ngFile)));
 			}
-		}
-		else {
-			return StatusInfo.OK_STATUS;
+			else
+				return StatusInfo.OK_STATUS;
 		}
 		// ng path is valid
 		return new CLIStatus(ngFile, null);

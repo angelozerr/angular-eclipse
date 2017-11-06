@@ -34,7 +34,8 @@ public class CLIProcessHelper {
 
 	public static final String NG_FILENAME = "ng";
 
-	private static final String ANGULAR_CLI = "@angular/cli:";
+	private static final String OLD_ANGULAR_CLI = "@angular/cli:";
+	private static final String NEW_ANGULAR_CLI = "Angular CLI:";
 
 	public static File findNg() {
 		return findNg(OSHelper.getOs());
@@ -86,9 +87,13 @@ public class CLIProcessHelper {
 				reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
 				String line;
 				while ((line = reader.readLine()) != null) {
-					int index = line.indexOf(ANGULAR_CLI);
+					int index = line.indexOf(OLD_ANGULAR_CLI);
 					if (index != -1) {
-						return line.substring(index + ANGULAR_CLI.length()).trim();
+						return line.substring(index + OLD_ANGULAR_CLI.length()).trim();
+					} else
+						index = line.indexOf(NEW_ANGULAR_CLI);
+					if (index != -1) {
+						return line.substring(index + NEW_ANGULAR_CLI.length()).trim();
 					}
 				}
 				return null;

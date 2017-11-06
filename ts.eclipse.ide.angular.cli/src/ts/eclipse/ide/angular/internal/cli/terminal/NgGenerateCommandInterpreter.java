@@ -56,8 +56,15 @@ public class NgGenerateCommandInterpreter extends AbstractCommandInterpreter {
 			fileNames.add("");
 		} else {
 			if (!fileNames.isEmpty()) {
-				int index = fileNames.size() - 1;
-				fileNames.set(index, fileNames.get(index) + line.trim());
+				int index = fileNames.size() - 1;				
+				String name = fileNames.get(index) + line.trim();
+				// in angular cli 1.5, we have
+				// create src/app/y.ts (19 bytes), we need to remove the (
+				int bracket = name.indexOf("(");
+				if (bracket != -1) {
+					name = name.substring(0,  bracket).trim();
+				}
+				fileNames.set(index, name);
 			}
 		}
 	}

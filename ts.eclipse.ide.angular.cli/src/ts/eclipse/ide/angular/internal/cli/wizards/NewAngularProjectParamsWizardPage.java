@@ -360,7 +360,7 @@ public class NewAngularProjectParamsWizardPage extends AbstractWizardPage {
 		if (inlineTemplate)
 			sbParams.append("-it").append(' ');
 
-		sbParams.append("-dir ./"); // Directory is already created
+		sbParams.append("--directory ./"); // Directory is already created
 
 		return sbParams.toString();
 	}
